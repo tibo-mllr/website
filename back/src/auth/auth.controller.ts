@@ -8,7 +8,9 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @Post('login')
-  signIn(@Body() signInDTto: Partial<User>): Promise<Partial<User>> {
+  signIn(
+    @Body() signInDTto: Partial<User>,
+  ): Promise<{ access_token: Promise<string> }> {
     return this.authService.signIn(signInDTto.username, signInDTto.password);
   }
 }
