@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { DataService } from './data.service';
 import { Data } from './schemas/data.schema';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('data')
 export class DataController {
@@ -11,6 +12,7 @@ export class DataController {
     return this.dataService.getData();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   createData(@Body() data: Data): Promise<Data> {
     return this.dataService.createData(data);
