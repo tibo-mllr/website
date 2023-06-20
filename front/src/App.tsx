@@ -1,24 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/header';
+import { Container } from 'react-bootstrap';
+import HomeView from './home/homeView';
+import { ReactElement } from 'react';
 
-function App() {
+function App(): ReactElement {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Header />
+      <main
+        style={{
+          paddingTop: '8px',
+          height: '100vh',
+          overflowY: 'auto',
+        }}
+      >
+        <Container>
+          <Routes>
+            <Route path="/" element={<HomeView />} />
+          </Routes>
+        </Container>
+      </main>
+    </Router>
   );
 }
 
