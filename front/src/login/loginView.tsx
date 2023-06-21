@@ -5,10 +5,7 @@ import { client } from '../utils';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-type LoginProps = {
-  setLoginToken: (token: string) => void;
-};
-export default function LoginView({ setLoginToken }: LoginProps): ReactElement {
+export default function LoginView(): ReactElement {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -22,7 +19,6 @@ export default function LoginView({ setLoginToken }: LoginProps): ReactElement {
         password: password,
       })
       .then((response) => {
-        setLoginToken(response.data.access_token);
         sessionStorage.setItem('loginToken', response.data.access_token);
         navigate('/admin');
       })

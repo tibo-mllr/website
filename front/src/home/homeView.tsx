@@ -1,14 +1,40 @@
-import { ReactElement } from 'react';
-import { Button } from 'react-bootstrap';
-import { client } from '../utils';
+import { ReactElement, useEffect, useState } from 'react';
+import { Data, client } from '../utils';
+import { Card, Col, Row } from 'react-bootstrap';
 
 export default function HomeView(): ReactElement {
-  const addTest = (): void => {
-    client
-      .post('/data', { name: 'test', content: 'test' })
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-  };
+  const [datas, setDatas] = useState<Data[]>([]);
 
-  return <Button onClick={addTest}>Test</Button>;
+  useEffect(() => {
+    client
+      .get('/data')
+      .then((response) => setDatas(response.data as Data[]))
+      .catch((error) => console.log(error));
+  });
+
+  return (
+    <>
+      {datas.length ? (
+        datas.map((data) => (
+          <Row style={{ paddingBottom: '8px' }} key={data.name}>
+            <Col>
+              <Card>
+                <Card.Header>
+                  <Card.Title>{data.name}</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                  <Card.Text>{data.content}</Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                  {new Date(data.date).toLocaleDateString()}
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
+        ))
+      ) : (
+        <i>Nothing to display</i>
+      )}
+    </>
+  );
 }

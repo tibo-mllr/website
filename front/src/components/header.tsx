@@ -2,15 +2,7 @@ import { ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-type HeaderProps = {
-  loginToken: string;
-  setLoginToken: (loginToken: string) => void;
-};
-
-export default function Header({
-  loginToken,
-  setLoginToken,
-}: HeaderProps): ReactElement {
+export default function Header(): ReactElement {
   const selected = window.location.pathname;
   const navigate = useNavigate();
 
@@ -34,7 +26,7 @@ export default function Header({
             >
               Home
             </Nav.Link>
-            {!!loginToken && (
+            {!!sessionStorage.getItem('loginToken') && (
               <Nav.Link
                 href="admin"
                 className={selected === '/admin' ? 'bg-selected' : undefined}
@@ -44,7 +36,7 @@ export default function Header({
             )}
           </Nav>
           <Nav className="justify-content-end">
-            {!loginToken ? (
+            {!sessionStorage.getItem('loginToken') ? (
               <Button variant="outline-light" href="/login">
                 Login admin
               </Button>
@@ -52,7 +44,6 @@ export default function Header({
               <Button
                 variant="outline-light"
                 onClick={(): void => {
-                  setLoginToken('');
                   sessionStorage.removeItem('loginToken');
                   navigate('/');
                 }}

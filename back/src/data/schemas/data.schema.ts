@@ -5,11 +5,14 @@ export type DataDocument = HydratedDocument<Data>;
 
 @Schema()
 export class Data {
-  @Prop()
+  @Prop({ required: true })
   name: string;
 
-  @Prop()
+  @Prop({ required: true })
   content: string;
+
+  @Prop({ required: true })
+  date: Date;
 }
 
 export const DataSchema = SchemaFactory.createForClass(Data);

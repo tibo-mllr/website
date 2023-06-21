@@ -8,13 +8,14 @@ export class DataService {
   constructor(@InjectModel(Data.name) private dataModel: Model<DataDocument>) {}
 
   async getData(): Promise<Data[]> {
-    return this.dataModel.find().exec();
+    return this.dataModel.find().sort({ date: 'desc' }).exec();
   }
 
   async createData(data: Data): Promise<Data> {
     const createdData = new this.dataModel({
       name: data.name,
       content: data.content,
+      date: data.date,
     });
     return createdData.save();
   }

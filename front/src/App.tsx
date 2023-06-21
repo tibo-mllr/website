@@ -2,17 +2,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/header';
 import { Container } from 'react-bootstrap';
 import HomeView from './home/homeView';
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import LoginView from './login/loginView';
+import AdminView from './admin/adminView';
 
 function App(): ReactElement {
-  const [loginToken, setLoginToken] = useState<string>(
-    sessionStorage.getItem('loginToken') || '',
-  );
-
   return (
     <Router>
-      <Header loginToken={loginToken} setLoginToken={setLoginToken} />
+      <Header />
       <main
         style={{
           paddingTop: '8px',
@@ -23,11 +20,10 @@ function App(): ReactElement {
         <Container>
           <Routes>
             <Route path="/" element={<HomeView />} />
-            <Route
-              path="/login"
-              element={<LoginView setLoginToken={setLoginToken} />}
-            />
-            {!!loginToken && <Route path="/admin" element={<div>Admin</div>} />}
+            <Route path="/login" element={<LoginView />} />
+            {!!sessionStorage.getItem('loginToken') && (
+              <Route path="/admin" element={<AdminView />} />
+            )}
           </Routes>
         </Container>
       </main>

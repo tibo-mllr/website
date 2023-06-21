@@ -8,4 +8,5 @@ export const client = axios.create({
 export type Data = {
   name: string;
   content: string;
+  date: Date;
 };

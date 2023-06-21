@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User, UsersService } from 'src/users/users.service';
+import { UsersService } from 'src/users/users.service';
+import { compare } from 'bcrypt';
+import { User } from 'src/users/schemas/user.schema';
 
 @Injectable()
 export class AuthService {
@@ -14,9 +16,9 @@ export class AuthService {
     pass: string,
   ): Promise<Partial<User> | null> {
     const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
+    if (user && (await compare(pass, user.hashedPassword))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
+      const { hashedPassword, ...result } = user;
       return result;
     }
     return null;
@@ -25,7 +27,7 @@ export class AuthService {
   async login(user: Partial<User>): Promise<{ access_token: string }> {
     const payload = { username: user.username, sub: user.userId };
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
     };
   }
 }
