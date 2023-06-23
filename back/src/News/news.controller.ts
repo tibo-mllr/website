@@ -6,6 +6,8 @@ import {
   Param,
   Post,
   Put,
+  RawBodyRequest,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { NewsService } from './news.service';
@@ -24,8 +26,14 @@ export class NewsController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() news: News): Promise<News> {
-    return await this.newsService.create(news).catch((error) => {
+  async create(
+    @Body() news: News,
+    @Request()
+    req: RawBodyRequest<{
+      user: { _id: string };
+    }>,
+  ): Promise<News> {
+    return await this.newsService.create(news, req.user._id).catch((error) => {
       throw new Error(error);
     });
   }
@@ -36,8 +44,9 @@ export class NewsController {
   async update(
     @Param('id') id: string,
     @Body() newNews: NewsDocument,
+    @Request() req: RawBodyRequest<{ user: { _id: string } }>,
   ): Promise<News> {
-    return await this.newsService.update(id, newNews);
+    return await this.newsService.update(id, newNews, req.user._id);
   }
 
   @Delete('/:id')

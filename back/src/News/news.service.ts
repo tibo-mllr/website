@@ -8,26 +8,34 @@ export class NewsService {
   constructor(@InjectModel(News.name) private newsModel: Model<NewsDocument>) {}
 
   async getAll(): Promise<NewsDocument[]> {
-    return await this.newsModel.find().sort({ date: 'desc' }).exec();
+    return await this.newsModel
+      .find()
+      .sort({ date: 'desc' })
+      .populate('author', 'username')
+      .populate('editor', 'username')
+      .exec();
   }
 
-  async create(news: News): Promise<NewsDocument> {
-    const createdNews = new this.newsModel({
-      title: news.title,
-      content: news.content,
-      date: news.date,
-    });
+  async create(news: News, userId: string): Promise<NewsDocument> {
+    const createdNews = new this.newsModel({ ...news, author: userId });
     await createdNews.save().catch((error) => {
       throw new Error(error);
     });
-    return createdNews;
+    return createdNews.populate('author', 'username');
   }
 
-  async update(id: string, newNews: NewsDocument): Promise<NewsDocument> {
-    return await this.newsModel.findByIdAndUpdate(id, {
-      ...newNews,
-      edited: true,
-    });
+  async update(
+    id: string,
+    newNews: NewsDocument,
+    userId: string,
+  ): Promise<NewsDocument> {
+    return await this.newsModel
+      .findByIdAndUpdate(id, {
+        ...newNews,
+        edited: true,
+        editor: userId,
+      })
+      .populate('author', 'username');
   }
 
   async delete(id: string): Promise<NewsDocument> {

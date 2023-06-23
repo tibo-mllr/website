@@ -5,6 +5,7 @@ import HomeView from './home/homeView';
 import { ReactElement, useState } from 'react';
 import LoginView from './login/loginView';
 import AdminView from './admin/adminView';
+import ProjectView from './project/projectView';
 
 function App(): ReactElement {
   const [showNewData, setShowNewData] = useState<boolean>(false);
@@ -28,6 +29,7 @@ function App(): ReactElement {
                 <HomeView showNew={showNewData} setShowNew={setShowNewData} />
               }
             />
+            <Route path="/projects" element={<ProjectView />} />
             <Route path="/login" element={<LoginView />} />
             {!!sessionStorage.getItem('loginToken') && (
               <Route

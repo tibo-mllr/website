@@ -34,9 +34,15 @@ export default function Header({
             >
               Home
             </Nav.Link>
+            <Nav.Link
+              href="/projects"
+              className={selected === '/projects' ? 'bg-selected' : undefined}
+            >
+              Projects
+            </Nav.Link>
             {!!sessionStorage.getItem('loginToken') && (
               <Nav.Link
-                href="admin"
+                href="/admin"
                 className={selected === '/admin' ? 'bg-selected' : undefined}
               >
                 Admin
