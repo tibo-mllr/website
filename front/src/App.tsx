@@ -2,14 +2,17 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/header';
 import { Container } from 'react-bootstrap';
 import HomeView from './home/homeView';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import LoginView from './login/loginView';
 import AdminView from './admin/adminView';
 
 function App(): ReactElement {
+  const [showNewData, setShowNewData] = useState<boolean>(false);
+  const [showNewUser, setShowNewUser] = useState<boolean>(false);
+
   return (
     <Router>
-      <Header />
+      <Header setShowNewData={setShowNewData} setShowNewUser={setShowNewUser} />
       <main
         style={{
           paddingTop: '8px',
@@ -19,10 +22,23 @@ function App(): ReactElement {
       >
         <Container>
           <Routes>
-            <Route path="/" element={<HomeView />} />
+            <Route
+              path="/"
+              element={
+                <HomeView showNew={showNewData} setShowNew={setShowNewData} />
+              }
+            />
             <Route path="/login" element={<LoginView />} />
             {!!sessionStorage.getItem('loginToken') && (
-              <Route path="/admin" element={<AdminView />} />
+              <Route
+                path="/admin"
+                element={
+                  <AdminView
+                    showNew={showNewUser}
+                    setShowNew={setShowNewUser}
+                  />
+                }
+              />
             )}
           </Routes>
         </Container>

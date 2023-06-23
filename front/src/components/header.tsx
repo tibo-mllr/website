@@ -2,7 +2,15 @@ import { ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-export default function Header(): ReactElement {
+type HeaderProps = {
+  setShowNewData: (showNew: boolean) => void;
+  setShowNewUser: (showNew: boolean) => void;
+};
+
+export default function Header({
+  setShowNewData,
+  setShowNewUser,
+}: HeaderProps): ReactElement {
   const selected = window.location.pathname;
   const navigate = useNavigate();
 
@@ -36,15 +44,50 @@ export default function Header(): ReactElement {
             )}
           </Nav>
           <Nav className="justify-content-end">
+            {!!sessionStorage.getItem('loginToken') &&
+              (sessionStorage.getItem('role') === 'admin' ||
+                sessionStorage.getItem('role') === 'superAdmin') &&
+              selected === '/' && (
+                <Button
+                  onClick={(): void => setShowNewData(true)}
+                  style={{ marginRight: '8px' }}
+                >
+                  <img
+                    alt="Plus icon"
+                    src="/plusIcon.png"
+                    height="16"
+                    className="d-inline-block align-center"
+                    style={{ paddingRight: '8px' }}
+                  />
+                  <b className="d-inline-block align-center">Add data</b>
+                </Button>
+              )}
+            {!!sessionStorage.getItem('loginToken') &&
+              (sessionStorage.getItem('role') === 'admin' ||
+                sessionStorage.getItem('role') === 'superAdmin') &&
+              selected === '/admin' && (
+                <Button
+                  onClick={(): void => setShowNewUser(true)}
+                  style={{ marginRight: '8px' }}
+                >
+                  <img
+                    alt="Plus icon"
+                    src="/plusIcon.png"
+                    height="16"
+                    className="d-inline-block align-center"
+                    style={{ paddingRight: '8px' }}
+                  />
+                  <b className="d-inline-block align-center">Add user</b>
+                </Button>
+              )}
             {!sessionStorage.getItem('loginToken') ? (
-              <Button variant="outline-light" href="/login">
-                Login admin
-              </Button>
+              <Nav.Link href="/login">Account</Nav.Link>
             ) : (
               <Button
                 variant="outline-light"
                 onClick={(): void => {
                   sessionStorage.removeItem('loginToken');
+                  sessionStorage.removeItem('role');
                   navigate('/');
                 }}
               >

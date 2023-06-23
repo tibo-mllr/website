@@ -1,83 +1,258 @@
-import { FormEvent, ReactElement, useState } from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import { Data, client } from '../utils';
+import { FormEvent, ReactElement, useEffect, useState } from 'react';
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
+import { User, client, Role, UserDocument } from '../utils';
 
-export default function AdminView(): ReactElement {
-  const [newData, setNewData] = useState<Data>({
-    name: '',
-    content: '',
-    date: new Date(),
+type AdminViewProps = {
+  showNew: boolean;
+  setShowNew: (showNew: boolean) => void;
+};
+
+export default function AdminView({
+  showNew,
+  setShowNew,
+}: AdminViewProps): ReactElement {
+  const [users, setUsers] = useState<UserDocument[]>([]);
+  const [newUser, setNewUser] = useState<User>({
+    username: '',
+    password: '',
+    role: Role.Admin,
+  });
+  const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [userToEdit, setUserToEdit] = useState<UserDocument>({
+    _id: '',
+    username: '',
+    password: '',
+    role: Role.Admin,
   });
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleCreate = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
-    console.log(newData);
-
     client
-      .post('/data', newData, {
+      .post('/user', newUser, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
         },
       })
       .then(() => {
-        alert('Data added');
-        setNewData({
-          name: '',
-          content: '',
-          date: new Date(),
+        alert('User added');
+        setNewUser({
+          username: '',
+          password: '',
+          role: Role.Admin,
         });
+        setShowNew(false);
       })
       .catch((error) => alert(error));
   };
 
+  const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    client
+      .put(`/user/${userToEdit._id}`, userToEdit, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then(() => {
+        alert('User edited');
+        setShowEdit(false);
+      })
+      .catch((error) => alert(error));
+  };
+
+  const handleDelete = (id: string): void => {
+    client
+      .delete(`/user/${id}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then(() => {
+        alert('User deleted');
+        setUsers(users.filter((user) => user._id !== id));
+      })
+      .catch((error) => alert(error));
+  };
+
+  useEffect(() => {
+    client
+      .get('/user', {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then((response) => {
+        setUsers(response.data as UserDocument[]);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
   return (
     <>
-      <Row>
-        <Col>
-          <Form onSubmit={handleSubmit}>
-            <Card>
-              <Card.Header>
-                <Card.Title>Add data</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <Form.Group>
-                  <Form.Label>Name</Form.Label>
+      {!!sessionStorage.getItem('loginToken') &&
+        sessionStorage.getItem('role') == 'superAdmin' &&
+        users.map((user) => (
+          <Row style={{ marginBottom: '8px' }} key={user._id}>
+            <Col>
+              <Card>
+                <Card.Header>
+                  <Card.Title>User: {user.username}</Card.Title>
+                </Card.Header>
+                <Card.Body>
+                  <Card.Text>Role: {user.role}</Card.Text>
+                </Card.Body>
+                <Card.Footer>
+                  <Row>
+                    <Col>
+                      <Button
+                        onClick={(): void => {
+                          setShowEdit(true);
+                          setUserToEdit(user);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    </Col>
+                    <Col className="d-flex justify-content-end">
+                      <Button
+                        onClick={(): void => {
+                          handleDelete(user._id);
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    </Col>
+                  </Row>
+                </Card.Footer>
+              </Card>
+            </Col>
+          </Row>
+        ))}
+      {!!sessionStorage.getItem('loginToken') &&
+        sessionStorage.getItem('role') == 'superAdmin' && (
+          <Modal show={showNew} onHide={(): void => setShowNew(false)}>
+            <Modal.Header closeButton>
+              <Card.Title>Add user</Card.Title>
+            </Modal.Header>
+            <Form onSubmit={handleCreate}>
+              <Modal.Body>
+                <Form.Group className="mb-3">
+                  <Form.Label>Username</Form.Label>
                   <Form.Control
                     type="text"
-                    value={newData.name}
+                    value={newUser.username}
                     onChange={(event): void =>
-                      setNewData({
-                        ...newData,
-                        name: event.target.value,
+                      setNewUser({
+                        ...newUser,
+                        username: event.target.value,
                       })
                     }
-                    placeholder="Enter name"
+                    placeholder="Enter username"
                   />
                 </Form.Group>
-                <Form.Group>
-                  <Form.Label>Content</Form.Label>
+                <Form.Group className="mb-3">
+                  <Form.Label>Password</Form.Label>
                   <Form.Control
-                    type="text"
-                    value={newData.content}
+                    type="password"
+                    value={newUser.password}
                     onChange={(event): void =>
-                      setNewData({
-                        ...newData,
-                        content: event.target.value,
+                      setNewUser({
+                        ...newUser,
+                        password: event.target.value,
                       })
                     }
-                    placeholder="Enter content"
+                    placeholder="Enter password"
+                    autoComplete="new-password"
                   />
                 </Form.Group>
-              </Card.Body>
-              <Card.Footer>
+                <Form.Group className="mb-3">
+                  <Form.Label>Role</Form.Label>
+                  <Form.Select
+                    value={newUser.role}
+                    onChange={(event): void =>
+                      setNewUser({
+                        ...newUser,
+                        role: event.target.value as Role,
+                      })
+                    }
+                  >
+                    <option disabled>Select a role</option>
+                    <option value={Role.Admin}>Admin</option>
+                    <option value={Role.SuperAdmin}>Super admin</option>
+                  </Form.Select>
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
                 <Button variant="primary" type="submit">
                   Add
                 </Button>
-              </Card.Footer>
-            </Card>
-          </Form>
-        </Col>
-      </Row>
+              </Modal.Footer>
+            </Form>
+          </Modal>
+        )}
+      {!!sessionStorage.getItem('loginToken') &&
+        sessionStorage.getItem('role') == 'superAdmin' && (
+          <Modal show={showEdit} onHide={(): void => setShowEdit(false)}>
+            <Modal.Header closeButton>
+              <Card.Title>Edit user</Card.Title>
+            </Modal.Header>
+            <Form onSubmit={handleEdit}>
+              <Modal.Body>
+                <Form.Group className="mb-3">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={userToEdit.username}
+                    onChange={(event): void =>
+                      setUserToEdit({
+                        ...userToEdit,
+                        username: event.target.value,
+                      })
+                    }
+                    placeholder="Enter username"
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    value={userToEdit.password}
+                    onChange={(event): void =>
+                      setUserToEdit({
+                        ...userToEdit,
+                        password: event.target.value,
+                      })
+                    }
+                    placeholder="Enter password"
+                    autoComplete="new-password"
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Role</Form.Label>
+                  <Form.Select
+                    value={userToEdit.role}
+                    onChange={(event): void =>
+                      setUserToEdit({
+                        ...userToEdit,
+                        role: event.target.value as Role,
+                      })
+                    }
+                  >
+                    <option disabled>Select a role</option>
+                    <option value={Role.Admin}>Admin</option>
+                    <option value={Role.SuperAdmin}>Super admin</option>
+                  </Form.Select>
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="primary" type="submit">
+                  Edit
+                </Button>
+              </Modal.Footer>
+            </Form>
+          </Modal>
+        )}
     </>
   );
 }

@@ -1,32 +1,148 @@
-import { ReactElement, useEffect, useState } from 'react';
-import { Data, client } from '../utils';
-import { Card, Col, Row } from 'react-bootstrap';
+import { ReactElement, FormEvent, useEffect, useState } from 'react';
+import { News, NewsDocument, client } from '../utils';
+import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 
-export default function HomeView(): ReactElement {
-  const [datas, setDatas] = useState<Data[]>([]);
+type HomeViewProps = {
+  showNew: boolean;
+  setShowNew: (showNew: boolean) => void;
+};
+
+export default function HomeView({
+  showNew,
+  setShowNew,
+}: HomeViewProps): ReactElement {
+  const [allNews, setAllNews] = useState<NewsDocument[]>([]);
+  const [newNews, setNewNews] = useState<News>({
+    title: '',
+    content: '',
+    date: new Date(),
+  });
+  const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({
+    _id: '',
+    title: '',
+    content: '',
+    date: new Date(),
+  });
+
+  const handleCreate = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    client
+      .post('/news', newNews, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then((response) => {
+        alert('News added');
+        setAllNews([...allNews, response.data as NewsDocument]);
+        setNewNews({
+          title: '',
+          content: '',
+          date: new Date(),
+        });
+        setShowNew(false);
+      })
+      .catch((error) => alert(error));
+  };
+
+  const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault();
+
+    client
+      .put(`/news/${newsToEdit._id}`, newsToEdit, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then((response) => {
+        alert('News edited');
+        setAllNews(
+          allNews.map((news) => {
+            if (news._id === newsToEdit._id) {
+              return response.data as NewsDocument;
+            }
+            return news;
+          }),
+        );
+        setShowEdit(false);
+      })
+      .catch((error) => alert(error));
+  };
+
+  const handleDelete = (id: string): void => {
+    client
+      .delete(`/news/${id}`, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then(() => {
+        setAllNews(allNews.filter((news) => news._id !== id));
+      })
+      .catch((error) => alert(error));
+  };
 
   useEffect(() => {
     client
-      .get('/data')
-      .then((response) => setDatas(response.data as Data[]))
+      .get('/news')
+      .then((response) => setAllNews(response.data as NewsDocument[]))
       .catch((error) => console.log(error));
-  });
+  }, []);
 
   return (
     <>
-      {datas.length ? (
-        datas.map((data) => (
-          <Row style={{ paddingBottom: '8px' }} key={data.name}>
+      {allNews.length ? (
+        allNews.map((news) => (
+          <Row style={{ paddingBottom: '8px' }} key={news.title}>
             <Col>
               <Card>
                 <Card.Header>
-                  <Card.Title>{data.name}</Card.Title>
+                  <Card.Title>{news.title}</Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  <Card.Text>{data.content}</Card.Text>
+                  <Card.Text>{news.content}</Card.Text>
                 </Card.Body>
                 <Card.Footer>
-                  {new Date(data.date).toLocaleDateString()}
+                  <Row>
+                    <Col>
+                      {new Date(news.date).toLocaleDateString()}
+                      {!!news.edited && (
+                        <>
+                          {' - '}
+                          <i>Edited</i>
+                        </>
+                      )}
+                    </Col>
+                    {!!sessionStorage.getItem('loginToken') &&
+                      sessionStorage.getItem('role') == 'superAdmin' && (
+                        <Col className="d-flex justify-content-end">
+                          <Button
+                            onClick={(): void => {
+                              setShowEdit(true);
+                              setNewsToEdit(news);
+                            }}
+                            style={{
+                              backgroundImage: 'url(/editIcon.png)',
+                              backgroundSize: 'cover',
+                              backgroundColor: 'transparent',
+                              border: 'none',
+                              marginRight: '8px',
+                            }}
+                          />
+                          <Button
+                            onClick={(): void => handleDelete(news._id)}
+                            style={{
+                              backgroundImage: 'url(/binIcon.png)',
+                              backgroundSize: 'cover',
+                              backgroundColor: 'transparent',
+                              border: 'none',
+                            }}
+                          />
+                        </Col>
+                      )}
+                  </Row>
                 </Card.Footer>
               </Card>
             </Col>
@@ -34,6 +150,93 @@ export default function HomeView(): ReactElement {
         ))
       ) : (
         <i>Nothing to display</i>
+      )}
+      {!!sessionStorage.getItem('loginToken') &&
+        sessionStorage.getItem('role') === 'superAdmin' && (
+          <Modal show={showEdit} onHide={(): void => setShowEdit(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Edit</Modal.Title>
+            </Modal.Header>
+            <Form onSubmit={handleEdit}>
+              <Modal.Body>
+                <Form.Group className="mb-3">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={newsToEdit.title}
+                    onChange={(event): void =>
+                      setNewsToEdit({
+                        ...newsToEdit,
+                        title: event.target.value,
+                      })
+                    }
+                    placeholder="Enter name"
+                  />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Content</Form.Label>
+                  <Form.Control
+                    type="text"
+                    value={newsToEdit.content}
+                    onChange={(event): void =>
+                      setNewsToEdit({
+                        ...newsToEdit,
+                        content: event.target.value,
+                      })
+                    }
+                    placeholder="Enter content"
+                  />
+                </Form.Group>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button type="submit">Change</Button>
+              </Modal.Footer>
+            </Form>
+          </Modal>
+        )}
+      {!!sessionStorage.getItem('loginToken') && (
+        <Modal show={showNew} onHide={(): void => setShowNew(false)}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add news</Modal.Title>
+          </Modal.Header>
+          <Form onSubmit={handleCreate}>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={newNews.title}
+                  onChange={(event): void =>
+                    setNewNews({
+                      ...newNews,
+                      title: event.target.value,
+                    })
+                  }
+                  placeholder="Enter name"
+                />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Content</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={newNews.content}
+                  onChange={(event): void =>
+                    setNewNews({
+                      ...newNews,
+                      content: event.target.value,
+                    })
+                  }
+                  placeholder="Enter content"
+                />
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" type="submit">
+                Add
+              </Button>
+            </Modal.Footer>
+          </Form>
+        </Modal>
       )}
     </>
   );

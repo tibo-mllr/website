@@ -20,6 +20,7 @@ export default function LoginView(): ReactElement {
       })
       .then((response) => {
         sessionStorage.setItem('loginToken', response.data.access_token);
+        sessionStorage.setItem('role', response.data.role);
         navigate('/admin');
       })
       .catch((error) => {
@@ -37,7 +38,7 @@ export default function LoginView(): ReactElement {
         <Card className="w-50 mt-5">
           <Form onSubmit={handleSubmit}>
             <Card.Body>
-              <Form.Group>
+              <Form.Group className="mb-3">
                 <Form.Label>Nom d'utilisateur</Form.Label>
                 <Form.Control
                   type="text"
@@ -46,7 +47,7 @@ export default function LoginView(): ReactElement {
                   onChange={(event): void => setUsername(event.target.value)}
                 />
               </Form.Group>
-              <Form.Group>
+              <Form.Group className="mb-3">
                 <Form.Label>Mot de passe</Form.Label>
                 <Form.Control
                   type="password"
