@@ -21,6 +21,7 @@ export default function LoginView(): ReactElement {
       .then((response) => {
         sessionStorage.setItem('loginToken', response.data.access_token);
         sessionStorage.setItem('role', response.data.role);
+        sessionStorage.setItem('id', response.data.id);
         navigate('/admin');
       })
       .catch((error) => {

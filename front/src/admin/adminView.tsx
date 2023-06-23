@@ -42,7 +42,10 @@ export default function AdminView({
         });
         setShowNew(false);
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        alert(error);
+        console.log(error);
+      });
   };
 
   const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
@@ -58,21 +61,32 @@ export default function AdminView({
         alert('User edited');
         setShowEdit(false);
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        alert(error);
+        console.log(error);
+      });
   };
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/user/${id}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
-        },
-      })
-      .then(() => {
-        alert('User deleted');
-        setUsers(users.filter((user) => user._id !== id));
-      })
-      .catch((error) => alert(error));
+    const confirm = window.confirm(
+      'Are you sure you want to delete this user?',
+    );
+    if (confirm) {
+      client
+        .delete(`/user/${id}`, {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+          },
+        })
+        .then(() => {
+          alert('User deleted');
+          setUsers(users.filter((user) => user._id !== id));
+        })
+        .catch((error) => {
+          alert(error);
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
@@ -114,15 +128,17 @@ export default function AdminView({
                         Edit
                       </Button>
                     </Col>
-                    <Col className="d-flex justify-content-end">
-                      <Button
-                        onClick={(): void => {
-                          handleDelete(user._id);
-                        }}
-                      >
-                        Delete
-                      </Button>
-                    </Col>
+                    {sessionStorage.getItem('id') !== user._id && (
+                      <Col className="d-flex justify-content-end">
+                        <Button
+                          onClick={(): void => {
+                            handleDelete(user._id);
+                          }}
+                        >
+                          Delete
+                        </Button>
+                      </Col>
+                    )}
                   </Row>
                 </Card.Footer>
               </Card>

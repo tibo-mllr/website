@@ -44,7 +44,10 @@ export default function HomeView({
         });
         setShowNew(false);
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        alert(error);
+        console.log(error);
+      });
   };
 
   const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
@@ -68,20 +71,31 @@ export default function HomeView({
         );
         setShowEdit(false);
       })
-      .catch((error) => alert(error));
+      .catch((error) => {
+        alert(error);
+        console.log(error);
+      });
   };
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/news/${id}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
-        },
-      })
-      .then(() => {
-        setAllNews(allNews.filter((news) => news._id !== id));
-      })
-      .catch((error) => alert(error));
+    const confirm = window.confirm(
+      'Are you sure you want to delete this news ?',
+    );
+    if (confirm) {
+      client
+        .delete(`/news/${id}`, {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+          },
+        })
+        .then(() => {
+          setAllNews(allNews.filter((news) => news._id !== id));
+        })
+        .catch((error) => {
+          alert(error);
+          console.log(error);
+        });
+    }
   };
 
   useEffect(() => {
