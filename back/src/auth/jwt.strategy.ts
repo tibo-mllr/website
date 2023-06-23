@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     sub: number;
     username: string;
   }): Promise<{ _id: number; username: string; role: Role }> {
-    const user = await this.userService.findOne(payload.username);
+    const user = await this.userService.get(payload.username);
     return { _id: payload.sub, username: payload.username, role: user.role };
   }
 }

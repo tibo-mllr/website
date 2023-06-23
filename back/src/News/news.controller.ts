@@ -18,14 +18,14 @@ export class NewsController {
   constructor(private readonly newsService: NewsService) {}
 
   @Get()
-  async getAllNews(): Promise<News[]> {
-    return await this.newsService.getAllNews();
+  async getAll(): Promise<News[]> {
+    return await this.newsService.getAll();
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async createNews(@Body() news: News): Promise<News> {
-    return await this.newsService.createNews(news).catch((error) => {
+  async create(@Body() news: News): Promise<News> {
+    return await this.newsService.create(news).catch((error) => {
       throw new Error(error);
     });
   }
@@ -33,17 +33,17 @@ export class NewsController {
   @Put('/:id')
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async modifyNews(
+  async update(
     @Param('id') id: string,
     @Body() newNews: NewsDocument,
   ): Promise<News> {
-    return await this.newsService.updateNews(id, newNews);
+    return await this.newsService.update(id, newNews);
   }
 
   @Delete('/:id')
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async deleteNews(@Param('id') id: string): Promise<News> {
-    return await this.newsService.deleteNews(id);
+  async delete(@Param('id') id: string): Promise<News> {
+    return await this.newsService.delete(id);
   }
 }

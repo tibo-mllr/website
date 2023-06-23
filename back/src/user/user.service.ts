@@ -8,11 +8,11 @@ import { hash } from 'bcrypt';
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
-  async findOne(username: string): Promise<UserDocument | undefined> {
+  async get(username: string): Promise<UserDocument | undefined> {
     return await this.userModel.findOne({ username }).exec();
   }
 
-  async findAll(): Promise<UserDocument[]> {
+  async getAll(): Promise<UserDocument[]> {
     return await this.userModel.find({}, { hashedPassword: 0 }).exec();
   }
 
@@ -28,7 +28,7 @@ export class UserService {
         throw new Error(error);
       });
     });
-    return await this.findOne(newUser.username);
+    return await this.get(newUser.username);
   }
 
   async update(id: number, user: NewUser): Promise<UserDocument> {

@@ -16,7 +16,7 @@ export class AuthService {
     username: string,
     pass: string,
   ): Promise<Partial<UserDocument> | null> {
-    const user = await this.userService.findOne(username);
+    const user = await this.userService.get(username);
     if (user && (await compare(pass, user.hashedPassword))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { hashedPassword, ...result } = user;
@@ -27,11 +27,12 @@ export class AuthService {
 
   async login(
     user: Partial<UserDocument>,
-  ): Promise<{ access_token: string; role: Role }> {
+  ): Promise<{ access_token: string; role: Role; id: string }> {
     const payload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
       role: user.role,
+      id: user._id.toString(),
     };
   }
 }

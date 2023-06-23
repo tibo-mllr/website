@@ -7,11 +7,11 @@ import { Model } from 'mongoose';
 export class NewsService {
   constructor(@InjectModel(News.name) private newsModel: Model<NewsDocument>) {}
 
-  async getAllNews(): Promise<NewsDocument[]> {
+  async getAll(): Promise<NewsDocument[]> {
     return await this.newsModel.find().sort({ date: 'desc' }).exec();
   }
 
-  async createNews(news: News): Promise<NewsDocument> {
+  async create(news: News): Promise<NewsDocument> {
     const createdNews = new this.newsModel({
       title: news.title,
       content: news.content,
@@ -23,14 +23,14 @@ export class NewsService {
     return createdNews;
   }
 
-  async updateNews(id: string, newNews: NewsDocument): Promise<NewsDocument> {
+  async update(id: string, newNews: NewsDocument): Promise<NewsDocument> {
     return await this.newsModel.findByIdAndUpdate(id, {
       ...newNews,
       edited: true,
     });
   }
 
-  async deleteNews(id: string): Promise<NewsDocument> {
+  async delete(id: string): Promise<NewsDocument> {
     return await this.newsModel.findByIdAndDelete(id);
   }
 }

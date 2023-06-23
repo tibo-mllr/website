@@ -20,8 +20,8 @@ export class UsersController {
   @Get()
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async findAll(): Promise<UserDocument[]> {
-    return await this.userService.findAll();
+  async getAll(): Promise<UserDocument[]> {
+    return await this.userService.getAll();
   }
 
   @Post()
