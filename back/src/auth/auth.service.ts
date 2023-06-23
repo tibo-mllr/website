@@ -1,21 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from 'src/users/users.service';
+import { UserService } from 'src/user/user.service';
 import { compare } from 'bcrypt';
-import { User } from 'src/users/schemas/user.schema';
+import { UserDocument } from 'src/user/user.schema';
+import { Role } from './role.guard';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private userService: UserService,
     private jwtService: JwtService,
   ) {}
 
   async validateUser(
     username: string,
     pass: string,
-  ): Promise<Partial<User> | null> {
-    const user = await this.usersService.findOne(username);
+  ): Promise<Partial<UserDocument> | null> {
+    const user = await this.userService.findOne(username);
     if (user && (await compare(pass, user.hashedPassword))) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { hashedPassword, ...result } = user;
@@ -24,10 +25,13 @@ export class AuthService {
     return null;
   }
 
-  async login(user: Partial<User>): Promise<{ access_token: string }> {
-    const payload = { username: user.username, sub: user.userId };
+  async login(
+    user: Partial<UserDocument>,
+  ): Promise<{ access_token: string; role: Role }> {
+    const payload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
+      role: user.role,
     };
   }
 }
