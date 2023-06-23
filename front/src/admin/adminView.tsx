@@ -1,6 +1,7 @@
 import { FormEvent, ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
-import { User, client, Role, UserDocument } from '../utils';
+import { client } from '../utils';
+import { Role, User, UserDocument } from './utilsAdmin';
 
 type AdminViewProps = {
   showNew: boolean;
@@ -33,7 +34,7 @@ export default function AdminView({
           Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
         },
       })
-      .then(() => {
+      .then((response) => {
         alert('User added');
         setNewUser({
           username: '',
@@ -41,6 +42,7 @@ export default function AdminView({
           role: Role.Admin,
         });
         setShowNew(false);
+        setUsers([...users, response.data as UserDocument]);
       })
       .catch((error) => {
         alert(error);

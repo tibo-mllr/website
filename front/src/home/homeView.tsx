@@ -1,5 +1,6 @@
 import { ReactElement, FormEvent, useEffect, useState } from 'react';
-import { News, NewsDocument, client } from '../utils';
+import { client } from '../utils';
+import { News, NewsDocument } from './utilsHome';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 
 type HomeViewProps = {
@@ -16,6 +17,7 @@ export default function HomeView({
     title: '',
     content: '',
     date: new Date(),
+    author: { username: '' },
   });
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({
@@ -23,6 +25,7 @@ export default function HomeView({
     title: '',
     content: '',
     date: new Date(),
+    author: { username: '' },
   });
 
   const handleCreate = (event: FormEvent<HTMLFormElement>): void => {
@@ -36,11 +39,12 @@ export default function HomeView({
       })
       .then((response) => {
         alert('News added');
-        setAllNews([...allNews, response.data as NewsDocument]);
+        setAllNews([response.data as NewsDocument, ...allNews]);
         setNewNews({
           title: '',
           content: '',
           date: new Date(),
+          author: { username: '' },
         });
         setShowNew(false);
       })
@@ -61,14 +65,10 @@ export default function HomeView({
       })
       .then((response) => {
         alert('News edited');
-        setAllNews(
-          allNews.map((news) => {
-            if (news._id === newsToEdit._id) {
-              return response.data as NewsDocument;
-            }
-            return news;
-          }),
-        );
+        setAllNews([
+          ...allNews.filter((news) => news._id !== newsToEdit._id),
+          response.data as NewsDocument,
+        ]);
         setShowEdit(false);
       })
       .catch((error) => {
@@ -109,7 +109,7 @@ export default function HomeView({
     <>
       {allNews.length ? (
         allNews.map((news) => (
-          <Row style={{ paddingBottom: '8px' }} key={news.title}>
+          <Row style={{ paddingBottom: '8px' }} key={news._id}>
             <Col>
               <Card>
                 <Card.Header>
@@ -121,11 +121,15 @@ export default function HomeView({
                 <Card.Footer>
                   <Row>
                     <Col>
-                      {new Date(news.date).toLocaleDateString()}
+                      {new Date(news.date).toLocaleDateString()} by{' '}
+                      {news.author.username}
                       {!!news.edited && (
                         <>
                           {' - '}
-                          <i>Edited</i>
+                          <i>
+                            Edited{' '}
+                            {!!news.editor ? 'by ' + news.editor.username : ''}
+                          </i>
                         </>
                       )}
                     </Col>
