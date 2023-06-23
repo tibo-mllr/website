@@ -28,16 +28,9 @@ export class UsersController {
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async create(@Body() user: NewUser): Promise<UserDocument> {
-    const createdUser = await this.userService
-      .create(user)
-      .then((user) => {
-        return user;
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-
-    return createdUser;
+    return await this.userService.create(user).catch((error) => {
+      throw new Error(error);
+    });
   }
 
   @Put('/:id')
@@ -47,16 +40,9 @@ export class UsersController {
     @Param('id') id: number,
     @Body() user: NewUser,
   ): Promise<UserDocument> {
-    const updatedUser = await this.userService
-      .update(id, user)
-      .then((user) => {
-        return user;
-      })
-      .catch((error) => {
-        throw new Error(error);
-      });
-
-    return updatedUser;
+    return await this.userService.update(id, user).catch((error) => {
+      throw new Error(error);
+    });
   }
 
   @Delete('/:id')
