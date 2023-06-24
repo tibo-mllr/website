@@ -24,6 +24,11 @@ export default function ProjectView(): ReactElement {
 
   return (
     <>
+      <Row>
+        <h1 style={{ textAlign: 'center' }}>
+          These are the projects I worked on
+        </h1>
+      </Row>
       {projects.length ? (
         projects.map((project) => (
           <Row key={project._id} style={{ marginBottom: '8px' }}>

@@ -91,6 +91,11 @@ export default function OrganizationView({
 
   return (
     <>
+      <Row>
+        <h1 style={{ textAlign: 'center' }}>
+          These are the organizations I worked for
+        </h1>
+      </Row>
       {organizations.map((organization) => (
         <Row style={{ marginBottom: '8px' }} key={organization._id}>
           <Col>
