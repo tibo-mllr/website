@@ -1,4 +1,10 @@
-import { FormEvent, ReactElement, useEffect, useState } from 'react';
+import {
+  FormEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
 import { Role, User, UserDocument } from './utilsAdmin';
@@ -31,14 +37,14 @@ export default function AdminView({
   const [editErrors, setEditErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const validateNewForm = (): FormErrors => {
+  const validateNewForm = useCallback((): FormErrors => {
     const errors: FormErrors = {};
 
     if (!newUser.username) errors.username = 'Username is required';
     if (!newUser.password) errors.password = 'Password is required';
 
     return errors;
-  };
+  }, [newUser]);
 
   const handleCreate = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -71,13 +77,13 @@ export default function AdminView({
     }
   };
 
-  const validateEditForm = (): FormErrors => {
+  const validateEditForm = useCallback((): FormErrors => {
     const errors: FormErrors = {};
 
     if (!userToEdit.username) errors.username = 'Username is required';
 
     return errors;
-  };
+  }, [userToEdit]);
 
   const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -139,14 +145,10 @@ export default function AdminView({
       .catch((error) => console.log(error));
   }, []);
 
-  useEffect(() => {
-    setNewErrors(validateNewForm());
-  }, [newUser]);
-
   return (
     <>
       {!!sessionStorage.getItem('loginToken') &&
-        sessionStorage.getItem('role') == 'superAdmin' && (
+        sessionStorage.getItem('role') === 'superAdmin' && (
           <>
             {users.map((user) => (
               <Row style={{ marginBottom: '8px' }} key={user._id}>

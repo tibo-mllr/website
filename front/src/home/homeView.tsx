@@ -1,4 +1,10 @@
-import { ReactElement, FormEvent, useEffect, useState } from 'react';
+import {
+  ReactElement,
+  FormEvent,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { FormErrors, client } from '../utils';
 import { News, NewsDocument } from './utilsHome';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
@@ -33,14 +39,14 @@ export default function HomeView({
   const [editErrors, setEditErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
-  const validateNewForm = (): FormErrors => {
+  const validateNewForm = useCallback((): FormErrors => {
     const errors: FormErrors = {};
 
     if (!newNews.title) errors.newtitle = 'Title is required';
     if (!newNews.content) errors.content = 'Content is required';
 
     return errors;
-  };
+  }, [newNews]);
 
   const handleCreate = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -74,14 +80,14 @@ export default function HomeView({
     }
   };
 
-  const validateEditForm = (): FormErrors => {
+  const validateEditForm = useCallback((): FormErrors => {
     const errors: FormErrors = {};
 
     if (!newsToEdit.title) errors.newtitle = 'Title is required';
     if (!newsToEdit.content) errors.content = 'Content is required';
 
     return errors;
-  };
+  }, [newsToEdit]);
 
   const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -140,14 +146,6 @@ export default function HomeView({
       .catch((error) => console.log(error));
   }, []);
 
-  useEffect(() => {
-    setNewErrors(validateNewForm());
-  }, [newNews]);
-
-  useEffect(() => {
-    setEditErrors(validateEditForm());
-  }, [newsToEdit]);
-
   return (
     <>
       {allNews.length ? (
@@ -177,7 +175,7 @@ export default function HomeView({
                       )}
                     </Col>
                     {!!sessionStorage.getItem('loginToken') &&
-                      sessionStorage.getItem('role') == 'superAdmin' && (
+                      sessionStorage.getItem('role') === 'superAdmin' && (
                         <Col className="d-flex justify-content-end">
                           <Button
                             onClick={(): void => {

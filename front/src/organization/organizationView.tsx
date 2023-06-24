@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   FormErrors,
   Organization,
@@ -28,7 +28,7 @@ export default function OrganizationView({
   const [newErros, setNewErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
 
-  const validateNewForm = (): FormErrors => {
+  const validateNewForm = useCallback((): FormErrors => {
     const errors: FormErrors = {};
 
     if (!newOrganization.name) errors.name = 'Name is required';
@@ -44,7 +44,7 @@ export default function OrganizationView({
         'Please enter the full URL (starting with "http://" or "https://")';
 
     return errors;
-  };
+  }, [newOrganization]);
 
   const handleCreate = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
@@ -84,10 +84,6 @@ export default function OrganizationView({
       .then((response) => setOrganizations(response.data))
       .catch((error) => console.log(error));
   }, []);
-
-  useEffect(() => {
-    setNewErrors(validateNewForm());
-  }, [newOrganization]);
 
   return (
     <>
