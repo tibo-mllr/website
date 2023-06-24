@@ -18,7 +18,7 @@ export default function Header({
   const navigate = useNavigate();
 
   return (
-    <header>
+    <header style={{ maxHeight: '7vh' }}>
       <Navbar bg="dark" variant="dark" sticky="top">
         <Container fluid>
           <Navbar.Brand href="/">

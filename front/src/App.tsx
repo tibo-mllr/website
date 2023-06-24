@@ -24,7 +24,7 @@ function App(): ReactElement {
       <main
         style={{
           paddingTop: '8px',
-          height: '100vh',
+          maxHeight: '93vh',
           overflowY: 'auto',
         }}
       >
