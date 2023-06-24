@@ -293,7 +293,7 @@ export default function HomeView({
             <Form onSubmit={handleEdit}>
               <Modal.Body>
                 <Form.Group className="mb-3">
-                  <Form.Label>Name</Form.Label>
+                  <Form.Label>Title</Form.Label>
                   <Form.Control
                     type="text"
                     value={newsToEdit.title}
