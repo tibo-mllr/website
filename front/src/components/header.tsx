@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import plusIcon from '../assets/plusIcon.png';
 
 type HeaderProps = {
   setShowNewData: (showNew: boolean) => void;
@@ -60,7 +61,7 @@ export default function Header({
                 >
                   <img
                     alt="Plus icon"
-                    src="/plusIcon.png"
+                    src={plusIcon}
                     height="16"
                     className="d-inline-block align-center"
                     style={{ paddingRight: '8px' }}
@@ -78,7 +79,7 @@ export default function Header({
                 >
                   <img
                     alt="Plus icon"
-                    src="/plusIcon.png"
+                    src={plusIcon}
                     height="16"
                     className="d-inline-block align-center"
                     style={{ paddingRight: '8px' }}

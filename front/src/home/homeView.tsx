@@ -2,6 +2,8 @@ import { ReactElement, FormEvent, useEffect, useState } from 'react';
 import { client } from '../utils';
 import { News, NewsDocument } from './utilsHome';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
+import editIcon from '../assets/editIcon.png';
+import binIcon from '../assets/binIcon.png';
 
 type HomeViewProps = {
   showNew: boolean;
@@ -142,22 +144,24 @@ export default function HomeView({
                               setNewsToEdit(news);
                             }}
                             style={{
-                              backgroundImage: 'url(/editIcon.png)',
-                              backgroundSize: 'cover',
-                              backgroundColor: 'transparent',
-                              border: 'none',
                               marginRight: '8px',
                             }}
-                          />
-                          <Button
-                            onClick={(): void => handleDelete(news._id)}
-                            style={{
-                              backgroundImage: 'url(/binIcon.png)',
-                              backgroundSize: 'cover',
-                              backgroundColor: 'transparent',
-                              border: 'none',
-                            }}
-                          />
+                          >
+                            <img
+                              alt="Edit"
+                              src={editIcon}
+                              height="24"
+                              className="d-inline-block align-center"
+                            />
+                          </Button>
+                          <Button onClick={(): void => handleDelete(news._id)}>
+                            <img
+                              alt="Delete"
+                              src={binIcon}
+                              height="24"
+                              className="d-inline-block align-center"
+                            />
+                          </Button>
                         </Col>
                       )}
                   </Row>

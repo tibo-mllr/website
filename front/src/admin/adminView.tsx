@@ -2,6 +2,8 @@ import { FormEvent, ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 import { client } from '../utils';
 import { Role, User, UserDocument } from './utilsAdmin';
+import editIcon from '../assets/editIcon.png';
+import binIcon from '../assets/binIcon.png';
 
 type AdminViewProps = {
   showNew: boolean;
@@ -127,7 +129,12 @@ export default function AdminView({
                           setUserToEdit(user);
                         }}
                       >
-                        Edit
+                        <img
+                          alt="Edit"
+                          src={editIcon}
+                          height="24"
+                          className="d-inline-block align-center"
+                        />
                       </Button>
                     </Col>
                     {sessionStorage.getItem('id') !== user._id && (
@@ -137,7 +144,12 @@ export default function AdminView({
                             handleDelete(user._id);
                           }}
                         >
-                          Delete
+                          <img
+                            alt="Delete"
+                            src={binIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
                         </Button>
                       </Col>
                     )}
