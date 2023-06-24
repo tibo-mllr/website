@@ -1,12 +1,4 @@
-export type Organization = {
-  name: string;
-  website: string;
-  location: string;
-};
-
-export type OrganizationDocument = Organization & {
-  _id: string;
-};
+import { OrganizationDocument } from '../utils';
 
 export enum ProjectType {
   Education = 'Education',

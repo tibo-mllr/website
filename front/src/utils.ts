@@ -8,3 +8,14 @@ export const client = axios.create({
 export type FormErrors = {
   [key: string]: string;
 };
+
+export type Organization = {
+  name: string;
+  description: string;
+  location: string;
+  website: string;
+};
+
+export type OrganizationDocument = Organization & {
+  _id: string;
+};

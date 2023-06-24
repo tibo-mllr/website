@@ -1,6 +1,7 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { client } from '../utils';
-import { OrganizationDocument, ProjectDocument } from './utilsProject';
+import { ProjectDocument } from './utilsProject';
+import { OrganizationDocument } from '../utils';
 import { Card, Col, Modal, Row } from 'react-bootstrap';
 
 export default function ProjectView(): ReactElement {
@@ -9,6 +10,7 @@ export default function ProjectView(): ReactElement {
   const [organization, setOrganization] = useState<OrganizationDocument>({
     _id: '',
     name: '',
+    description: '',
     location: '',
     website: '',
   });
@@ -16,9 +18,7 @@ export default function ProjectView(): ReactElement {
   useEffect(() => {
     client
       .get('/project')
-      .then((response) => {
-        setProjects(response.data as ProjectDocument[]);
-      })
+      .then((response) => setProjects(response.data as ProjectDocument[]))
       .catch((error) => console.log(error));
   }, []);
 
@@ -83,10 +83,11 @@ export default function ProjectView(): ReactElement {
         </Modal.Header>
         <Modal.Body>
           <p>
-            <b>Location:</b> {organization.location}
+            <b>Location: </b>
+            {organization.location}
           </p>
           <p>
-            <b>Website:</b>{' '}
+            <b>Website: </b>
             <a href={organization.website}>{organization.website}</a>
           </p>
         </Modal.Body>

@@ -9,10 +9,13 @@ export class Organization {
   name: string;
 
   @Prop({ required: true })
-  website: string;
+  description: string;
 
   @Prop({ required: true })
   location: string;
+
+  @Prop({ required: true })
+  website: string;
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization);

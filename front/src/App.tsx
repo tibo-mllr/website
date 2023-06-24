@@ -6,14 +6,21 @@ import { ReactElement, useState } from 'react';
 import LoginView from './login/loginView';
 import AdminView from './admin/adminView';
 import ProjectView from './project/projectView';
+import OrganizationView from './organization/organizationView';
 
 function App(): ReactElement {
   const [showNewData, setShowNewData] = useState<boolean>(false);
+  const [showNewOrganization, setShowNewOrganization] =
+    useState<boolean>(false);
   const [showNewUser, setShowNewUser] = useState<boolean>(false);
 
   return (
     <Router>
-      <Header setShowNewData={setShowNewData} setShowNewUser={setShowNewUser} />
+      <Header
+        setShowNewData={setShowNewData}
+        setShowNewUser={setShowNewUser}
+        setShowNewOrganization={setShowNewOrganization}
+      />
       <main
         style={{
           paddingTop: '8px',
@@ -27,6 +34,15 @@ function App(): ReactElement {
               path="/"
               element={
                 <HomeView showNew={showNewData} setShowNew={setShowNewData} />
+              }
+            />
+            <Route
+              path="/organizations"
+              element={
+                <OrganizationView
+                  showNew={showNewOrganization}
+                  setShowNew={setShowNewOrganization}
+                />
               }
             />
             <Route path="/projects" element={<ProjectView />} />
