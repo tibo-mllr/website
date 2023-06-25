@@ -13,12 +13,14 @@ function App(): ReactElement {
   const [showNewOrganization, setShowNewOrganization] =
     useState<boolean>(false);
   const [showNewUser, setShowNewUser] = useState<boolean>(false);
+  const [showNewProject, setShowNewProject] = useState<boolean>(false);
 
   return (
     <Router>
       <Header
         setShowNewData={setShowNewData}
         setShowNewUser={setShowNewUser}
+        setShowNewProject={setShowNewProject}
         setShowNewOrganization={setShowNewOrganization}
       />
       <main
@@ -45,7 +47,15 @@ function App(): ReactElement {
                 />
               }
             />
-            <Route path="/projects" element={<ProjectView />} />
+            <Route
+              path="/projects"
+              element={
+                <ProjectView
+                  showNew={showNewProject}
+                  setShowNew={setShowNewProject}
+                />
+              }
+            />
             <Route path="/login" element={<LoginView />} />
             {!!sessionStorage.getItem('loginToken') && (
               <Route

@@ -270,8 +270,11 @@ export default function AdminView({
                       }
                     >
                       <option disabled>Select a role</option>
-                      <option value={Role.Admin}>Admin</option>
-                      <option value={Role.SuperAdmin}>Super admin</option>
+                      {Object.values(Role).map((role) => (
+                        <option key={role} value={role}>
+                          {role}
+                        </option>
+                      ))}
                     </Form.Select>
                   </Form.Group>
                 </Modal.Body>

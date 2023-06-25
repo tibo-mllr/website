@@ -6,12 +6,14 @@ import plusIcon from '../assets/plusIcon.png';
 type HeaderProps = {
   setShowNewData: (showNew: boolean) => void;
   setShowNewUser: (showNew: boolean) => void;
+  setShowNewProject: (showNew: boolean) => void;
   setShowNewOrganization: (showNew: boolean) => void;
 };
 
 export default function Header({
   setShowNewData,
   setShowNewUser,
+  setShowNewProject,
   setShowNewOrganization,
 }: HeaderProps): ReactElement {
   const selected = window.location.pathname;
@@ -77,6 +79,24 @@ export default function Header({
                     style={{ paddingRight: '8px' }}
                   />
                   <b className="d-inline-block align-center">Add a news</b>
+                </Button>
+              )}
+            {!!sessionStorage.getItem('loginToken') &&
+              (sessionStorage.getItem('role') === 'admin' ||
+                sessionStorage.getItem('role') === 'superAdmin') &&
+              selected === '/projects' && (
+                <Button
+                  onClick={(): void => setShowNewProject(true)}
+                  style={{ marginRight: '8px' }}
+                >
+                  <img
+                    alt="Plus icon"
+                    src={plusIcon}
+                    height="16"
+                    className="d-inline-block align-center"
+                    style={{ paddingRight: '8px' }}
+                  />
+                  <b className="d-inline-block align-center">Add project</b>
                 </Button>
               )}
             {!!sessionStorage.getItem('loginToken') &&

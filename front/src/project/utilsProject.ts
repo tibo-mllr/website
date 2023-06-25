@@ -7,15 +7,15 @@ export enum ProjectType {
 }
 
 export type Project = {
-  role: string; //
-  title: string; //
+  role: string;
+  title: string;
   organization: OrganizationDocument;
   type: ProjectType;
-  startDate: Date; //
-  endDate?: Date; //
-  description: string; //
-  link?: string; //
-  competencies: string[]; //
+  startDate: Date;
+  endDate?: Date;
+  description: string;
+  link?: string;
+  competencies: string[];
 };
 
 export type ProjectDocument = Project & {
