@@ -237,6 +237,17 @@ export default function ProjectView({
     }
   };
 
+  const handleDelete = (id: string): void => {
+    client
+      .delete('/project/' + id, {
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        },
+      })
+      .then(() => setProjects(projects.filter((project) => project._id !== id)))
+      .catch((error) => console.log(error));
+  };
+
   useEffect(() => {
     client
       .get('/project')
@@ -295,11 +306,26 @@ export default function ProjectView({
                     <i>{project.competencies.join(' • ')}</i>
                   </Card.Text>
                 </Card.Body>
-                {project.link && (
-                  <Card.Footer>
-                    <a href={project.link}>See more</a>
-                  </Card.Footer>
-                )}
+                <Card.Footer>
+                  {project.link && (
+                    <Col>
+                      <a href={project.link}>See more</a>
+                    </Col>
+                  )}
+                  {!!sessionStorage.getItem('loginToken') &&
+                    sessionStorage.getItem('role') === 'superAdmin' && (
+                      <Col className="d-flex justify-content-end">
+                        <Button onClick={(): void => handleDelete(project._id)}>
+                          <img
+                            alt="Delete"
+                            src={binIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                      </Col>
+                    )}
+                </Card.Footer>
               </Card>
             </Col>
           </Row>
