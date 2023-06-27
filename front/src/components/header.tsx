@@ -1,6 +1,7 @@
 import { ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
+import logo from '../assets/logo.png';
 import plusIcon from '../assets/plusIcon.png';
 
 type HeaderProps = {
@@ -26,7 +27,7 @@ export default function Header({
           <Navbar.Brand href="/">
             <img
               alt="Anarchist logo"
-              src="/logo192.png"
+              src={logo}
               height="30"
               className="d-inline-block align-top"
             />{' '}
