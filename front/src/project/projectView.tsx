@@ -8,7 +8,7 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { FormErrors, client } from '../utils';
 import { Project, ProjectDocument, ProjectType } from './utilsProject';
-import { OrganizationDocument } from '../utils';
+import { OrganizationDocument } from '../organization/utilsOrganization';
 import {
   Button,
   Card,
@@ -85,6 +85,8 @@ export default function ProjectView({
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   const checkTimeStamp = (begin: Date, end: Date): boolean => {
+    begin = new Date(begin);
+    end = new Date(end);
     return begin.getTime() < end.getTime();
   };
 
@@ -355,7 +357,7 @@ export default function ProjectView({
             .then((response) => {
               alert('Project edited');
               setProjects([...projects, response.data as ProjectDocument]);
-              setShowNew(false);
+              setShowEdit(false);
             })
             .catch((error) => {
               alert(error);
@@ -413,7 +415,7 @@ export default function ProjectView({
               .then((response) => {
                 alert('Project edited');
                 setProjects([...projects, response.data as ProjectDocument]);
-                setShowNew(false);
+                setShowEdit(false);
               })
               .catch((error) => {
                 alert(error);
@@ -442,7 +444,7 @@ export default function ProjectView({
           .then((response) => {
             alert('Project edited');
             setProjects([...projects, response.data as ProjectDocument]);
-            setShowNew(false);
+            setShowEdit(false);
           })
           .catch((error) => {
             alert(error);

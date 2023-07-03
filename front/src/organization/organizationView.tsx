@@ -1,10 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
-import {
-  FormErrors,
-  Organization,
-  OrganizationDocument,
-  client,
-} from '../utils';
+import { FormErrors, client } from '../utils';
+import { Organization, OrganizationDocument } from './utilsOrganization';
 import { Button, Card, Col, Form, Modal, Row } from 'react-bootstrap';
 
 type OrganizationViewProps = {

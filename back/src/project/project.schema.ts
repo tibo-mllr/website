@@ -4,7 +4,7 @@ import { Organization } from 'src/organization/organization.schema';
 
 export type ProjectDocument = HydratedDocument<Project>;
 
-enum ProjectType {
+export enum ProjectType {
   Education = 'Education',
   Tech = 'Tech Experiences',
   Personal = 'Personal Projects',

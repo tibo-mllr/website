@@ -7,6 +7,7 @@ import LoginView from './login/loginView';
 import AdminView from './admin/adminView';
 import ProjectView from './project/projectView';
 import OrganizationView from './organization/organizationView';
+import ResumeView from './resume/resumeView';
 
 function App(): ReactElement {
   const [showNewData, setShowNewData] = useState<boolean>(false);
@@ -38,21 +39,22 @@ function App(): ReactElement {
                 <HomeView showNew={showNewData} setShowNew={setShowNewData} />
               }
             />
-            <Route
-              path="/organizations"
-              element={
-                <OrganizationView
-                  showNew={showNewOrganization}
-                  setShowNew={setShowNewOrganization}
-                />
-              }
-            />
+            <Route path="/resume" element={<ResumeView />} />
             <Route
               path="/projects"
               element={
                 <ProjectView
                   showNew={showNewProject}
                   setShowNew={setShowNewProject}
+                />
+              }
+            />
+            <Route
+              path="/organizations"
+              element={
+                <OrganizationView
+                  showNew={showNewOrganization}
+                  setShowNew={setShowNewOrganization}
                 />
               }
             />

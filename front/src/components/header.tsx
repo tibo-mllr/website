@@ -41,18 +41,24 @@ export default function Header({
               Home
             </Nav.Link>
             <Nav.Link
-              href="/organizations"
-              className={
-                selected === '/organizations' ? 'bg-selected' : undefined
-              }
+              href="/resume"
+              className={selected === '/resume' ? 'bg-selected' : undefined}
             >
-              Organizations
+              Resume
             </Nav.Link>
             <Nav.Link
               href="/projects"
               className={selected === '/projects' ? 'bg-selected' : undefined}
             >
               Projects
+            </Nav.Link>
+            <Nav.Link
+              href="/organizations"
+              className={
+                selected === '/organizations' ? 'bg-selected' : undefined
+              }
+            >
+              Organizations
             </Nav.Link>
             {!!sessionStorage.getItem('loginToken') && (
               <Nav.Link

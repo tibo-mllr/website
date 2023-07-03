@@ -1,4 +1,4 @@
-import { OrganizationDocument } from '../utils';
+import { OrganizationDocument } from '../organization/utilsOrganization';
 
 export enum ProjectType {
   Education = 'Education',
