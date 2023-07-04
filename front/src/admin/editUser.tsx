@@ -1,4 +1,10 @@
-import { FormEvent, ReactElement, useCallback, useState } from 'react';
+import {
+  FormEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Role, UserDocument } from './utilsAdmin';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
@@ -60,6 +66,10 @@ export default function EditUser({
       setSubmitted(false);
     }
   };
+
+  useEffect(() => {
+    setErrors(validateForm());
+  }, [validateForm]);
 
   return (
     <Modal

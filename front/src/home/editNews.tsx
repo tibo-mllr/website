@@ -1,4 +1,10 @@
-import { FormEvent, ReactElement, useCallback, useState } from 'react';
+import {
+  FormEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
 import { NewsDocument } from './utilsHome';
@@ -60,6 +66,10 @@ export default function EditNews({
       setSubmitted(false);
     }
   };
+
+  useEffect(() => {
+    setErrors(validateForm());
+  }, [validateForm]);
 
   return (
     <Modal

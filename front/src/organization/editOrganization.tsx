@@ -1,4 +1,10 @@
-import { FormEvent, ReactElement, useCallback, useState } from 'react';
+import {
+  FormEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { OrganizationDocument } from './utilsOrganization';
 import { FormErrors, client } from '../utils';
@@ -73,6 +79,10 @@ export default function EditOrganization({
       setSubmitted(false);
     }
   };
+
+  useEffect(() => {
+    setErrors(validateForm());
+  }, [validateForm]);
 
   return (
     <Modal

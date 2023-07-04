@@ -1,4 +1,10 @@
-import { FormEvent, ReactElement, useCallback, useState } from 'react';
+import {
+  FormEvent,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import {
   Button,
   Card,
@@ -232,6 +238,10 @@ export default function EditProject({
       }
     }
   };
+
+  useEffect(() => {
+    setErrors(validateForm());
+  }, [validateForm]);
 
   return (
     <Modal
