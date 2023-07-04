@@ -55,7 +55,7 @@ export class UsersController {
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
-    @Param('id') id: number,
+    @Param('id') id: string,
     @Body() user: NewUser,
   ): Promise<UserDocument> {
     return await this.userService.update(id, user).catch((error) => {

@@ -17,7 +17,7 @@ export class UserService {
   }
 
   async getSelf(id: string): Promise<UserDocument | undefined> {
-    return await this.userModel.findById(id).exec();
+    return await this.userModel.findById(id, { hashedPassword: 0 }).exec();
   }
 
   async getAll(): Promise<UserDocument[]> {
@@ -25,21 +25,22 @@ export class UserService {
   }
 
   async create(newUser: NewUser): Promise<UserDocument> {
+    let createdUser: UserDocument;
     hash(newUser.password, 8, async (_, hashedPassword) => {
       const user = {
         role: newUser.role,
         username: newUser.username,
         hashedPassword: hashedPassword,
       };
-      const createdUser = new this.userModel(user);
+      createdUser = new this.userModel(user);
       await createdUser.save().catch((error) => {
         throw new Error(error);
       });
     });
-    return await this.get(newUser.username);
+    return await this.getSelf(createdUser._id.toString());
   }
 
-  async update(id: number, user: NewUser): Promise<UserDocument> {
+  async update(id: string, user: NewUser): Promise<UserDocument> {
     if (user.password) {
       hash(user.password, 8, async (_, hashedPassword) => {
         const updatedUser = {
@@ -63,7 +64,7 @@ export class UserService {
       throw new Error(error);
     });
 
-    return await this.userModel.findById(id).exec();
+    return await this.getSelf(id);
   }
 
   async delete(id: number): Promise<UserDocument> {
