@@ -58,65 +58,69 @@ export default function OrganizationView({
           These are the organizations I worked for
         </h1>
       </Row>
-      {organizations.map((organization) => (
-        <Row style={{ marginBottom: '8px' }} key={organization._id}>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title>
-                  <b>{organization.name}</b>, {organization.location}
-                </Card.Title>
-              </Card.Header>
-              <Card.Body>
-                {organization.description ? (
-                  organization.description
-                ) : (
-                  <i>No description provided</i>
-                )}
-                <br />
-                <br />
-                <b>Website: </b>
-                <a href={organization.website}>{organization.website}</a>
-              </Card.Body>
-              {sessionStorage.getItem('loginToken') &&
-                sessionStorage.getItem('role') === 'superAdmin' && (
-                  <Card.Footer>
-                    <Row>
-                      <Col className="d-flex justify-content-end">
-                        <Button
-                          onClick={(): void => {
-                            setShowEdit(true);
-                            setOrganizationToEdit(organization);
-                          }}
-                          style={{
-                            marginRight: '8px',
-                          }}
-                        >
-                          <img
-                            alt="Edit"
-                            src={editIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                        <Button
-                          onClick={(): void => handleDelete(organization._id)}
-                        >
-                          <img
-                            alt="Delete"
-                            src={binIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Card.Footer>
-                )}
-            </Card>
-          </Col>
-        </Row>
-      ))}
+      {organizations.length ? (
+        organizations.map((organization) => (
+          <Row style={{ marginBottom: '8px' }} key={organization._id}>
+            <Col>
+              <Card>
+                <Card.Header>
+                  <Card.Title>
+                    <b>{organization.name}</b>, {organization.location}
+                  </Card.Title>
+                </Card.Header>
+                <Card.Body>
+                  {organization.description ? (
+                    organization.description
+                  ) : (
+                    <i>No description provided</i>
+                  )}
+                  <br />
+                  <br />
+                  <b>Website: </b>
+                  <a href={organization.website}>{organization.website}</a>
+                </Card.Body>
+                {sessionStorage.getItem('loginToken') &&
+                  sessionStorage.getItem('role') === 'superAdmin' && (
+                    <Card.Footer>
+                      <Row>
+                        <Col className="d-flex justify-content-end">
+                          <Button
+                            onClick={(): void => {
+                              setShowEdit(true);
+                              setOrganizationToEdit(organization);
+                            }}
+                            style={{
+                              marginRight: '8px',
+                            }}
+                          >
+                            <img
+                              alt="Edit"
+                              src={editIcon}
+                              height="24"
+                              className="d-inline-block align-center"
+                            />
+                          </Button>
+                          <Button
+                            onClick={(): void => handleDelete(organization._id)}
+                          >
+                            <img
+                              alt="Delete"
+                              src={binIcon}
+                              height="24"
+                              className="d-inline-block align-center"
+                            />
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Card.Footer>
+                  )}
+              </Card>
+            </Col>
+          </Row>
+        ))
+      ) : (
+        <i>No organization to display</i>
+      )}
       {sessionStorage.getItem('loginToken') && (
         <CreateOrganization
           show={showNew}

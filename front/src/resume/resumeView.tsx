@@ -40,12 +40,16 @@ export default function ResumeView(): ReactElement {
             <b style={{ fontSize: '1.2em' }}>Skills</b>
             <br />
             <span>
-              {resume.competencies.map((competency, index) => (
-                <span key={index}>
-                  {competency.competencies.join(' • ')}
-                  {index !== resume.competencies.length - 1 ? ' • ' : ''}
-                </span>
-              ))}
+              {resume.competencies.length ? (
+                resume.competencies.map((competency, index) => (
+                  <span key={index}>
+                    {competency.competencies.join(' • ')}
+                    {index !== resume.competencies.length - 1 ? ' • ' : ''}
+                  </span>
+                ))
+              ) : (
+                <i>No skills to display</i>
+              )}
             </span>
             <br />
             <br />
@@ -65,52 +69,57 @@ export default function ResumeView(): ReactElement {
         </Card>
       </Col>
       <Col>
-        {resume.projects.map((type) => (
-          <Row style={{ marginBottom: '8px' }} key={type._id}>
-            <Col>
-              <Card>
-                <Card.Header>
-                  <Card.Title>{type._id}</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  {type.projects.map((project) => (
-                    <Row key={project._id}>
-                      <Row>
-                        <Col>
-                          <b>
-                            <span style={{ fontSize: '1.3em' }}>
-                              {project.role}
+        {resume.projects.length ? (
+          resume.projects.map((type) => (
+            <Row style={{ marginBottom: '8px' }} key={type._id}>
+              <Col>
+                <Card>
+                  <Card.Header>
+                    <Card.Title>{type._id}</Card.Title>
+                  </Card.Header>
+                  <Card.Body>
+                    {type.projects.map((project) => (
+                      <Row key={project._id}>
+                        <Row>
+                          <Col>
+                            <b>
+                              <span style={{ fontSize: '1.3em' }}>
+                                {project.role}
+                                {' | '}
+                              </span>
+                            </b>
+                            <span style={{ fontSize: '1em' }}>
+                              <u>{project.organization.name}</u>
                               {' | '}
                             </span>
-                          </b>
-                          <span style={{ fontSize: '1em' }}>
-                            <u>{project.organization.name}</u>
-                            {' | '}
+                            <span style={{ fontSize: '0.75em' }}>
+                              {new Date(project.startDate).toLocaleDateString()}{' '}
+                              -{' '}
+                              {project.endDate
+                                ? new Date(project.endDate).toLocaleDateString()
+                                : 'Present'}
+                            </span>
+                          </Col>
+                        </Row>
+                        <Row>
+                          <span>
+                            <b>{project.title}</b>
+                            <br />
+                            {project.description}
+                            <br />
+                            <i>{project.competencies.join(' • ')}</i>
                           </span>
-                          <span style={{ fontSize: '0.75em' }}>
-                            {new Date(project.startDate).toLocaleDateString()} -{' '}
-                            {project.endDate
-                              ? new Date(project.endDate).toLocaleDateString()
-                              : 'Present'}
-                          </span>
-                        </Col>
+                        </Row>
                       </Row>
-                      <Row>
-                        <span>
-                          <b>{project.title}</b>
-                          <br />
-                          {project.description}
-                          <br />
-                          <i>{project.competencies.join(' • ')}</i>
-                        </span>
-                      </Row>
-                    </Row>
-                  ))}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        ))}
+                    ))}
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          ))
+        ) : (
+          <i>No experience to display</i>
+        )}
       </Col>
     </Row>
   );
