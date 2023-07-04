@@ -29,7 +29,8 @@ export class OrganizationService {
     id: string,
     organization: Organization,
   ): Promise<OrganizationDocument> {
-    return await this.organizationModel.findByIdAndUpdate(id, organization);
+    await this.organizationModel.findByIdAndUpdate(id, organization);
+    return await this.organizationModel.findById(id);
   }
 
   async delete(id: string): Promise<OrganizationDocument> {

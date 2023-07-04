@@ -22,7 +22,8 @@ export class ProjectService {
   }
 
   async update(id: string, project: Project): Promise<ProjectDocument> {
-    return await this.projectModel.findByIdAndUpdate(id, project);
+    await this.projectModel.findByIdAndUpdate(id, project);
+    return await this.projectModel.findById(id);
   }
 
   async delete(id: string): Promise<ProjectDocument> {

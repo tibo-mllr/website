@@ -29,13 +29,15 @@ export class NewsService {
     newNews: NewsDocument,
     userId: string,
   ): Promise<NewsDocument> {
+    await this.newsModel.findByIdAndUpdate(id, {
+      ...newNews,
+      edited: true,
+      editor: userId,
+    });
     return await this.newsModel
-      .findByIdAndUpdate(id, {
-        ...newNews,
-        edited: true,
-        editor: userId,
-      })
-      .populate('author', 'username');
+      .findById(id)
+      .populate('author', 'username')
+      .populate('editor', 'username');
   }
 
   async delete(id: string): Promise<NewsDocument> {
