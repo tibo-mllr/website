@@ -6,7 +6,7 @@ import { Model } from 'mongoose';
 @Injectable()
 export class ProjectService {
   constructor(
-    @InjectModel(Project.name) private projectModel: Model<Project>,
+    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
   ) {}
 
   async getAll(): Promise<ProjectDocument[]> {

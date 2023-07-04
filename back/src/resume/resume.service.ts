@@ -15,7 +15,7 @@ import { Resume } from './resume.entity';
 @Injectable()
 export class ResumeService {
   constructor(
-    @InjectModel(Project.name) private projectModel: Model<Project>,
+    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
     @InjectModel(Organization.name)
     private organizationModel: Model<OrganizationDocument>,
   ) {}
