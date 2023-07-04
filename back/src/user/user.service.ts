@@ -16,6 +16,10 @@ export class UserService {
     return await this.userModel.findOne({ username }).exec();
   }
 
+  async getSelf(id: string): Promise<UserDocument | undefined> {
+    return await this.userModel.findById(id).exec();
+  }
+
   async getAll(): Promise<UserDocument[]> {
     return await this.userModel.find({}, { hashedPassword: 0 }).exec();
   }

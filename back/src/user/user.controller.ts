@@ -6,6 +6,8 @@ import {
   Param,
   Post,
   Put,
+  RawBodyRequest,
+  Req,
   UseGuards,
 } from '@nestjs/common';
 import { NewUser, UserDocument } from './user.schema';
@@ -17,11 +19,27 @@ import { Role, RoleGuard, Roles } from 'src/auth/role.guard';
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
+  @Get('/superAdmin')
   @Roles(Role.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async getAll(): Promise<UserDocument[]> {
     return await this.userService.getAll();
+  }
+
+  @Get('/admin')
+  @Roles(Role.Admin)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  async getSelf(
+    @Req()
+    req: RawBodyRequest<{
+      user: {
+        _id: string;
+        username: string;
+        role: string;
+      };
+    }>,
+  ): Promise<UserDocument[]> {
+    return [await this.userService.getSelf(req.user._id)];
   }
 
   @Post()

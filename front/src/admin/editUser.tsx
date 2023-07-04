@@ -124,22 +124,24 @@ export default function EditUser({
               autoComplete="new-password"
             />
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Role</Form.Label>
-            <Form.Select
-              value={userToEdit.role}
-              onChange={(event): void =>
-                setUserToEdit({
-                  ...userToEdit,
-                  role: event.target.value as Role,
-                })
-              }
-            >
-              <option disabled>Select a role</option>
-              <option value={Role.Admin}>Admin</option>
-              <option value={Role.SuperAdmin}>Super admin</option>
-            </Form.Select>
-          </Form.Group>
+          {sessionStorage.getItem('role') == 'superAdmin' && (
+            <Form.Group className="mb-3">
+              <Form.Label>Role</Form.Label>
+              <Form.Select
+                value={userToEdit.role}
+                onChange={(event): void =>
+                  setUserToEdit({
+                    ...userToEdit,
+                    role: event.target.value as Role,
+                  })
+                }
+              >
+                <option disabled>Select a role</option>
+                <option value={Role.Admin}>Admin</option>
+                <option value={Role.SuperAdmin}>Super admin</option>
+              </Form.Select>
+            </Form.Group>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" type="submit">

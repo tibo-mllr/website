@@ -43,87 +43,82 @@ export default function AdminView({
 
   useEffect(() => {
     client
-      .get('/user', {
+      .get(`/user/${sessionStorage.getItem('role')}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
         },
       })
-      .then((response) => {
-        setUsers(response.data as UserDocument[]);
-      })
+      .then((response) => setUsers(response.data as UserDocument[]))
       .catch((error) => console.log(error));
   }, []);
 
   return (
     <>
-      {!!sessionStorage.getItem('loginToken') &&
-        sessionStorage.getItem('role') === 'superAdmin' && (
-          <>
-            {users.map((user) => (
-              <Row style={{ marginBottom: '8px' }} key={user._id}>
-                <Col>
-                  <Card>
-                    <Card.Header>
-                      <Card.Title>User: {user.username}</Card.Title>
-                    </Card.Header>
-                    <Card.Body>
-                      <Card.Text>Role: {user.role}</Card.Text>
-                    </Card.Body>
-                    <Card.Footer>
-                      <Row>
-                        <Col>
-                          <Button
-                            onClick={(): void => {
-                              setShowEdit(true);
-                              setUserToEdit(user);
-                            }}
-                          >
-                            <img
-                              alt="Edit"
-                              src={editIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                        </Col>
-                        {sessionStorage.getItem('id') !== user._id && (
-                          <Col className="d-flex justify-content-end">
-                            <Button
-                              onClick={(): void => {
-                                handleDelete(user._id);
-                              }}
-                            >
-                              <img
-                                alt="Delete"
-                                src={binIcon}
-                                height="24"
-                                className="d-inline-block align-center"
-                              />
-                            </Button>
-                          </Col>
-                        )}
-                      </Row>
-                    </Card.Footer>
-                  </Card>
-                </Col>
-              </Row>
-            ))}
-            <CreateUser
-              show={showNew}
-              setShow={setShowNew}
-              users={users}
-              setUsers={setUsers}
-            />
-            <EditUser
-              userToEdit={userToEdit}
-              setUserToEdit={setUserToEdit}
-              show={showEdit}
-              setShow={setShowEdit}
-              users={users}
-              setUsers={setUsers}
-            />
-          </>
-        )}
+      {users.map((user) => (
+        <Row style={{ marginBottom: '8px' }} key={user._id}>
+          <Col>
+            <Card>
+              <Card.Header>
+                <Card.Title>User: {user.username}</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Card.Text>Role: {user.role}</Card.Text>
+              </Card.Body>
+              <Card.Footer>
+                <Row>
+                  <Col>
+                    <Button
+                      onClick={(): void => {
+                        setShowEdit(true);
+                        setUserToEdit(user);
+                      }}
+                    >
+                      <img
+                        alt="Edit"
+                        src={editIcon}
+                        height="24"
+                        className="d-inline-block align-center"
+                      />
+                    </Button>
+                  </Col>
+                  {sessionStorage.getItem('id') !== user._id && (
+                    <Col className="d-flex justify-content-end">
+                      <Button
+                        onClick={(): void => {
+                          handleDelete(user._id);
+                        }}
+                      >
+                        <img
+                          alt="Delete"
+                          src={binIcon}
+                          height="24"
+                          className="d-inline-block align-center"
+                        />
+                      </Button>
+                    </Col>
+                  )}
+                </Row>
+              </Card.Footer>
+            </Card>
+          </Col>
+        </Row>
+      ))}
+      {sessionStorage.getItem('role') === 'superAdmin' && (
+        <CreateUser
+          show={showNew}
+          setShow={setShowNew}
+          users={users}
+          setUsers={setUsers}
+        />
+      )}
+      <EditUser
+        userToEdit={userToEdit}
+        setUserToEdit={setUserToEdit}
+        show={showEdit}
+        setShow={setShowEdit}
+        users={users}
+        setUsers={setUsers}
+      />
     </>
   );
 }
