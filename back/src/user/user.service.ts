@@ -3,10 +3,14 @@ import { NewUser, User, UserDocument } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { hash } from 'bcrypt';
+import { News, NewsDocument } from 'src/news/news.schema';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(News.name) private newsModel: Model<NewsDocument>,
+  ) {}
 
   async get(username: string): Promise<UserDocument | undefined> {
     return await this.userModel.findOne({ username }).exec();
@@ -59,6 +63,8 @@ export class UserService {
   }
 
   async delete(id: number): Promise<UserDocument> {
+    await this.newsModel.deleteMany({ author: id }).exec();
+    await this.newsModel.deleteMany({ editor: id }).exec();
     return await this.userModel.findByIdAndDelete(id).exec();
   }
 }
