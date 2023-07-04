@@ -36,14 +36,8 @@ export default function AdminView({
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then(() => {
-          alert('User deleted');
-          setUsers(users.filter((user) => user._id !== id));
-        })
-        .catch((error) => {
-          alert(error);
-          console.log(error);
-        });
+        .then(() => setUsers(users.filter((user) => user._id !== id)))
+        .catch((error) => console.log(error));
     }
   };
 

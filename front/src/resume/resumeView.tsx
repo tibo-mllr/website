@@ -12,10 +12,7 @@ export default function ResumeView(): ReactElement {
   useEffect(() => {
     client
       .get('/resume')
-      .then((response) => {
-        setResume(response.data as Resume);
-        console.log(response.data);
-      })
+      .then((response) => setResume(response.data as Resume))
       .catch((error) => console.log(error));
   }, []);
 

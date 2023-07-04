@@ -37,13 +37,8 @@ export default function HomeView({
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then(() => {
-          setAllNews(allNews.filter((news) => news._id !== id));
-        })
-        .catch((error) => {
-          alert(error);
-          console.log(error);
-        });
+        .then(() => setAllNews(allNews.filter((news) => news._id !== id)))
+        .catch((error) => console.log(error));
     }
   };
 
