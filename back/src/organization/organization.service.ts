@@ -2,12 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Organization, OrganizationDocument } from './organization.schema';
 import { Model } from 'mongoose';
+import { Project, ProjectDocument } from 'src/project/project.schema';
 
 @Injectable()
 export class OrganizationService {
   constructor(
     @InjectModel(Organization.name)
     private organizationModel: Model<OrganizationDocument>,
+    @InjectModel(Project.name)
+    private projectModel: Model<ProjectDocument>,
   ) {}
 
   async getAll(): Promise<OrganizationDocument[]> {
@@ -30,6 +33,7 @@ export class OrganizationService {
   }
 
   async delete(id: string): Promise<OrganizationDocument> {
+    await this.projectModel.deleteMany({ organization: id });
     return await this.organizationModel.findByIdAndDelete(id);
   }
 }
