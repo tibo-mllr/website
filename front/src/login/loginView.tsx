@@ -5,7 +5,13 @@ import { client } from '../utils';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-export default function LoginView(): ReactElement {
+type LoginViewProps = {
+  setLoginToken: (loginToken: string) => void;
+};
+
+export default function LoginView({
+  setLoginToken,
+}: LoginViewProps): ReactElement {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -19,6 +25,7 @@ export default function LoginView(): ReactElement {
         password: password,
       })
       .then((response) => {
+        setLoginToken(response.data.access_token);
         sessionStorage.setItem('loginToken', response.data.access_token);
         sessionStorage.setItem('role', response.data.role);
         sessionStorage.setItem('id', response.data.id);

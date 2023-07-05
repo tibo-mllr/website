@@ -15,6 +15,9 @@ function App(): ReactElement {
     useState<boolean>(false);
   const [showNewUser, setShowNewUser] = useState<boolean>(false);
   const [showNewProject, setShowNewProject] = useState<boolean>(false);
+  const [loginToken, setLoginToken] = useState<string>(
+    sessionStorage.getItem('loginToken') || '',
+  );
 
   return (
     <Router>
@@ -58,8 +61,11 @@ function App(): ReactElement {
                 />
               }
             />
-            <Route path="/login" element={<LoginView />} />
-            {!!sessionStorage.getItem('loginToken') && (
+            <Route
+              path="/login"
+              element={<LoginView setLoginToken={setLoginToken} />}
+            />
+            {(!!sessionStorage.getItem('loginToken') || !!loginToken) && (
               <Route
                 path="/admin"
                 element={
