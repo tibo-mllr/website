@@ -47,7 +47,14 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   async create(@Body() user: NewUser): Promise<UserDocument> {
     return await this.userService.create(user).catch((error) => {
-      throw new Error(error);
+      throw error;
+    });
+  }
+
+  @Post('/new')
+  async createSelf(@Body() user: NewUser): Promise<UserDocument> {
+    return await this.userService.createSelf(user).catch((error) => {
+      throw error;
     });
   }
 
@@ -59,7 +66,7 @@ export class UsersController {
     @Body() user: NewUser,
   ): Promise<UserDocument> {
     return await this.userService.update(id, user).catch((error) => {
-      throw new Error(error);
+      throw error;
     });
   }
 

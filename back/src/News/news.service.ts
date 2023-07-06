@@ -19,7 +19,7 @@ export class NewsService {
   async create(news: News, userId: string): Promise<NewsDocument> {
     const createdNews = new this.newsModel({ ...news, author: userId });
     await createdNews.save().catch((error) => {
-      throw new Error(error);
+      throw error;
     });
     return createdNews.populate('author', 'username');
   }

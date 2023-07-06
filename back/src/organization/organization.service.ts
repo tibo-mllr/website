@@ -20,7 +20,7 @@ export class OrganizationService {
   async create(organization: Organization): Promise<OrganizationDocument> {
     const createdOrganization = new this.organizationModel(organization);
     await createdOrganization.save().catch((error) => {
-      throw new Error(error);
+      throw error;
     });
     return createdOrganization;
   }

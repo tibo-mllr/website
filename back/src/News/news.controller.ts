@@ -34,7 +34,7 @@ export class NewsController {
     }>,
   ): Promise<News> {
     return await this.newsService.create(news, req.user._id).catch((error) => {
-      throw new Error(error);
+      throw error;
     });
   }
 

@@ -30,7 +30,7 @@ export class OrganizationController {
     return await this.organizationService
       .create(organization)
       .catch((error) => {
-        throw new Error(error);
+        throw error;
       });
   }
 
@@ -44,7 +44,7 @@ export class OrganizationController {
     return await this.organizationService
       .update(id, organization)
       .catch((error) => {
-        throw new Error(error);
+        throw error;
       });
   }
 

@@ -16,7 +16,7 @@ export class ProjectService {
   async create(project: Project): Promise<ProjectDocument> {
     const createdProject = new this.projectModel(project);
     await createdProject.save().catch((error) => {
-      throw new Error(error);
+      throw error;
     });
     return createdProject;
   }

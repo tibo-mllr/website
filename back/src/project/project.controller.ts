@@ -26,7 +26,7 @@ export class ProjectController {
   @UseGuards(JwtAuthGuard)
   async create(@Body() project: Project): Promise<ProjectDocument> {
     return await this.projectService.create(project).catch((error) => {
-      throw new Error(error);
+      throw error;
     });
   }
 
@@ -38,7 +38,7 @@ export class ProjectController {
     @Body() project: Project,
   ): Promise<ProjectDocument> {
     return await this.projectService.update(id, project).catch((error) => {
-      throw new Error(error);
+      throw error;
     });
   }
 

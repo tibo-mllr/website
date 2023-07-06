@@ -14,6 +14,7 @@ type CreateUserProps = {
   setShow: (show: boolean) => void;
   users: UserDocument[];
   setUsers: (users: UserDocument[]) => void;
+  newSelf?: boolean;
 };
 
 export default function CreateUser({
@@ -21,6 +22,7 @@ export default function CreateUser({
   setShow,
   users,
   setUsers,
+  newSelf = false,
 }: CreateUserProps): ReactElement {
   const [newUser, setNewUser] = useState<User>({
     username: '',
@@ -47,13 +49,13 @@ export default function CreateUser({
     if (Object.keys(errors).length > 0) setErrors(errors);
     else {
       client
-        .post('/user', newUser, {
+        .post(`/user${newSelf ? '/new' : ''}`, newUser, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
         .then((response) => {
-          alert('User added');
+          alert(newSelf ? 'Account created' : 'User added');
           setNewUser({
             username: '',
             password: '',
@@ -63,8 +65,11 @@ export default function CreateUser({
           setUsers([...users, response.data as UserDocument]);
         })
         .catch((error) => {
-          alert(error);
-          console.log(error);
+          if (error.response.status === 409) alert('Username already used');
+          else {
+            alert(error);
+            console.log(error);
+          }
         });
       setSubmitted(false);
     }
@@ -130,25 +135,28 @@ export default function CreateUser({
               {erros.password}
             </Form.Control.Feedback>
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Role</Form.Label>
-            <Form.Select
-              value={newUser.role}
-              onChange={(event): void =>
-                setNewUser({
-                  ...newUser,
-                  role: event.target.value as Role,
-                })
-              }
-            >
-              <option disabled>Select a role</option>
-              {Object.values(Role).map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-            </Form.Select>
-          </Form.Group>
+          {sessionStorage.getItem('loginToken') &&
+            sessionStorage.getItem('role') == 'superAdmin' && (
+              <Form.Group className="mb-3">
+                <Form.Label>Role</Form.Label>
+                <Form.Select
+                  value={newUser.role}
+                  onChange={(event): void =>
+                    setNewUser({
+                      ...newUser,
+                      role: event.target.value as Role,
+                    })
+                  }
+                >
+                  <option disabled>Select a role</option>
+                  {Object.values(Role).map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" type="submit">
