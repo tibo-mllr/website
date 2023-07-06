@@ -10,7 +10,7 @@ import { ResumeModule } from './resume/resume.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost:27017/nest'),
+    MongooseModule.forRoot(`mongodb://${process.env.DB_HOST}:27017/nest`),
     NewsModule,
     AuthModule,
     UsersModule,

@@ -17,3 +17,10 @@ lerna-debug.log*
 
 # JWT
 *.env
+
+# Git
+.git
+.gitignore
+
+# Misc
+.env.template
