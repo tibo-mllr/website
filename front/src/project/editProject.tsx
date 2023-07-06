@@ -66,8 +66,8 @@ export default function EditProject({
     if (!projectToEdit.organization.website)
       errors.organizationWebsite = 'Organization website is required';
     if (
-      !projectToEdit.organization.website.startsWith('http://') &&
-      !projectToEdit.organization.website.startsWith('https://')
+      !projectToEdit.organization.website?.startsWith('http://') &&
+      !projectToEdit.organization.website?.startsWith('https://')
     )
       errors.organizationWebsite =
         'Please enter the full URL (starting with "http://" or "https://")';
@@ -109,8 +109,11 @@ export default function EditProject({
 
     if (Object.keys(errors).length) setErrors(errors);
     else if (!projectToEdit.organization._id) {
+      const organizationToPost: Partial<OrganizationDocument> =
+        projectToEdit.organization;
+      delete organizationToPost._id;
       client
-        .post('/organization', projectToEdit.organization, {
+        .post('/organization', organizationToPost, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
