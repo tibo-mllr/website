@@ -1,8 +1,6 @@
-import Card from 'react-bootstrap/card';
-import Form from 'react-bootstrap/form';
 import { FormEvent, ReactElement, useState } from 'react';
 import { client } from '../utils';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 type LoginViewProps = {
