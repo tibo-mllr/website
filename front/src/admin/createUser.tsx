@@ -24,11 +24,12 @@ export default function CreateUser({
   setUsers,
   newSelf = false,
 }: CreateUserProps): ReactElement {
-  const [newUser, setNewUser] = useState<User>({
+  const emptyUser: User = {
     username: '',
     password: '',
     role: Role.Admin,
-  });
+  };
+  const [newUser, setNewUser] = useState<User>(emptyUser);
   const [erros, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -56,11 +57,7 @@ export default function CreateUser({
         })
         .then((response) => {
           alert(newSelf ? 'Account created' : 'User added');
-          setNewUser({
-            username: '',
-            password: '',
-            role: Role.Admin,
-          });
+          setNewUser(emptyUser);
           setShow(false);
           setUsers([...users, response.data as UserDocument]);
         })

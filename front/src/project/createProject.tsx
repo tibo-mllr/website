@@ -39,7 +39,7 @@ export default function CreateProject({
   organizations,
   setOrganizations,
 }: CreateProjectProps): ReactElement {
-  const [newProject, setNewProject] = useState<Project>({
+  const emptyProject: Project = {
     role: '',
     title: '',
     description: '',
@@ -55,7 +55,8 @@ export default function CreateProject({
     },
     startDate: new Date(),
     endDate: new Date(),
-  });
+  };
+  const [newProject, setNewProject] = useState<Project>(emptyProject);
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -154,6 +155,7 @@ export default function CreateProject({
             .then((response) => {
               alert('Project added');
               setProjects([...projects, response.data as ProjectDocument]);
+              setNewProject(emptyProject);
               setShow(false);
             })
             .catch((error) => {
@@ -213,6 +215,7 @@ export default function CreateProject({
               .then((response) => {
                 alert('Project added');
                 setProjects([...projects, response.data as ProjectDocument]);
+                setNewProject(emptyProject);
                 setShow(false);
               })
               .catch((error) => {
@@ -243,6 +246,7 @@ export default function CreateProject({
           .then((response) => {
             alert('Project added');
             setProjects([...projects, response.data as ProjectDocument]);
+            setNewProject(emptyProject);
             setShow(false);
           })
           .catch((error) => {

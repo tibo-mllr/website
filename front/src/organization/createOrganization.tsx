@@ -22,12 +22,14 @@ export default function CreateOrganization({
   organizations,
   setOrganizations,
 }: CreateOrganizationProps): ReactElement {
-  const [newOrganization, setNewOrganization] = useState<Organization>({
+  const emptyOrganization: Organization = {
     name: '',
     description: '',
     location: '',
     website: '',
-  });
+  };
+  const [newOrganization, setNewOrganization] =
+    useState<Organization>(emptyOrganization);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -65,12 +67,7 @@ export default function CreateOrganization({
         .then((response) => {
           alert('Organization added');
           setOrganizations([...organizations, response.data]);
-          setNewOrganization({
-            name: '',
-            description: '',
-            location: '',
-            website: '',
-          });
+          setNewOrganization(emptyOrganization);
           setShow(false);
         })
         .catch((error) => {

@@ -22,12 +22,13 @@ export default function CreateNews({
   allNews,
   setAllNews,
 }: CreateNewsProps): ReactElement {
-  const [newNews, setNewNews] = useState<News>({
+  const emptyNews: News = {
     title: '',
     content: '',
     date: new Date(),
     author: { username: '' },
-  });
+  };
+  const [newNews, setNewNews] = useState<News>(emptyNews);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -56,12 +57,7 @@ export default function CreateNews({
         .then((response) => {
           alert('News added');
           setAllNews([response.data as NewsDocument, ...allNews]);
-          setNewNews({
-            title: '',
-            content: '',
-            date: new Date(),
-            author: { username: '' },
-          });
+          setNewNews(emptyNews);
           setShow(false);
         })
         .catch((error) => {
