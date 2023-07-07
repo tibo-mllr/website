@@ -18,12 +18,12 @@ export class ProjectService {
     await createdProject.save().catch((error) => {
       throw error;
     });
-    return createdProject;
+    return createdProject.populate('organization');
   }
 
   async update(id: string, project: Project): Promise<ProjectDocument> {
     await this.projectModel.findByIdAndUpdate(id, project);
-    return await this.projectModel.findById(id);
+    return await this.projectModel.findById(id).populate('organization');
   }
 
   async delete(id: string): Promise<ProjectDocument> {
