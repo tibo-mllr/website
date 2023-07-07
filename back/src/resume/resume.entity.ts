@@ -5,5 +5,5 @@ export class Resume {
     _id: ProjectType;
     projects: ProjectDocument[];
   }[];
-  competencies: ProjectDocument[];
+  competencies: string[];
 }

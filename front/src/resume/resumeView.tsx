@@ -71,12 +71,7 @@ export default function ResumeView(): ReactElement {
             <br />
             <span>
               {resume.competencies.length ? (
-                resume.competencies.map((competency, index) => (
-                  <span key={index}>
-                    {competency.competencies.join(' • ')}
-                    {index !== resume.competencies.length - 1 ? ' • ' : ''}
-                  </span>
-                ))
+                resume.competencies.join(' • ')
               ) : (
                 <i>No skills to display</i>
               )}
@@ -98,7 +93,7 @@ export default function ResumeView(): ReactElement {
           </Card.Body>
         </Card>
       </Col>
-      <Col>
+      <Col style={{ maxHeight: '92vh', overflowY: 'auto' }}>
         {resume.projects.length ? (
           resume.projects.map((type) => (
             <Row style={{ marginBottom: '8px' }} key={type._id}>

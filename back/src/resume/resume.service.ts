@@ -23,6 +23,22 @@ export class ResumeService {
   async getResume(): Promise<Resume> {
     const types = await this.projectModel
       .aggregate([
+        { $sort: { startDate: -1 } },
+        { $sort: { endDate: 1 } },
+        {
+          $match: {
+            $or: [
+              {
+                endDate: {
+                  $gt: new Date(
+                    new Date().setFullYear(new Date().getFullYear() - 2),
+                  ),
+                },
+              },
+              { endDate: undefined },
+            ],
+          },
+        },
         {
           $group: {
             _id: '$type',
@@ -52,7 +68,7 @@ export class ResumeService {
     }
 
     const competencies = await this.projectModel
-      .find({}, { competencies: 1 })
+      .distinct('competencies')
       .exec();
 
     return {
