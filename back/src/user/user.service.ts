@@ -4,12 +4,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { hash } from 'bcrypt';
 import { News, NewsDocument } from 'src/news/news.schema';
+import { Gateway } from 'src/app.gateway';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(News.name) private newsModel: Model<NewsDocument>,
+    private gateway: Gateway,
   ) {}
 
   async get(username: string): Promise<UserDocument | undefined> {
@@ -41,7 +43,9 @@ export class UserService {
       throw error;
     });
 
-    return await this.getSelf(createdUser._id.toString());
+    const userToSend = await this.getSelf(createdUser._id.toString());
+    this.gateway.server.emit('userAdded', userToSend);
+    return userToSend;
   }
 
   async createSelf(newUser: NewUser): Promise<UserDocument> {
@@ -61,7 +65,9 @@ export class UserService {
       throw error;
     });
 
-    return await this.getSelf(createdUser._id.toString());
+    const userToSend = await this.getSelf(createdUser._id.toString());
+    this.gateway.server.emit('userAdded', userToSend);
+    return userToSend;
   }
 
   async update(id: string, user: NewUser): Promise<UserDocument> {
@@ -88,12 +94,16 @@ export class UserService {
       throw error;
     });
 
-    return await this.getSelf(id);
+    const userToSend = await this.getSelf(id);
+    this.gateway.server.emit('userEdited', userToSend);
+    return userToSend;
   }
 
   async delete(id: number): Promise<UserDocument> {
     await this.newsModel.deleteMany({ author: id }).exec();
     await this.newsModel.deleteMany({ editor: id }).exec();
+    this.gateway.server.emit('severalNewsDeleted');
+    this.gateway.server.emit('userDeleted', id);
     return await this.userModel.findByIdAndDelete(id).exec();
   }
 }

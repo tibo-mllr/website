@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { client } from '../utils';
+import { client, socket } from '../utils';
 import { NewsDocument } from './utilsHome';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import editIcon from '../assets/editIcon.png';
@@ -48,6 +48,34 @@ export default function HomeView({
       .then((response) => setAllNews(response.data as NewsDocument[]))
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    socket.on('newsAdded', (newNews: NewsDocument) =>
+      setAllNews([newNews, ...allNews]),
+    );
+    socket.on('newsEdited', (editedNews: NewsDocument) =>
+      setAllNews(
+        allNews.map((news) =>
+          news._id === editedNews._id ? editedNews : news,
+        ),
+      ),
+    );
+    socket.on('newsDeleted', (id: string) =>
+      setAllNews(allNews.filter((news) => news._id !== id)),
+    );
+    socket.on('severalNewsDeleted', () => {
+      client
+        .get('/news')
+        .then((response) => setAllNews(response.data as NewsDocument[]))
+        .catch((error) => console.log(error));
+    });
+    return () => {
+      socket.off('newsAdded');
+      socket.off('newsEdited');
+      socket.off('newsDeleted');
+      socket.off('severalNewsDeleted');
+    };
+  }, [allNews]);
 
   return (
     <>

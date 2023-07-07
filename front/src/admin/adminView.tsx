@@ -1,6 +1,6 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { client } from '../utils';
+import { client, socket } from '../utils';
 import { Role, UserDocument } from './utilsAdmin';
 import editIcon from '../assets/editIcon.png';
 import binIcon from '../assets/binIcon.png';
@@ -51,6 +51,25 @@ export default function AdminView({
       .then((response) => setUsers(response.data as UserDocument[]))
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    socket.on('userAdded', (newUser: UserDocument) =>
+      setUsers([...users, newUser]),
+    );
+    socket.on('userEdited', (editedUser: UserDocument) =>
+      setUsers(
+        users.map((user) => (user._id === editedUser._id ? editedUser : user)),
+      ),
+    );
+    socket.on('userDeleted', (id: string) =>
+      setUsers(users.filter((user) => user._id !== id)),
+    );
+    return () => {
+      socket.off('userAdded');
+      socket.off('userEdited');
+      socket.off('userDeleted');
+    };
+  }, [users]);
 
   return (
     <>

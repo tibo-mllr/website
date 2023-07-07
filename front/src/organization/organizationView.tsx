@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { client } from '../utils';
+import { client, socket } from '../utils';
 import { OrganizationDocument } from './utilsOrganization';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import CreateOrganization from './createOrganization';
@@ -50,6 +50,33 @@ export default function OrganizationView({
       .then((response) => setOrganizations(response.data))
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    socket.on('organizationAdded', (newOrganization: OrganizationDocument) =>
+      setOrganizations([...organizations, newOrganization]),
+    );
+    socket.on(
+      'organizationEdited',
+      (editedOrganization: OrganizationDocument) =>
+        setOrganizations(
+          organizations.map((organization) =>
+            organization._id === editedOrganization._id
+              ? editedOrganization
+              : organization,
+          ),
+        ),
+    );
+    socket.on('organizationDeleted', (id: string) =>
+      setOrganizations(
+        organizations.filter((organization) => organization._id !== id),
+      ),
+    );
+    return () => {
+      socket.off('organizationAdded');
+      socket.off('organizationEdited');
+      socket.off('organizationDeleted');
+    };
+  }, [organizations]);
 
   return (
     <>

@@ -2,10 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { News, NewsDocument } from './news.schema';
 import { Model } from 'mongoose';
+import { Gateway } from 'src/app.gateway';
 
 @Injectable()
 export class NewsService {
-  constructor(@InjectModel(News.name) private newsModel: Model<NewsDocument>) {}
+  constructor(
+    @InjectModel(News.name) private newsModel: Model<NewsDocument>,
+    private gateway: Gateway,
+  ) {}
 
   async getAll(): Promise<NewsDocument[]> {
     return await this.newsModel
@@ -21,7 +25,9 @@ export class NewsService {
     await createdNews.save().catch((error) => {
       throw error;
     });
-    return createdNews.populate('author', 'username');
+    await createdNews.populate('author', 'username');
+    this.gateway.server.emit('newsAdded', createdNews);
+    return createdNews;
   }
 
   async update(
@@ -34,13 +40,16 @@ export class NewsService {
       edited: true,
       editor: userId,
     });
-    return await this.newsModel
+    const editedNews = await this.newsModel
       .findById(id)
       .populate('author', 'username')
       .populate('editor', 'username');
+    this.gateway.server.emit('newsEdited', editedNews);
+    return editedNews;
   }
 
   async delete(id: string): Promise<NewsDocument> {
+    this.gateway.server.emit('newsDeleted', id);
     return await this.newsModel.findByIdAndDelete(id);
   }
 }

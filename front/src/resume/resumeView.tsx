@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { client } from '../utils';
+import { client, socket } from '../utils';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Resume } from './utilsResume';
 
@@ -14,6 +14,39 @@ export default function ResumeView(): ReactElement {
       .get('/resume')
       .then((response) => setResume(response.data as Resume))
       .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    socket.on('projectAdded', () => {
+      client
+        .get('/resume')
+        .then((response) => setResume(response.data as Resume))
+        .catch((error) => console.log(error));
+    });
+    socket.on('projectEdited', () => {
+      client
+        .get('/resume')
+        .then((response) => setResume(response.data as Resume))
+        .catch((error) => console.log(error));
+    });
+    socket.on('projectDeleted', () => {
+      client
+        .get('/resume')
+        .then((response) => setResume(response.data as Resume))
+        .catch((error) => console.log(error));
+    });
+    socket.on('projectsDeleted', () => {
+      client
+        .get('/resume')
+        .then((response) => setResume(response.data as Resume))
+        .catch((error) => console.log(error));
+    });
+    return () => {
+      socket.off('projectAdded');
+      socket.off('projectEdited');
+      socket.off('projectDeleted');
+      socket.off('projectsDeleted');
+    };
   }, []);
 
   return (

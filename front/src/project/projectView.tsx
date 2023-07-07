@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { client } from '../utils';
+import { client, socket } from '../utils';
 import { ProjectDocument, ProjectType } from './utilsProject';
 import { OrganizationDocument } from '../organization/utilsOrganization';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
@@ -28,7 +28,6 @@ export default function ProjectView({
     location: '',
     website: '',
   });
-
   const [projectToEdit, setProjectToEdit] = useState<ProjectDocument>({
     _id: '',
     role: '',
@@ -72,6 +71,35 @@ export default function ProjectView({
       )
       .catch((error) => console.log(error));
   }, []);
+
+  useEffect(() => {
+    socket.on('projectAdded', (newProject: ProjectDocument) =>
+      setProjects([newProject, ...projects]),
+    );
+    socket.on('projectEdited', (editedProject: ProjectDocument) =>
+      setProjects(
+        projects.map((project) =>
+          project._id === editedProject._id ? editedProject : project,
+        ),
+      ),
+    );
+    socket.on('projectDeleted', (id: string) =>
+      setProjects(projects.filter((project) => project._id !== id)),
+    );
+    // Several projects deleted by cascade with an organization
+    socket.on('projectsDeleted', () => {
+      client
+        .get('/project')
+        .then((response) => setProjects(response.data))
+        .catch((error) => console.log(error));
+    });
+    return () => {
+      socket.off('projectAdded');
+      socket.off('projectEdited');
+      socket.off('projectDeleted');
+      socket.off('projectsDeleted');
+    };
+  }, [projects]);
 
   return (
     <>

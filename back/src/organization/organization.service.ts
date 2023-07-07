@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Organization, OrganizationDocument } from './organization.schema';
 import { Model } from 'mongoose';
 import { Project, ProjectDocument } from 'src/project/project.schema';
+import { Gateway } from 'src/app.gateway';
 
 @Injectable()
 export class OrganizationService {
@@ -11,6 +12,7 @@ export class OrganizationService {
     private organizationModel: Model<OrganizationDocument>,
     @InjectModel(Project.name)
     private projectModel: Model<ProjectDocument>,
+    private gateway: Gateway,
   ) {}
 
   async getAll(): Promise<OrganizationDocument[]> {
@@ -22,6 +24,7 @@ export class OrganizationService {
     await createdOrganization.save().catch((error) => {
       throw error;
     });
+    this.gateway.server.emit('organizationAdded', createdOrganization);
     return createdOrganization;
   }
 
@@ -30,11 +33,15 @@ export class OrganizationService {
     organization: Organization,
   ): Promise<OrganizationDocument> {
     await this.organizationModel.findByIdAndUpdate(id, organization);
-    return await this.organizationModel.findById(id);
+    const editedOrganization = await this.organizationModel.findById(id);
+    this.gateway.server.emit('organizationEdited', editedOrganization);
+    return editedOrganization;
   }
 
   async delete(id: string): Promise<OrganizationDocument> {
     await this.projectModel.deleteMany({ organization: id });
+    this.gateway.server.emit('projectsDeleted');
+    this.gateway.server.emit('organizationDeleted', id);
     return await this.organizationModel.findByIdAndDelete(id);
   }
 }

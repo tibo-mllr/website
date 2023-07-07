@@ -4,6 +4,7 @@ import { OrganizationService } from './organization.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Organization, OrganizationSchema } from './organization.schema';
 import { Project, ProjectSchema } from 'src/project/project.schema';
+import { Gateway } from 'src/app.gateway';
 
 @Module({
   imports: [
@@ -13,6 +14,6 @@ import { Project, ProjectSchema } from 'src/project/project.schema';
     MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
   ],
   controllers: [OrganizationController],
-  providers: [OrganizationService],
+  providers: [OrganizationService, Gateway],
 })
 export class OrganizationModule {}
