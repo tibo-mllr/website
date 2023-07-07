@@ -12,13 +12,15 @@ Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
 ### Run
 
 - Copy the [`back/.env.template`](back/.env.template) file to `back/.docker.env` and complete it accordingly.
-- Open a terminal and run the following command:
+- Open a terminal and run (make sure Docker Daemon is runnning):
 
-```bash
-docker-compose up
-```
+  ```bash
+  make launch-docker
+  ```
 
-The website will be available at [http://localhost:3000](http://localhost:3000).
+  The website will be available at [http://localhost:3000](http://localhost:3000).
+
+  (Don't forget to turn off the containers with `make stop-docker`)
 
 ## Run locally
 
@@ -32,18 +34,18 @@ The website will be available at [http://localhost:3000](http://localhost:3000).
 - Copy the [`back/.env.template`](back/.env.template) file to `back/.env` and complete it accordingly.
 - Open two terminals and run the following commands:
 
-```bash
-cd back
-npm ci
-npm run start
-```
+  ```bash
+  make clean-install-back
+  make run-back
+  ```
 
-and
+  and
 
-```bash
-cd front
-npm ci
-npm run start
-```
+  ```bash
+  make clean-install-front
+  make run-front
+  ```
 
-The website will be available at [http://localhost:3000](http://localhost:3000).
+  The website will be available at [http://localhost:3000](http://localhost:3000).
+
+  (Don't forget to stop both terminals with `Ctrl+C`, otherwise the ports may still be in use)
