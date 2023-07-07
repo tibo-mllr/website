@@ -62,7 +62,13 @@ export default function EditOrganization({
         })
         .then((response) => {
           alert('Organization edited');
-          setOrganizations([...organizations, response.data]);
+          setOrganizations(
+            organizations.map((organization) =>
+              organization._id === response.data._id
+                ? response.data
+                : organization,
+            ),
+          );
           setOrganizationToEdit({
             _id: '',
             name: '',

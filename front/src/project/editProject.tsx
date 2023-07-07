@@ -141,7 +141,11 @@ export default function EditProject({
             )
             .then((response) => {
               alert('Project edited');
-              setProjects([...projects, response.data as ProjectDocument]);
+              setProjects(
+                projects.map((project) =>
+                  project._id === response.data._id ? response.data : project,
+                ),
+              );
               setShow(false);
             })
             .catch((error) => {
@@ -200,7 +204,11 @@ export default function EditProject({
               )
               .then((response) => {
                 alert('Project edited');
-                setProjects([...projects, response.data as ProjectDocument]);
+                setProjects(
+                  projects.map((project) =>
+                    project._id === response.data._id ? response.data : project,
+                  ),
+                );
                 setShow(false);
               })
               .catch((error) => {
@@ -230,7 +238,11 @@ export default function EditProject({
           )
           .then((response) => {
             alert('Project edited');
-            setProjects([...projects, response.data as ProjectDocument]);
+            setProjects(
+              projects.map((project) =>
+                project._id === response.data._id ? response.data : project,
+              ),
+            );
             setShow(false);
           })
           .catch((error) => {

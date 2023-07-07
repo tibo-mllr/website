@@ -53,10 +53,11 @@ export default function EditNews({
         })
         .then((response) => {
           alert('News edited');
-          setAllNews([
-            ...allNews.filter((news) => news._id !== newsToEdit._id),
-            response.data as NewsDocument,
-          ]);
+          setAllNews(
+            allNews.map((news) =>
+              news._id === response.data._id ? response.data : news,
+            ),
+          );
           setShow(false);
         })
         .catch((error) => {
