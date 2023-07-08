@@ -31,6 +31,7 @@ type EditProjectProps = {
   setProjects: (projects: ProjectDocument[]) => void;
   organizations: OrganizationDocument[];
   setOrganizations: (organizations: OrganizationDocument[]) => void;
+  competencies: string[];
 };
 
 export default function EditProject({
@@ -42,6 +43,7 @@ export default function EditProject({
   setProjects,
   organizations,
   setOrganizations,
+  competencies,
 }: EditProjectProps): ReactElement {
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
@@ -611,6 +613,7 @@ export default function EditProject({
                         <Form.Label>Competency</Form.Label>
                         <Form.Control
                           type="text"
+                          list="competenciesList"
                           value={projectToEdit.competencies[index]}
                           onChange={(event): void =>
                             setProjectToEdit({
@@ -632,6 +635,11 @@ export default function EditProject({
                             (!!projectToEdit.competencies[index] || submitted)
                           }
                         />
+                        <datalist id="competenciesList">
+                          {competencies.map((competency) => (
+                            <option key={competency} value={competency} />
+                          ))}
+                        </datalist>
                         <Form.Control.Feedback type="invalid">
                           {errors['competency' + index]}
                         </Form.Control.Feedback>

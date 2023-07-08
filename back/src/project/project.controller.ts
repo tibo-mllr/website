@@ -22,6 +22,11 @@ export class ProjectController {
     return await this.projectService.getAll();
   }
 
+  @Get('/competencies')
+  async getCompetencies(): Promise<string[]> {
+    return await this.projectService.getCompetencies();
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(@Body() project: Project): Promise<ProjectDocument> {

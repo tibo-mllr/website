@@ -29,6 +29,7 @@ type CreateProjectProps = {
   setProjects: (projects: ProjectDocument[]) => void;
   organizations: OrganizationDocument[];
   setOrganizations: (organizations: OrganizationDocument[]) => void;
+  competencies: string[];
 };
 
 export default function CreateProject({
@@ -38,6 +39,7 @@ export default function CreateProject({
   setProjects,
   organizations,
   setOrganizations,
+  competencies,
 }: CreateProjectProps): ReactElement {
   const emptyProject: Project = {
     role: '',
@@ -614,6 +616,7 @@ export default function CreateProject({
                         <Form.Label>Competency</Form.Label>
                         <Form.Control
                           type="text"
+                          list="competenciesList"
                           value={newProject.competencies[index]}
                           onChange={(event): void =>
                             setNewProject({
@@ -635,6 +638,11 @@ export default function CreateProject({
                             (!!newProject.competencies[index] || submitted)
                           }
                         />
+                        <datalist id="competenciesList">
+                          {competencies.map((competency) => (
+                            <option key={competency} value={competency} />
+                          ))}
+                        </datalist>
                         <Form.Control.Feedback type="invalid">
                           {errors['competency' + index]}
                         </Form.Control.Feedback>

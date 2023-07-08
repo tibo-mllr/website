@@ -47,6 +47,7 @@ export default function ProjectView({
     endDate: new Date(),
   });
   const [showEdit, setShowEdit] = useState<boolean>(false);
+  const [competencies, setCompetencies] = useState<string[]>([]);
 
   const handleDelete = (id: string): void => {
     client
@@ -65,6 +66,10 @@ export default function ProjectView({
       .then((response) => setProjects(response.data as ProjectDocument[]))
       .catch((error) => console.log(error));
     client
+      .get('/project/competencies')
+      .then((response) => setCompetencies(response.data as string[]))
+      .catch((error) => console.log(error));
+    client
       .get('/organization')
       .then((response) =>
         setOrganizations(response.data as OrganizationDocument[]),
@@ -73,24 +78,44 @@ export default function ProjectView({
   }, []);
 
   useEffect(() => {
-    socket.on('projectAdded', (newProject: ProjectDocument) =>
-      setProjects([newProject, ...projects]),
-    );
-    socket.on('projectEdited', (editedProject: ProjectDocument) =>
+    socket.on('projectAdded', (newProject: ProjectDocument) => {
+      setProjects([newProject, ...projects]);
+      const projectCompetencies = newProject.competencies;
+      setCompetencies(
+        [...competencies, ...projectCompetencies].filter(
+          (competency, index, self) => self.indexOf(competency) === index,
+        ),
+      );
+    });
+    socket.on('projectEdited', (editedProject: ProjectDocument) => {
       setProjects(
         projects.map((project) =>
           project._id === editedProject._id ? editedProject : project,
         ),
-      ),
-    );
-    socket.on('projectDeleted', (id: string) =>
-      setProjects(projects.filter((project) => project._id !== id)),
-    );
+      );
+      const projectCompetencies = editedProject.competencies;
+      setCompetencies(
+        [...competencies, ...projectCompetencies].filter(
+          (competency, index, self) => self.indexOf(competency) === index,
+        ),
+      );
+    });
+    socket.on('projectDeleted', (id: string) => {
+      setProjects(projects.filter((project) => project._id !== id));
+      client
+        .get('/project/competencies')
+        .then((response) => setCompetencies(response.data as string[]))
+        .catch((error) => console.log(error));
+    });
     // Several projects deleted by cascade with an organization
     socket.on('projectsDeleted', () => {
       client
         .get('/project')
         .then((response) => setProjects(response.data))
+        .catch((error) => console.log(error));
+      client
+        .get('/project/competencies')
+        .then((response) => setCompetencies(response.data as string[]))
         .catch((error) => console.log(error));
     });
     return () => {
@@ -99,7 +124,7 @@ export default function ProjectView({
       socket.off('projectDeleted');
       socket.off('projectsDeleted');
     };
-  }, [projects]);
+  }, [competencies, projects]);
 
   return (
     <>
@@ -211,10 +236,11 @@ export default function ProjectView({
         <CreateProject
           show={showNew}
           setShow={setShowNew}
-          organizations={organizations}
-          setOrganizations={setOrganizations}
           projects={projects}
           setProjects={setProjects}
+          organizations={organizations}
+          setOrganizations={setOrganizations}
+          competencies={competencies}
         />
       )}
       {!!sessionStorage.getItem('loginToken') &&
@@ -228,6 +254,7 @@ export default function ProjectView({
             setProjects={setProjects}
             organizations={organizations}
             setOrganizations={setOrganizations}
+            competencies={competencies}
           />
         )}
     </>

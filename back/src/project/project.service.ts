@@ -15,6 +15,10 @@ export class ProjectService {
     return await this.projectModel.find().populate('organization').exec();
   }
 
+  async getCompetencies(): Promise<string[]> {
+    return await this.projectModel.distinct('competencies').exec();
+  }
+
   async create(project: Project): Promise<ProjectDocument> {
     const createdProject = new this.projectModel(project);
     await createdProject.save().catch((error) => {
