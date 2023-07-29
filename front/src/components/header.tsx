@@ -151,6 +151,7 @@ export default function Header({
                 onClick={(): void => {
                   sessionStorage.removeItem('loginToken');
                   sessionStorage.removeItem('role');
+                  sessionStorage.removeItem('id');
                   navigate('/');
                 }}
               >
