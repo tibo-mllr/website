@@ -1,12 +1,12 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { client, socket } from '../utils';
-import { ProjectDocument, ProjectType } from './utilsProject';
-import { OrganizationDocument } from '../organization/utilsOrganization';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import editIcon from '../assets/editIcon.png';
 import binIcon from '../assets/binIcon.png';
+import editIcon from '../assets/editIcon.png';
+import { OrganizationDocument } from '../organization/utilsOrganization';
+import { client, socket } from '../utils';
 import CreateProject from './createProject';
 import EditProject from './editProject';
+import { ProjectDocument, ProjectType } from './utilsProject';
 
 type ProjectViewProps = {
   showNew: boolean;

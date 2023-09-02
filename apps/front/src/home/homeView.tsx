@@ -1,11 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react';
-import { client, socket } from '../utils';
-import { NewsDocument } from './utilsHome';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import editIcon from '../assets/editIcon.png';
 import binIcon from '../assets/binIcon.png';
+import editIcon from '../assets/editIcon.png';
+import { client, socket } from '../utils';
 import CreateNews from './createNews';
 import EditNews from './editNews';
+import { NewsDocument } from './utilsHome';
 
 type HomeViewProps = {
   showNew: boolean;

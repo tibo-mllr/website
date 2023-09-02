@@ -1,11 +1,11 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { client, socket } from '../utils';
-import { Role, UserDocument } from './utilsAdmin';
-import editIcon from '../assets/editIcon.png';
 import binIcon from '../assets/binIcon.png';
+import editIcon from '../assets/editIcon.png';
+import { client, socket } from '../utils';
 import CreateUser from './createUser';
 import EditUser from './editUser';
+import { Role, UserDocument } from './utilsAdmin';
 
 type AdminViewProps = {
   showNew: boolean;

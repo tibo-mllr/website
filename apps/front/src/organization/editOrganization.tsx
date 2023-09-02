@@ -6,8 +6,8 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { OrganizationDocument } from './utilsOrganization';
 import { FormErrors, client } from '../utils';
+import { OrganizationDocument } from './utilsOrganization';
 
 type EditOrganizationProps = {
   organizationToEdit: OrganizationDocument;
