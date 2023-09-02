@@ -1,0 +1,19 @@
+{
+  "name": "@website/shared-types",
+  "version": "1.0.0",
+  "description": "Types shared between apps",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "git@github.com:Tibo-Mllr/website.git",
+  "author": "Thibault Muller <thibault.muller@student-cs.fr>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc --build --verbose ./tsconfig.json ",
+    "dev": "tsc --watch --project ./tsconfig.json",
+    "lint": "eslint --ext .js,.ts "
+  },
+  "dependencies": {
+    "zod": "^3.22.2"
+  }
+}
