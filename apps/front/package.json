@@ -24,6 +24,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@website/shared-types": "*",
     "eslint": "^8.48.0",
     "eslint-plugin-react-hooks": "^4.6.0"
   },
