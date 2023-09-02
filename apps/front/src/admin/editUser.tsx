@@ -5,9 +5,9 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { Role, UserDocument } from './utilsAdmin';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
+import { Role, UserDocument } from './utilsAdmin';
 
 type EditUserProps = {
   userToEdit: UserDocument;

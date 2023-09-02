@@ -1,12 +1,12 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Header from './components/header';
-import { Container } from 'react-bootstrap';
-import HomeView from './home/homeView';
 import { ReactElement, useState } from 'react';
-import LoginView from './login/loginView';
+import { Container } from 'react-bootstrap';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AdminView from './admin/adminView';
-import ProjectView from './project/projectView';
+import Header from './components/header';
+import HomeView from './home/homeView';
+import LoginView from './login/loginView';
 import OrganizationView from './organization/organizationView';
+import ProjectView from './project/projectView';
 import ResumeView from './resume/resumeView';
 
 function App(): ReactElement {

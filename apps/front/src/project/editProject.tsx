@@ -15,12 +15,12 @@ import {
   Row,
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { OrganizationDocument } from '../organization/utilsOrganization';
 import { Option } from 'react-bootstrap-typeahead/types/types';
-import { ProjectDocument, ProjectType } from './utilsProject';
-import { FormErrors, client } from '../utils';
-import plusIcon from '../assets/plusIcon.png';
 import binIcon from '../assets/binIcon.png';
+import plusIcon from '../assets/plusIcon.png';
+import { OrganizationDocument } from '../organization/utilsOrganization';
+import { FormErrors, client } from '../utils';
+import { ProjectDocument, ProjectType } from './utilsProject';
 
 type EditProjectProps = {
   projectToEdit: ProjectDocument;

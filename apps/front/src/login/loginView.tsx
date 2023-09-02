@@ -1,8 +1,8 @@
 import { FormEvent, ReactElement, useState } from 'react';
-import { client } from '../utils';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import CreateUser from '../admin/createUser';
+import { client } from '../utils';
 
 type LoginViewProps = {
   setLoginToken: (loginToken: string) => void;
