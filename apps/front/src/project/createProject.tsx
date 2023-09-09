@@ -342,11 +342,14 @@ export default function CreateProject({
                       })
                     }
                     onChange={(selected): void => {
-                      if (selected.length)
+                      if (selected.length) {
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        delete (selected[0] as any).id;
                         setNewProject({
                           ...newProject,
                           organization: selected[0] as OrganizationDocument,
                         });
+                      }
                     }}
                     selected={[newProject.organization.name as Option]}
                     labelKey={'name'}
