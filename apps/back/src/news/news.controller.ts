@@ -10,10 +10,10 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { NewsService } from './news.service';
-import { News, NewsDocument } from './news.schema';
+import { News, NewsDocument, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role, RoleGuard, Roles } from 'src/auth/role.guard';
+import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { NewsService } from './news.service';
 
 @Controller('news')
 export class NewsController {
@@ -39,7 +39,7 @@ export class NewsController {
   }
 
   @Put('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
@@ -50,7 +50,7 @@ export class NewsController {
   }
 
   @Delete('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async delete(@Param('id') id: string): Promise<News> {
     return await this.newsService.delete(id);

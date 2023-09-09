@@ -8,10 +8,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ProjectService } from './project.service';
-import { Project, ProjectDocument } from './project.schema';
+import { Project, ProjectDocument, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role, RoleGuard, Roles } from 'src/auth/role.guard';
+import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { ProjectService } from './project.service';
 
 @Controller('project')
 export class ProjectController {
@@ -36,7 +36,7 @@ export class ProjectController {
   }
 
   @Put('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
@@ -48,7 +48,7 @@ export class ProjectController {
   }
 
   @Delete('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async delete(@Param('id') id: string): Promise<ProjectDocument> {
     return await this.projectService.delete(id);

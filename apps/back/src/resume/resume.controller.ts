@@ -1,6 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
+import { Resume } from '@website/shared-types';
 import { ResumeService } from './resume.service';
-import { Resume } from './resume.entity';
 
 @Controller('resume')
 export class ResumeController {

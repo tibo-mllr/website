@@ -1,18 +1,20 @@
 import { Module } from '@nestjs/common';
-import { ResumeController } from './resume.controller';
-import { ResumeService } from './resume.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Project, ProjectSchema } from 'src/project/project.schema';
 import {
-  Organization,
+  OrganizationClass,
   OrganizationSchema,
 } from 'src/organization/organization.schema';
+import { ProjectClass, ProjectSchema } from 'src/project/project.schema';
+import { ResumeController } from './resume.controller';
+import { ResumeService } from './resume.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
     MongooseModule.forFeature([
-      { name: Organization.name, schema: OrganizationSchema },
+      { name: ProjectClass.name, schema: ProjectSchema },
+    ]),
+    MongooseModule.forFeature([
+      { name: OrganizationClass.name, schema: OrganizationSchema },
     ]),
   ],
   controllers: [ResumeController],

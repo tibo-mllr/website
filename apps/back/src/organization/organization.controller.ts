@@ -8,10 +8,14 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { OrganizationService } from './organization.service';
-import { Organization, OrganizationDocument } from './organization.schema';
+import {
+  Organization,
+  OrganizationDocument,
+  UserRole,
+} from '@website/shared-types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role, RoleGuard, Roles } from 'src/auth/role.guard';
+import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { OrganizationService } from './organization.service';
 
 @Controller('organization')
 export class OrganizationController {
@@ -35,7 +39,7 @@ export class OrganizationController {
   }
 
   @Put('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
@@ -49,7 +53,7 @@ export class OrganizationController {
   }
 
   @Delete('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async delete(@Param('id') id: string): Promise<OrganizationDocument> {
     return await this.organizationService.delete(id);

@@ -6,13 +6,9 @@ import {
   SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
+import { UserRole } from '@website/shared-types';
 
-export enum Role {
-  Admin = 'admin',
-  SuperAdmin = 'superAdmin',
-}
-
-export const Roles = (...roles: Role[]): CustomDecorator<'role'> => {
+export const Roles = (...roles: UserRole[]): CustomDecorator<'role'> => {
   return SetMetadata('role', roles);
 };
 
@@ -21,7 +17,7 @@ export class RoleGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   canActivate(context: ExecutionContext): boolean {
-    const role = this.reflector.get<Role[]>('role', context.getHandler());
+    const role = this.reflector.get<UserRole[]>('role', context.getHandler());
     if (!role) {
       return true;
     }

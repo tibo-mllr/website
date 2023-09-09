@@ -1,16 +1,17 @@
 import { ConflictException, Injectable } from '@nestjs/common';
-import { NewUser, User, UserDocument } from './user.schema';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FrontUser, NewsDocument, UserDocument } from '@website/shared-types';
 import { hash } from 'bcrypt';
-import { News, NewsDocument } from 'src/news/news.schema';
+import { Model } from 'mongoose';
 import { Gateway } from 'src/app.gateway';
+import { NewsClass } from 'src/news/news.schema';
+import { UserClass } from './user.schema';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    @InjectModel(News.name) private newsModel: Model<NewsDocument>,
+    @InjectModel(UserClass.name) private userModel: Model<UserDocument>,
+    @InjectModel(NewsClass.name) private newsModel: Model<NewsDocument>,
     private gateway: Gateway,
   ) {}
 
@@ -26,7 +27,7 @@ export class UserService {
     return await this.userModel.find({}, { hashedPassword: 0 }).exec();
   }
 
-  async create(newUser: NewUser): Promise<UserDocument> {
+  async create(newUser: FrontUser): Promise<UserDocument> {
     const existingUser = await this.get(newUser.username);
     if (existingUser) {
       console.log(existingUser);
@@ -48,7 +49,7 @@ export class UserService {
     return userToSend;
   }
 
-  async createSelf(newUser: NewUser): Promise<UserDocument> {
+  async createSelf(newUser: FrontUser): Promise<UserDocument> {
     const existingUser = await this.get(newUser.username);
     if (existingUser) {
       console.log(existingUser);
@@ -70,7 +71,7 @@ export class UserService {
     return userToSend;
   }
 
-  async update(id: string, user: NewUser): Promise<UserDocument> {
+  async update(id: string, user: FrontUser): Promise<UserDocument> {
     if (user.password) {
       hash(user.password, 8, async (_, hashedPassword) => {
         const updatedUser = {

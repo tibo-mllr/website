@@ -10,24 +10,24 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { NewUser, UserDocument } from './user.schema';
-import { UserService } from './user.service';
+import { FrontUser, UserDocument, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { Role, RoleGuard, Roles } from 'src/auth/role.guard';
+import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { UserService } from './user.service';
 
 @Controller('user')
 export class UsersController {
   constructor(private readonly userService: UserService) {}
 
   @Get('/superAdmin')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async getAll(): Promise<UserDocument[]> {
     return await this.userService.getAll();
   }
 
   @Get('/admin')
-  @Roles(Role.Admin)
+  @Roles(UserRole.Admin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async getSelf(
     @Req()
@@ -43,27 +43,27 @@ export class UsersController {
   }
 
   @Post()
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async create(@Body() user: NewUser): Promise<UserDocument> {
+  async create(@Body() user: FrontUser): Promise<UserDocument> {
     return await this.userService.create(user).catch((error) => {
       throw error;
     });
   }
 
   @Post('/new')
-  async createSelf(@Body() user: NewUser): Promise<UserDocument> {
+  async createSelf(@Body() user: FrontUser): Promise<UserDocument> {
     return await this.userService.createSelf(user).catch((error) => {
       throw error;
     });
   }
 
   @Put('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
-    @Body() user: NewUser,
+    @Body() user: FrontUser,
   ): Promise<UserDocument> {
     return await this.userService.update(id, user).catch((error) => {
       throw error;
@@ -71,7 +71,7 @@ export class UsersController {
   }
 
   @Delete('/:id')
-  @Roles(Role.SuperAdmin)
+  @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
   async delete(@Param('id') id: number): Promise<UserDocument> {
     return await this.userService.delete(id);

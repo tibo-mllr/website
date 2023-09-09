@@ -1,22 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
 import {
-  Organization,
   OrganizationDocument,
-} from 'src/organization/organization.schema';
-import {
-  Project,
   ProjectDocument,
   ProjectType,
-} from 'src/project/project.schema';
-import { Resume } from './resume.entity';
+  Resume,
+} from '@website/shared-types';
+import { Model } from 'mongoose';
+import { OrganizationClass } from 'src/organization/organization.schema';
+import { ProjectClass } from 'src/project/project.schema';
 
 @Injectable()
 export class ResumeService {
   constructor(
-    @InjectModel(Project.name) private projectModel: Model<ProjectDocument>,
-    @InjectModel(Organization.name)
+    @InjectModel(ProjectClass.name)
+    private projectModel: Model<ProjectDocument>,
+    @InjectModel(OrganizationClass.name)
     private organizationModel: Model<OrganizationDocument>,
   ) {}
 
@@ -73,7 +72,7 @@ export class ResumeService {
 
     return {
       projects: types as {
-        _id: ProjectType;
+        type: ProjectType;
         projects: ProjectDocument[];
       }[],
       competencies: competencies,

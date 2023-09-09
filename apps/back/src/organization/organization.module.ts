@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
-import { OrganizationController } from './organization.controller';
-import { OrganizationService } from './organization.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Organization, OrganizationSchema } from './organization.schema';
-import { Project, ProjectSchema } from 'src/project/project.schema';
 import { Gateway } from 'src/app.gateway';
+import { ProjectClass, ProjectSchema } from 'src/project/project.schema';
+import { OrganizationController } from './organization.controller';
+import { OrganizationClass, OrganizationSchema } from './organization.schema';
+import { OrganizationService } from './organization.service';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Organization.name, schema: OrganizationSchema },
+      { name: OrganizationClass.name, schema: OrganizationSchema },
     ]),
-    MongooseModule.forFeature([{ name: Project.name, schema: ProjectSchema }]),
+    MongooseModule.forFeature([
+      { name: ProjectClass.name, schema: ProjectSchema },
+    ]),
   ],
   controllers: [OrganizationController],
   providers: [OrganizationService, Gateway],

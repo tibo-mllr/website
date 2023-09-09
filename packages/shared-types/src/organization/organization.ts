@@ -1,3 +1,4 @@
+import { HydratedDocument } from 'mongoose';
 import { z } from 'zod';
 
 export const organizationSchema = z.object({
@@ -8,9 +9,4 @@ export const organizationSchema = z.object({
 });
 export type Organization = z.infer<typeof organizationSchema>;
 
-export const organizationDocumentSchema = organizationSchema.merge(
-  z.object({
-    _id: z.string(),
-  }),
-);
-export type OrganizationDocument = z.infer<typeof organizationDocumentSchema>;
+export type OrganizationDocument = HydratedDocument<Organization>;

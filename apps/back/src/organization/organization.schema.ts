@@ -1,10 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-
-export type OrganizationDocument = HydratedDocument<Organization>;
+import { Organization } from '@website/shared-types';
 
 @Schema()
-export class Organization {
+export class OrganizationClass {
   @Prop({ required: true })
   name: string;
 
@@ -18,4 +16,5 @@ export class Organization {
   website: string;
 }
 
-export const OrganizationSchema = SchemaFactory.createForClass(Organization);
+export const OrganizationSchema =
+  SchemaFactory.createForClass<Organization>(OrganizationClass);

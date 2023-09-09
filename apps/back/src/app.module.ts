@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { NewsModule } from './news/news.module';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './user/user.module';
 import { AppController } from './app.controller';
-import { ProjectModule } from './project/project.module';
+import { AuthModule } from './auth/auth.module';
+import { NewsModule } from './news/news.module';
 import { OrganizationModule } from './organization/organization.module';
+import { ProjectModule } from './project/project.module';
 import { ResumeModule } from './resume/resume.module';
+import { UsersModule } from './user/user.module';
 
 @Module({
   imports: [

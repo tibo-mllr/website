@@ -1,13 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
-import { Role } from 'src/auth/role.guard';
-
-export type UserDocument = HydratedDocument<User>;
+import { User, UserRole } from '@website/shared-types';
 
 @Schema()
-export class User {
+export class UserClass {
   @Prop({ required: true })
-  role: Role;
+  role: UserRole;
 
   @Prop({ required: true, unique: true })
   username: string;
@@ -16,10 +13,4 @@ export class User {
   hashedPassword: string;
 }
 
-export class NewUser {
-  role: Role;
-  username: string;
-  password: string;
-}
-
-export const UserSchema = SchemaFactory.createForClass(User);
+export const UserSchema = SchemaFactory.createForClass<User>(UserClass);

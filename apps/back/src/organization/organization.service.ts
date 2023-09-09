@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Organization, OrganizationDocument } from './organization.schema';
+import {
+  Organization,
+  OrganizationDocument,
+  ProjectDocument,
+} from '@website/shared-types';
 import { Model } from 'mongoose';
-import { Project, ProjectDocument } from 'src/project/project.schema';
 import { Gateway } from 'src/app.gateway';
+import { ProjectClass } from 'src/project/project.schema';
+import { OrganizationClass } from './organization.schema';
 
 @Injectable()
 export class OrganizationService {
   constructor(
-    @InjectModel(Organization.name)
+    @InjectModel(OrganizationClass.name)
     private organizationModel: Model<OrganizationDocument>,
-    @InjectModel(Project.name)
+    @InjectModel(ProjectClass.name)
     private projectModel: Model<ProjectDocument>,
     private gateway: Gateway,
   ) {}

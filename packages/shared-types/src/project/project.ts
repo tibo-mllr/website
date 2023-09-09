@@ -1,11 +1,9 @@
+import { HydratedDocument } from 'mongoose';
 import { z } from 'zod';
-import {
-  organizationDocumentSchema,
-  organizationSchema,
-} from '../organization';
+import { organizationSchema } from '../organization';
 
 export enum ProjectType {
-  Education,
+  Education = 'Education',
   TechExperiences = 'Tech Experiences',
   PersonalProjects = 'Personal Projects',
 }
@@ -24,8 +22,4 @@ export const projectSchema = z.object({
 });
 export type Project = z.infer<typeof projectSchema>;
 
-export const projectDocumentSchema = projectSchema.extend({
-  _id: z.string(),
-  organization: organizationDocumentSchema,
-});
-export type ProjectDocument = z.infer<typeof projectDocumentSchema>;
+export type ProjectDocument = HydratedDocument<Project>;

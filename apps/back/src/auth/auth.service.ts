@@ -1,9 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
+import { UserDocument, UserRole } from '@website/shared-types';
 import { compare } from 'bcrypt';
-import { UserDocument } from 'src/user/user.schema';
-import { Role } from './role.guard';
+import { UserService } from 'src/user/user.service';
 
 @Injectable()
 export class AuthService {
@@ -27,7 +26,7 @@ export class AuthService {
 
   async login(
     user: Partial<UserDocument>,
-  ): Promise<{ access_token: string; role: Role; id: string }> {
+  ): Promise<{ access_token: string; role: UserRole; id: string }> {
     const payload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload, { expiresIn: '1h' }),
