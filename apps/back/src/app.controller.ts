@@ -6,9 +6,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserRole } from '@website/shared-types';
-import { Types } from 'mongoose';
 import { AuthService } from './auth/auth.service';
 import { LocalAuthGuard } from './auth/local-auth.guard';
+import { UserDocument } from './user/user.schema';
 
 @Controller()
 export class AppController {
@@ -19,7 +19,7 @@ export class AppController {
   async login(
     @Request()
     req: RawBodyRequest<{
-      user: { _doc: { username: string; _id: Types.ObjectId; role: UserRole } };
+      user: { _doc: Partial<UserDocument> };
     }>,
   ): Promise<{ access_token: string; role: UserRole }> {
     return await this.authService.login(req.user._doc);
