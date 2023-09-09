@@ -1,4 +1,3 @@
-import { HydratedDocument } from 'mongoose';
 import { z } from 'zod';
 import { organizationSchema } from '../organization';
 
@@ -21,5 +20,3 @@ export const projectSchema = z.object({
   competencies: z.array(z.string()),
 });
 export type Project = z.infer<typeof projectSchema>;
-
-export type ProjectDocument = HydratedDocument<Project>;

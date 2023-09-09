@@ -8,9 +8,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { Project, ProjectDocument, UserRole } from '@website/shared-types';
+import { Project, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { ProjectDocument } from './project.schema';
 import { ProjectService } from './project.service';
 
 @Controller('project')

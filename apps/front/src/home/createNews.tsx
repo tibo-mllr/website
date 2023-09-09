@@ -1,3 +1,4 @@
+import { News } from '@website/shared-types';
 import {
   FormEvent,
   ReactElement,
@@ -7,7 +8,7 @@ import {
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
-import { News, NewsDocument } from './utilsHome';
+import { NewsDocument } from './utilsHome';
 
 type CreateNewsProps = {
   show: boolean;

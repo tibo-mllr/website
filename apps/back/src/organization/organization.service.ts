@@ -1,14 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  Organization,
-  OrganizationDocument,
-  ProjectDocument,
-} from '@website/shared-types';
+import { Organization } from '@website/shared-types';
 import { Model } from 'mongoose';
 import { Gateway } from 'src/app.gateway';
-import { ProjectClass } from 'src/project/project.schema';
-import { OrganizationClass } from './organization.schema';
+import { ProjectClass, ProjectDocument } from 'src/project/project.schema';
+import { OrganizationClass, OrganizationDocument } from './organization.schema';
 
 @Injectable()
 export class OrganizationService {

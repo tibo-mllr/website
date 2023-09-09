@@ -1,23 +1,10 @@
+import { Project as NormalProject } from '@website/shared-types';
 import { OrganizationDocument } from '../organization/utilsOrganization';
 
-export enum ProjectType {
-  Education = 'Education',
-  Tech = 'Tech Experiences',
-  Personal = 'Personal Projects',
-}
-
-export type Project = {
-  role: string;
-  title: string;
+export type Project = Omit<NormalProject, 'organization'> & {
   organization: OrganizationDocument;
-  type: ProjectType;
-  startDate: Date;
-  endDate?: Date;
-  description: string;
-  link?: string;
-  competencies: string[];
 };
-
 export type ProjectDocument = Project & {
   _id: string;
+  organization: OrganizationDocument;
 };

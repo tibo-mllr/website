@@ -1,3 +1,4 @@
+import { ProjectType } from '@website/shared-types';
 import {
   FormEvent,
   ReactElement,
@@ -20,7 +21,7 @@ import binIcon from '../assets/binIcon.png';
 import plusIcon from '../assets/plusIcon.png';
 import { OrganizationDocument } from '../organization/utilsOrganization';
 import { FormErrors, client } from '../utils';
-import { ProjectDocument, ProjectType } from './utilsProject';
+import { ProjectDocument } from './utilsProject';
 
 type EditProjectProps = {
   projectToEdit: ProjectDocument;

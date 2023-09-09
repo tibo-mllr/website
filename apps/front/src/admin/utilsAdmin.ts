@@ -1,14 +1,5 @@
-export enum Role {
-  Admin = 'admin',
-  SuperAdmin = 'superAdmin',
-}
+import { FrontUser } from '@website/shared-types';
 
-export type User = {
-  role: Role;
-  username: string;
-  password: string;
-};
-
-export type UserDocument = User & {
+export type FrontUserDocument = FrontUser & {
   _id: string;
 };

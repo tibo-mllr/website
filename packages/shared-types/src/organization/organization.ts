@@ -1,4 +1,3 @@
-import { HydratedDocument } from 'mongoose';
 import { z } from 'zod';
 
 export const organizationSchema = z.object({
@@ -8,5 +7,3 @@ export const organizationSchema = z.object({
   website: z.string().url(),
 });
 export type Organization = z.infer<typeof organizationSchema>;
-
-export type OrganizationDocument = HydratedDocument<Organization>;

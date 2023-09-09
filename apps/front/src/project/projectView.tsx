@@ -1,3 +1,4 @@
+import { ProjectType } from '@website/shared-types';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import binIcon from '../assets/binIcon.png';
@@ -6,7 +7,7 @@ import { OrganizationDocument } from '../organization/utilsOrganization';
 import { client, socket } from '../utils';
 import CreateProject from './createProject';
 import EditProject from './editProject';
-import { ProjectDocument, ProjectType } from './utilsProject';
+import { ProjectDocument } from './utilsProject';
 
 type ProjectViewProps = {
   showNew: boolean;

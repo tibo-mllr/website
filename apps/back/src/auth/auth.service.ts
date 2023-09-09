@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { UserDocument, UserRole } from '@website/shared-types';
+import { UserRole } from '@website/shared-types';
 import { compare } from 'bcrypt';
+import { UserDocument } from 'src/user/user.schema';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()

@@ -1,3 +1,4 @@
+import { FrontUser, UserRole } from '@website/shared-types';
 import {
   FormEvent,
   ReactElement,
@@ -7,13 +8,13 @@ import {
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
-import { Role, User, UserDocument } from './utilsAdmin';
+import { FrontUserDocument } from './utilsAdmin';
 
 type CreateUserProps = {
   show: boolean;
   setShow: (show: boolean) => void;
-  users: UserDocument[];
-  setUsers: (users: UserDocument[]) => void;
+  users: FrontUserDocument[];
+  setUsers: (users: FrontUserDocument[]) => void;
   newSelf?: boolean;
 };
 
@@ -24,12 +25,12 @@ export default function CreateUser({
   setUsers,
   newSelf = false,
 }: CreateUserProps): ReactElement {
-  const emptyUser: User = {
+  const emptyUser: FrontUser = {
     username: '',
     password: '',
-    role: Role.Admin,
+    role: UserRole.Admin,
   };
-  const [newUser, setNewUser] = useState<User>(emptyUser);
+  const [newUser, setNewUser] = useState<FrontUser>(emptyUser);
   const [erros, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -59,7 +60,7 @@ export default function CreateUser({
           alert(newSelf ? 'Account created' : 'User added');
           setNewUser(emptyUser);
           setShow(false);
-          setUsers([...users, response.data as UserDocument]);
+          setUsers([...users, response.data as FrontUserDocument]);
         })
         .catch((error) => {
           if (error.response.status === 409) alert('Username already used');
@@ -141,12 +142,12 @@ export default function CreateUser({
                   onChange={(event): void =>
                     setNewUser({
                       ...newUser,
-                      role: event.target.value as Role,
+                      role: event.target.value as UserRole,
                     })
                   }
                 >
                   <option disabled>Select a role</option>
-                  {Object.values(Role).map((role) => (
+                  {Object.values(UserRole).map((role) => (
                     <option key={role} value={role}>
                       {role}
                     </option>

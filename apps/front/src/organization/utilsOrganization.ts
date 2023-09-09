@@ -1,9 +1,4 @@
-export type Organization = {
-  name: string;
-  description: string;
-  location: string;
-  website: string;
-};
+import { Organization } from '@website/shared-types';
 
 export type OrganizationDocument = Organization & {
   _id: string;

@@ -1,7 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { ProjectType } from '@website/shared-types';
-import { Types } from 'mongoose';
+import { Project, ProjectType } from '@website/shared-types';
+import { HydratedDocument, Types } from 'mongoose';
 import { OrganizationClass } from 'src/organization/organization.schema';
+
+export type ProjectDocument = HydratedDocument<Project>;
 
 @Schema()
 export class ProjectClass {

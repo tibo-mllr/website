@@ -1,5 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Organization } from '@website/shared-types';
+import { HydratedDocument } from 'mongoose';
+
+export type OrganizationDocument = HydratedDocument<Organization>;
 
 @Schema()
 export class OrganizationClass {

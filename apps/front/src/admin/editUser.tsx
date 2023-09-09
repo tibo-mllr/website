@@ -1,3 +1,4 @@
+import { UserRole } from '@website/shared-types';
 import {
   FormEvent,
   ReactElement,
@@ -7,15 +8,15 @@ import {
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
-import { Role, UserDocument } from './utilsAdmin';
+import { FrontUserDocument } from './utilsAdmin';
 
 type EditUserProps = {
-  userToEdit: UserDocument;
-  setUserToEdit: (userToEdit: UserDocument) => void;
+  userToEdit: FrontUserDocument;
+  setUserToEdit: (userToEdit: FrontUserDocument) => void;
   show: boolean;
   setShow: (show: boolean) => void;
-  users: UserDocument[];
-  setUsers: (users: UserDocument[]) => void;
+  users: FrontUserDocument[];
+  setUsers: (users: FrontUserDocument[]) => void;
 };
 
 export default function EditUser({
@@ -132,13 +133,13 @@ export default function EditUser({
                 onChange={(event): void =>
                   setUserToEdit({
                     ...userToEdit,
-                    role: event.target.value as Role,
+                    role: event.target.value as UserRole,
                   })
                 }
               >
                 <option disabled>Select a role</option>
-                <option value={Role.Admin}>Admin</option>
-                <option value={Role.SuperAdmin}>Super admin</option>
+                <option value={UserRole.Admin}>Admin</option>
+                <option value={UserRole.SuperAdmin}>Super admin</option>
               </Form.Select>
             </Form.Group>
           )}

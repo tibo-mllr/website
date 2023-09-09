@@ -1,9 +1,8 @@
-import { HydratedDocument } from 'mongoose';
 import { z } from 'zod';
 
 export enum UserRole {
-  Admin,
-  SuperAdmin,
+  Admin = 'Admin',
+  SuperAdmin = 'superAdmin',
 }
 export const userRoleSchema = z.nativeEnum(UserRole);
 
@@ -13,5 +12,3 @@ export const userSchema = z.object({
   hashedPassword: z.string(),
 });
 export type User = z.infer<typeof userSchema>;
-
-export type UserDocument = HydratedDocument<User>;

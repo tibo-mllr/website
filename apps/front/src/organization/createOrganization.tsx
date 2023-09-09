@@ -1,3 +1,4 @@
+import { Organization } from '@website/shared-types';
 import {
   FormEvent,
   ReactElement,
@@ -7,7 +8,7 @@ import {
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { FormErrors, client } from '../utils';
-import { Organization, OrganizationDocument } from './utilsOrganization';
+import { OrganizationDocument } from './utilsOrganization';
 
 export type CreateOrganizationProps = {
   show: boolean;

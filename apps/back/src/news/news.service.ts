@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { News, NewsDocument } from '@website/shared-types';
+import { News } from '@website/shared-types';
 import { Model } from 'mongoose';
 import { Gateway } from 'src/app.gateway';
-import { NewsClass } from './news.schema';
+import { NewsClass, NewsDocument } from './news.schema';
 
 @Injectable()
 export class NewsService {

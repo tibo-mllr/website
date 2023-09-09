@@ -1,14 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  OrganizationDocument,
-  ProjectDocument,
-  ProjectType,
-  Resume,
-} from '@website/shared-types';
+import { ProjectType } from '@website/shared-types';
 import { Model } from 'mongoose';
-import { OrganizationClass } from 'src/organization/organization.schema';
-import { ProjectClass } from 'src/project/project.schema';
+import {
+  OrganizationClass,
+  OrganizationDocument,
+} from 'src/organization/organization.schema';
+import { ProjectClass, ProjectDocument } from 'src/project/project.schema';
+import { Resume } from './resume.entity';
 
 @Injectable()
 export class ResumeService {
@@ -72,7 +71,7 @@ export class ResumeService {
 
     return {
       projects: types as {
-        type: ProjectType;
+        _id: ProjectType;
         projects: ProjectDocument[];
       }[],
       competencies: competencies,

@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Resume } from '@website/shared-types';
+import { Resume } from './resume.entity';
 import { ResumeService } from './resume.service';
 
 @Controller('resume')

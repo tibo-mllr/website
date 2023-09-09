@@ -10,9 +10,10 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { News, NewsDocument, UserRole } from '@website/shared-types';
+import { News, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { NewsDocument } from './news.schema';
 import { NewsService } from './news.service';
 
 @Controller('news')

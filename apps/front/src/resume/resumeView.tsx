@@ -104,7 +104,7 @@ export default function ResumeView(): ReactElement {
                   </Card.Header>
                   <Card.Body>
                     {type.projects.map((project) => (
-                      <Row key={project._id}>
+                      <Row key={project._id.toString()}>
                         <Row>
                           <Col>
                             <b>

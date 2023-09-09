@@ -1,3 +1,4 @@
+import { UserRole } from '@website/shared-types';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import binIcon from '../assets/binIcon.png';
@@ -5,7 +6,7 @@ import editIcon from '../assets/editIcon.png';
 import { client, socket } from '../utils';
 import CreateUser from './createUser';
 import EditUser from './editUser';
-import { Role, UserDocument } from './utilsAdmin';
+import { FrontUserDocument } from './utilsAdmin';
 
 type AdminViewProps = {
   showNew: boolean;
@@ -16,13 +17,13 @@ export default function AdminView({
   showNew,
   setShowNew,
 }: AdminViewProps): ReactElement {
-  const [users, setUsers] = useState<UserDocument[]>([]);
+  const [users, setUsers] = useState<FrontUserDocument[]>([]);
   const [showEdit, setShowEdit] = useState<boolean>(false);
-  const [userToEdit, setUserToEdit] = useState<UserDocument>({
+  const [userToEdit, setUserToEdit] = useState<FrontUserDocument>({
     _id: '',
     username: '',
     password: '',
-    role: Role.Admin,
+    role: UserRole.Admin,
   });
 
   const handleDelete = (id: string): void => {
@@ -48,15 +49,15 @@ export default function AdminView({
           Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
         },
       })
-      .then((response) => setUsers(response.data as UserDocument[]))
+      .then((response) => setUsers(response.data as FrontUserDocument[]))
       .catch((error) => console.log(error));
   }, []);
 
   useEffect(() => {
-    socket.on('userAdded', (newUser: UserDocument) =>
+    socket.on('userAdded', (newUser: FrontUserDocument) =>
       setUsers([...users, newUser]),
     );
-    socket.on('userEdited', (editedUser: UserDocument) =>
+    socket.on('userEdited', (editedUser: FrontUserDocument) =>
       setUsers(
         users.map((user) => (user._id === editedUser._id ? editedUser : user)),
       ),
