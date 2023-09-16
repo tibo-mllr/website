@@ -1,7 +1,7 @@
-import { z } from 'zod';
+import { nativeEnum } from 'zod';
 
 export enum UserRole {
   Admin = 'Admin',
   SuperAdmin = 'superAdmin',
 }
-export const userRoleSchema = z.nativeEnum(UserRole);
+export const userRoleSchema = nativeEnum(UserRole);
