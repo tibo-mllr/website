@@ -95,11 +95,7 @@ export function OrganizationView({
                   </Card.Title>
                 </Card.Header>
                 <Card.Body>
-                  {organization.description ? (
-                    organization.description
-                  ) : (
-                    <i>No description provided</i>
-                  )}
+                  {organization.description ?? <i>No description provided</i>}
                   <br />
                   <br />
                   <b>Website: </b>
