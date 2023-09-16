@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { NewsDocument } from './utilsHome';
 
 type CreateNewsProps = {
@@ -17,7 +17,7 @@ type CreateNewsProps = {
   setAllNews: (allNews: NewsDocument[]) => void;
 };
 
-export default function CreateNews({
+export function CreateNews({
   show,
   setShow,
   allNews,
@@ -134,3 +134,5 @@ export default function CreateNews({
     </Modal>
   );
 }
+
+export default CreateNews;

@@ -5,8 +5,8 @@ import { Model } from 'mongoose';
 import {
   OrganizationClass,
   OrganizationDocument,
-} from 'src/organization/organization.schema';
-import { ProjectClass, ProjectDocument } from 'src/project/project.schema';
+} from 'organization/organization.schema';
+import { ProjectClass, ProjectDocument } from 'project/project.schema';
 import { Resume } from './resume.entity';
 
 @Injectable()

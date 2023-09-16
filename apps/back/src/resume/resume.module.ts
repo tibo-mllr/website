@@ -3,8 +3,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {
   OrganizationClass,
   OrganizationSchema,
-} from 'src/organization/organization.schema';
-import { ProjectClass, ProjectSchema } from 'src/project/project.schema';
+} from 'organization/organization.schema';
+import { ProjectClass, ProjectSchema } from 'project/project.schema';
 import { ResumeController } from './resume.controller';
 import { ResumeService } from './resume.service';
 

@@ -1,8 +1,7 @@
+import { logo, plusIcon } from 'assets';
 import { ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png';
-import plusIcon from '../assets/plusIcon.png';
 
 type HeaderProps = {
   setShowNewData: (showNew: boolean) => void;
@@ -11,7 +10,7 @@ type HeaderProps = {
   setShowNewOrganization: (showNew: boolean) => void;
 };
 
-export default function Header({
+export function Header({
   setShowNewData,
   setShowNewUser,
   setShowNewProject,
@@ -164,3 +163,5 @@ export default function Header({
     </header>
   );
 }
+
+export default Header;

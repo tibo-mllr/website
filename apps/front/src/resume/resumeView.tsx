@@ -1,9 +1,9 @@
 import { ReactElement, useEffect, useState } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { client, socket } from '../utils';
+import { client, socket } from 'utils';
 import { Resume } from './utilsResume';
 
-export default function ResumeView(): ReactElement {
+export function ResumeView(): ReactElement {
   const [resume, setResume] = useState<Resume>({
     projects: [],
     competencies: [],
@@ -161,3 +161,5 @@ export default function ResumeView(): ReactElement {
     </Row>
   );
 }
+
+export default ResumeView;

@@ -1,5 +1,5 @@
 import { ProjectType } from '@website/shared-types';
-import { ProjectDocument } from '../project/utilsProject';
+import { ProjectDocument } from 'project';
 
 export type Resume = {
   projects: { _id: ProjectType; projects: ProjectDocument[] }[];

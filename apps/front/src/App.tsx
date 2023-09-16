@@ -1,13 +1,13 @@
+import { AdminView } from 'admin';
+import { Header } from 'components';
+import { HomeView } from 'home';
+import { LoginView } from 'login';
+import { OrganizationView } from 'organization';
+import { ProjectView } from 'project';
 import { ReactElement, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import AdminView from './admin/adminView';
-import Header from './components/header';
-import HomeView from './home/homeView';
-import LoginView from './login/loginView';
-import OrganizationView from './organization/organizationView';
-import ProjectView from './project/projectView';
-import ResumeView from './resume/resumeView';
+import { ResumeView } from 'resume';
 
 function App(): ReactElement {
   const [showNewData, setShowNewData] = useState<boolean>(false);

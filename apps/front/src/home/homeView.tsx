@@ -1,8 +1,7 @@
+import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import binIcon from '../assets/binIcon.png';
-import editIcon from '../assets/editIcon.png';
-import { client, socket } from '../utils';
+import { client, socket } from 'utils';
 import CreateNews from './createNews';
 import EditNews from './editNews';
 import { NewsDocument } from './utilsHome';
@@ -12,10 +11,7 @@ type HomeViewProps = {
   setShowNew: (showNew: boolean) => void;
 };
 
-export default function HomeView({
-  showNew,
-  setShowNew,
-}: HomeViewProps): ReactElement {
+export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
   const [allNews, setAllNews] = useState<NewsDocument[]>([]);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({
@@ -165,3 +161,5 @@ export default function HomeView({
     </>
   );
 }
+
+export default HomeView;

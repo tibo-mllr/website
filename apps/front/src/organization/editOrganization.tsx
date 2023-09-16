@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { OrganizationDocument } from './utilsOrganization';
 
 type EditOrganizationProps = {
@@ -18,7 +18,7 @@ type EditOrganizationProps = {
   setOrganizations: (organizations: OrganizationDocument[]) => void;
 };
 
-export default function EditOrganization({
+export function EditOrganization({
   organizationToEdit,
   setOrganizationToEdit,
   show,
@@ -198,3 +198,5 @@ export default function EditOrganization({
     </Modal>
   );
 }
+
+export default EditOrganization;

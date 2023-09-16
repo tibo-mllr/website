@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Organization } from '@website/shared-types';
+import { Gateway } from 'app.gateway';
 import { Model } from 'mongoose';
-import { Gateway } from 'src/app.gateway';
-import { ProjectClass, ProjectDocument } from 'src/project/project.schema';
+import { ProjectClass, ProjectDocument } from 'project/project.schema';
 import { OrganizationClass, OrganizationDocument } from './organization.schema';
 
 @Injectable()

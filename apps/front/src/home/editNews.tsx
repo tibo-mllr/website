@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { NewsDocument } from './utilsHome';
 
 type EditNewsProps = {
@@ -18,7 +18,7 @@ type EditNewsProps = {
   setAllNews: (allNews: NewsDocument[]) => void;
 };
 
-export default function EditNews({
+export function EditNews({
   newsToEdit,
   setNewsToEdit,
   show,
@@ -133,3 +133,5 @@ export default function EditNews({
     </Modal>
   );
 }
+
+export default EditNews;

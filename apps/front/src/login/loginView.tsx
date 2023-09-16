@@ -1,16 +1,14 @@
+import { CreateUser } from 'admin';
 import { FormEvent, ReactElement, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import CreateUser from '../admin/createUser';
-import { client } from '../utils';
+import { client } from 'utils';
 
 type LoginViewProps = {
   setLoginToken: (loginToken: string) => void;
 };
 
-export default function LoginView({
-  setLoginToken,
-}: LoginViewProps): ReactElement {
+export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [show, setShow] = useState<boolean>(false);
@@ -99,3 +97,5 @@ export default function LoginView({
     </>
   );
 }
+
+export default LoginView;

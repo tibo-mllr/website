@@ -1,8 +1,7 @@
+import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import binIcon from '../assets/binIcon.png';
-import editIcon from '../assets/editIcon.png';
-import { client, socket } from '../utils';
+import { client, socket } from 'utils';
 import CreateOrganization from './createOrganization';
 import EditOrganization from './editOrganization';
 import { OrganizationDocument } from './utilsOrganization';
@@ -12,7 +11,7 @@ type OrganizationViewProps = {
   setShowNew: (showNew: boolean) => void;
 };
 
-export default function OrganizationView({
+export function OrganizationView({
   showNew,
   setShowNew,
 }: OrganizationViewProps): ReactElement {
@@ -170,3 +169,5 @@ export default function OrganizationView({
     </>
   );
 }
+
+export default OrganizationView;

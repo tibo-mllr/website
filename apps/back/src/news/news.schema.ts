@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { News } from '@website/shared-types';
 import { HydratedDocument, Types } from 'mongoose';
-import { UserClass } from 'src/user/user.schema';
+import { UserClass } from 'user/user.schema';
 
 export type NewsDocument = HydratedDocument<News>;
 

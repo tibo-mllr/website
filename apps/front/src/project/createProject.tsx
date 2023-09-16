@@ -1,4 +1,6 @@
 import { ProjectType } from '@website/shared-types';
+import { binIcon, plusIcon } from 'assets';
+import { OrganizationDocument } from 'organization';
 import {
   FormEvent,
   ReactElement,
@@ -17,10 +19,7 @@ import {
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
-import binIcon from '../assets/binIcon.png';
-import plusIcon from '../assets/plusIcon.png';
-import { OrganizationDocument } from '../organization/utilsOrganization';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { Project, ProjectDocument } from './utilsProject';
 
 type CreateProjectProps = {
@@ -33,7 +32,7 @@ type CreateProjectProps = {
   competencies: string[];
 };
 
-export default function CreateProject({
+export function CreateProject({
   show,
   setShow,
   projects,
@@ -719,3 +718,5 @@ export default function CreateProject({
     </Modal>
   );
 }
+
+export default CreateProject;

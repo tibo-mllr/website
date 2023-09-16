@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Gateway } from 'src/app.gateway';
-import { NewsClass, NewsSchema } from 'src/news/news.schema';
+import { Gateway } from 'app.gateway';
+import { NewsClass, NewsSchema } from 'news/news.schema';
 import { UsersController } from './user.controller';
 import { UserClass, UserSchema } from './user.schema';
 import { UserService } from './user.service';

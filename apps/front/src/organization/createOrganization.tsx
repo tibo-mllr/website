@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { OrganizationDocument } from './utilsOrganization';
 
 export type CreateOrganizationProps = {
@@ -17,7 +17,7 @@ export type CreateOrganizationProps = {
   setOrganizations: (organizations: OrganizationDocument[]) => void;
 };
 
-export default function CreateOrganization({
+export function CreateOrganization({
   show,
   setShow,
   organizations,
@@ -188,3 +188,5 @@ export default function CreateOrganization({
     </Modal>
   );
 }
+
+export default CreateOrganization;

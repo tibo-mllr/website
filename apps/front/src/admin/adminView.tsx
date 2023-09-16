@@ -1,9 +1,8 @@
 import { UserRole } from '@website/shared-types';
+import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import binIcon from '../assets/binIcon.png';
-import editIcon from '../assets/editIcon.png';
-import { client, socket } from '../utils';
+import { client, socket } from 'utils';
 import CreateUser from './createUser';
 import EditUser from './editUser';
 import { FrontUserDocument } from './utilsAdmin';
@@ -13,7 +12,7 @@ type AdminViewProps = {
   setShowNew: (showNew: boolean) => void;
 };
 
-export default function AdminView({
+export function AdminView({
   showNew,
   setShowNew,
 }: AdminViewProps): ReactElement {
@@ -142,3 +141,5 @@ export default function AdminView({
     </>
   );
 }
+
+export default AdminView;

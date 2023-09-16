@@ -6,9 +6,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserRole } from '@website/shared-types';
-import { AuthService } from './auth/auth.service';
-import { LocalAuthGuard } from './auth/local-auth.guard';
-import { UserDocument } from './user/user.schema';
+import { AuthService } from 'auth/auth.service';
+import { LocalAuthGuard } from 'auth/local-auth.guard';
+import { UserDocument } from 'user/user.schema';
 
 @Controller()
 export class AppController {

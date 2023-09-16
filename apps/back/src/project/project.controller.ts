@@ -9,8 +9,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { Project, UserRole } from '@website/shared-types';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RoleGuard, Roles } from 'src/auth/role.guard';
+import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { RoleGuard, Roles } from 'auth/role.guard';
 import { ProjectDocument } from './project.schema';
 import { ProjectService } from './project.service';
 

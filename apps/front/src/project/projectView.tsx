@@ -1,10 +1,9 @@
 import { ProjectType } from '@website/shared-types';
+import { binIcon, editIcon } from 'assets';
+import { OrganizationDocument } from 'organization';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import binIcon from '../assets/binIcon.png';
-import editIcon from '../assets/editIcon.png';
-import { OrganizationDocument } from '../organization/utilsOrganization';
-import { client, socket } from '../utils';
+import { client, socket } from 'utils';
 import CreateProject from './createProject';
 import EditProject from './editProject';
 import { ProjectDocument } from './utilsProject';
@@ -13,7 +12,7 @@ type ProjectViewProps = {
   showNew: boolean;
   setShowNew: (show: boolean) => void;
 };
-export default function ProjectView({
+export function ProjectView({
   showNew,
   setShowNew,
 }: ProjectViewProps): ReactElement {
@@ -261,3 +260,5 @@ export default function ProjectView({
     </>
   );
 }
+
+export default ProjectView;

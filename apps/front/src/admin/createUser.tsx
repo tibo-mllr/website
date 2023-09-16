@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { FrontUserDocument } from './utilsAdmin';
 
 type CreateUserProps = {
@@ -18,7 +18,7 @@ type CreateUserProps = {
   newSelf?: boolean;
 };
 
-export default function CreateUser({
+export function CreateUser({
   show,
   setShow,
   users,
@@ -165,3 +165,5 @@ export default function CreateUser({
     </Modal>
   );
 }
+
+export default CreateUser;

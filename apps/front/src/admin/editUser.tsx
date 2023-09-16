@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
-import { FormErrors, client } from '../utils';
+import { FormErrors, client } from 'utils';
 import { FrontUserDocument } from './utilsAdmin';
 
 type EditUserProps = {
@@ -19,7 +19,7 @@ type EditUserProps = {
   setUsers: (users: FrontUserDocument[]) => void;
 };
 
-export default function EditUser({
+export function EditUser({
   userToEdit,
   setUserToEdit,
   show,
@@ -153,3 +153,5 @@ export default function EditUser({
     </Modal>
   );
 }
+
+export default EditUser;
