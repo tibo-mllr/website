@@ -5,7 +5,7 @@ Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
 
 ## Prerequisites
 
-- NodeJS with yarn and lerna
+- NodeJS with yarn
 - A MongoDB instance
 
 ## Run[^1]
