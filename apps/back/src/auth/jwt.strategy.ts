@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Types } from 'mongoose';
 import { ExtractJwt, Strategy } from 'passport-jwt';
+import { JWT_SECRET } from 'settings';
 import { UserDocument } from 'user/user.schema';
 import { UserService } from 'user/user.service';
 @Injectable()
@@ -10,7 +11,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: JWT_SECRET,
     });
   }
 
