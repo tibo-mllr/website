@@ -1,3 +1,4 @@
+import { UserRole } from '@website/shared-types';
 import { CreateUser } from 'admin';
 import { FormEvent, ReactElement, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
@@ -18,15 +19,14 @@ export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
   const handleSubmit = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
     client
-      .post('/auth/login/', {
+      .post<{ access_token: string; role: UserRole }>('/auth/login/', {
         username: username,
         password: password,
       })
-      .then((response) => {
-        setLoginToken(response.data.access_token);
-        sessionStorage.setItem('loginToken', response.data.access_token);
-        sessionStorage.setItem('role', response.data.role);
-        sessionStorage.setItem('id', response.data.id);
+      .then(({ data }) => {
+        setLoginToken(data.access_token);
+        sessionStorage.setItem('loginToken', data.access_token);
+        sessionStorage.setItem('role', data.role);
         navigate('/admin');
       })
       .catch((error) => {

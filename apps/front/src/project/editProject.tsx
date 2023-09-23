@@ -115,22 +115,19 @@ export function EditProject({
         projectToEdit.organization;
       delete organizationToPost._id;
       client
-        .post('/organization', organizationToPost, {
+        .post<OrganizationDocument>('/organization', organizationToPost, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then((response) => {
-          setOrganizations([
-            ...organizations,
-            response.data as OrganizationDocument,
-          ]);
+        .then(({ data }) => {
+          setOrganizations([...organizations, data]);
           client
-            .put(
+            .put<ProjectDocument>(
               '/project/' + projectToEdit._id,
               {
                 ...projectToEdit,
-                organization: response.data._id,
+                organization: data._id,
                 endDate: selectEndDate ? projectToEdit.endDate : undefined,
               },
               {
@@ -141,11 +138,11 @@ export function EditProject({
                 },
               },
             )
-            .then((response) => {
+            .then(({ data }) => {
               alert('Project edited');
               setProjects(
                 projects.map((project) =>
-                  project._id === response.data._id ? response.data : project,
+                  project._id === data._id ? data : project,
                 ),
               );
               setShow(false);
@@ -172,7 +169,7 @@ export function EditProject({
         organizationToCheck?.website !== projectToEdit.organization.website
       ) {
         client
-          .put(
+          .put<OrganizationDocument>(
             '/organization/' + projectToEdit.organization._id,
             projectToEdit.organization,
             {
@@ -181,19 +178,19 @@ export function EditProject({
               },
             },
           )
-          .then((response) => {
+          .then(({ data }) => {
             setOrganizations([
               ...organizations.filter(
-                (organization) => organization._id !== response.data._id,
+                (organization) => organization._id !== data._id,
               ),
-              response.data as OrganizationDocument,
+              data,
             ]);
             client
-              .put(
+              .put<ProjectDocument>(
                 '/project/' + projectToEdit._id,
                 {
                   ...projectToEdit,
-                  organization: response.data._id,
+                  organization: data._id,
                   endDate: selectEndDate ? projectToEdit.endDate : undefined,
                 },
                 {
@@ -204,11 +201,11 @@ export function EditProject({
                   },
                 },
               )
-              .then((response) => {
+              .then(({ data }) => {
                 alert('Project edited');
                 setProjects(
                   projects.map((project) =>
-                    project._id === response.data._id ? response.data : project,
+                    project._id === data._id ? data : project,
                   ),
                 );
                 setShow(false);
@@ -225,7 +222,7 @@ export function EditProject({
         setSubmitted(false);
       } else {
         client
-          .put(
+          .put<ProjectDocument>(
             '/project/' + projectToEdit._id,
             {
               ...projectToEdit,
@@ -238,11 +235,11 @@ export function EditProject({
               },
             },
           )
-          .then((response) => {
+          .then(({ data }) => {
             alert('Project edited');
             setProjects(
               projects.map((project) =>
-                project._id === response.data._id ? response.data : project,
+                project._id === data._id ? data : project,
               ),
             );
             setShow(false);

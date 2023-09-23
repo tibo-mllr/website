@@ -43,12 +43,12 @@ export function AdminView({
 
   useEffect(() => {
     client
-      .get(`/user/${sessionStorage.getItem('role')}`, {
+      .get<FrontUserDocument[]>(`/user/${sessionStorage.getItem('role')}`, {
         headers: {
           Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
         },
       })
-      .then((response) => setUsers(response.data as FrontUserDocument[]))
+      .then(({ data }) => setUsers(data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -100,22 +100,20 @@ export function AdminView({
                       />
                     </Button>
                   </Col>
-                  {sessionStorage.getItem('id') !== user._id && (
-                    <Col className="d-flex justify-content-end">
-                      <Button
-                        onClick={(): void => {
-                          handleDelete(user._id);
-                        }}
-                      >
-                        <img
-                          alt="Delete"
-                          src={binIcon}
-                          height="24"
-                          className="d-inline-block align-center"
-                        />
-                      </Button>
-                    </Col>
-                  )}
+                  <Col className="d-flex justify-content-end">
+                    <Button
+                      onClick={(): void => {
+                        handleDelete(user._id);
+                      }}
+                    >
+                      <img
+                        alt="Delete"
+                        src={binIcon}
+                        height="24"
+                        className="d-inline-block align-center"
+                      />
+                    </Button>
+                  </Col>
                 </Row>
               </Card.Footer>
             </Card>

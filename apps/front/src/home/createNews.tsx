@@ -50,14 +50,14 @@ export function CreateNews({
     if (Object.keys(errors).length > 0) setErrors(errors);
     else {
       client
-        .post('/news', newNews, {
+        .post<NewsDocument>('/news', newNews, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then((response) => {
+        .then(({ data }) => {
           alert('News added');
-          setAllNews([response.data as NewsDocument, ...allNews]);
+          setAllNews([data, ...allNews]);
           setNewNews(emptyNews);
           setShow(false);
         })

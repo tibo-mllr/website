@@ -128,22 +128,19 @@ export function CreateProject({
         newProject.organization;
       delete organizationToPost._id;
       client
-        .post('/organization', organizationToPost, {
+        .post<OrganizationDocument>('/organization', organizationToPost, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then((response) => {
-          setOrganizations([
-            ...organizations,
-            response.data as OrganizationDocument,
-          ]);
+        .then(({ data }) => {
+          setOrganizations([...organizations, data]);
           client
-            .post(
+            .post<ProjectDocument>(
               '/project',
               {
                 ...newProject,
-                organization: response.data._id,
+                organization: data._id,
                 endDate: selectEndDate ? newProject.endDate : undefined,
               },
               {
@@ -154,9 +151,9 @@ export function CreateProject({
                 },
               },
             )
-            .then((response) => {
+            .then(({ data }) => {
               alert('Project added');
-              setProjects([...projects, response.data as ProjectDocument]);
+              setProjects([...projects, data]);
               setNewProject(emptyProject);
               setShow(false);
             })
@@ -182,7 +179,7 @@ export function CreateProject({
         organizationToCheck?.website !== newProject.organization.website
       ) {
         client
-          .put(
+          .put<OrganizationDocument>(
             '/organization/' + newProject.organization._id,
             newProject.organization,
             {
@@ -191,19 +188,19 @@ export function CreateProject({
               },
             },
           )
-          .then((response) => {
+          .then(({ data }) => {
             setOrganizations([
               ...organizations.filter(
-                (organization) => organization._id !== response.data._id,
+                (organization) => organization._id !== data._id,
               ),
-              response.data as OrganizationDocument,
+              data,
             ]);
             client
-              .post(
+              .post<ProjectDocument>(
                 '/project',
                 {
                   ...newProject,
-                  organization: response.data._id,
+                  organization: data._id,
                   endDate: selectEndDate ? newProject.endDate : undefined,
                 },
                 {
@@ -214,9 +211,9 @@ export function CreateProject({
                   },
                 },
               )
-              .then((response) => {
+              .then(({ data }) => {
                 alert('Project added');
-                setProjects([...projects, response.data as ProjectDocument]);
+                setProjects([...projects, data]);
                 setNewProject(emptyProject);
                 setShow(false);
               })
@@ -232,7 +229,7 @@ export function CreateProject({
         setSubmitted(false);
       } else {
         client
-          .post(
+          .post<ProjectDocument>(
             '/project',
             {
               ...newProject,
@@ -245,9 +242,9 @@ export function CreateProject({
               },
             },
           )
-          .then((response) => {
+          .then(({ data }) => {
             alert('Project added');
-            setProjects([...projects, response.data as ProjectDocument]);
+            setProjects([...projects, data]);
             setNewProject(emptyProject);
             setShow(false);
           })

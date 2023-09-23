@@ -40,8 +40,8 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
 
   useEffect(() => {
     client
-      .get('/news')
-      .then((response) => setAllNews(response.data as NewsDocument[]))
+      .get<NewsDocument[]>('/news')
+      .then(({ data }) => setAllNews(data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -61,8 +61,8 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
     );
     socket.on('severalNewsDeleted', () => {
       client
-        .get('/news')
-        .then((response) => setAllNews(response.data as NewsDocument[]))
+        .get<NewsDocument[]>('/news')
+        .then(({ data }) => setAllNews(data))
         .catch((error) => console.error(error));
     });
     return () => {

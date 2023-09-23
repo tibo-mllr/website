@@ -45,8 +45,8 @@ export function OrganizationView({
 
   useEffect(() => {
     client
-      .get('/organization')
-      .then((response) => setOrganizations(response.data))
+      .get<OrganizationDocument[]>('/organization')
+      .then(({ data }) => setOrganizations(data))
       .catch((error) => console.error(error));
   }, []);
 

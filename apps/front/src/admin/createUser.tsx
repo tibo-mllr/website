@@ -51,16 +51,16 @@ export function CreateUser({
     if (Object.keys(errors).length > 0) setErrors(errors);
     else {
       client
-        .post(`/user${newSelf ? '/new' : ''}`, newUser, {
+        .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then((response) => {
+        .then(({ data }) => {
           alert(newSelf ? 'Account created' : 'User added');
           setNewUser(emptyUser);
           setShow(false);
-          setUsers([...users, response.data as FrontUserDocument]);
+          setUsers([...users, data]);
         })
         .catch((error) => {
           if (error.response.status === 409) alert('Username already used');

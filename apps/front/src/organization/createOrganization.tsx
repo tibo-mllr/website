@@ -60,14 +60,14 @@ export function CreateOrganization({
     if (Object.keys(errors).length) setErrors(errors);
     else {
       client
-        .post('/organization', newOrganization, {
+        .post<OrganizationDocument>('/organization', newOrganization, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then((response) => {
+        .then(({ data }) => {
           alert('Organization added');
-          setOrganizations([...organizations, response.data]);
+          setOrganizations([...organizations, data]);
           setNewOrganization(emptyOrganization);
           setShow(false);
         })

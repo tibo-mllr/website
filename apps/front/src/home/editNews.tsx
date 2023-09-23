@@ -46,17 +46,15 @@ export function EditNews({
     if (Object.keys(errors).length > 0) setErrors(errors);
     else {
       client
-        .put(`/news/${newsToEdit._id}`, newsToEdit, {
+        .put<NewsDocument>(`/news/${newsToEdit._id}`, newsToEdit, {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
           },
         })
-        .then((response) => {
+        .then(({ data }) => {
           alert('News edited');
           setAllNews(
-            allNews.map((news) =>
-              news._id === response.data._id ? response.data : news,
-            ),
+            allNews.map((news) => (news._id === data._id ? data : news)),
           );
           setShow(false);
         })

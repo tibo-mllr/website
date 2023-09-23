@@ -11,34 +11,34 @@ export function ResumeView(): ReactElement {
 
   useEffect(() => {
     client
-      .get('/resume')
-      .then((response) => setResume(response.data as Resume))
+      .get<Resume>('/resume')
+      .then(({ data }) => setResume(data))
       .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
     socket.on('projectAdded', () => {
       client
-        .get('/resume')
-        .then((response) => setResume(response.data as Resume))
+        .get<Resume>('/resume')
+        .then(({ data }) => setResume(data))
         .catch((error) => console.error(error));
     });
     socket.on('projectEdited', () => {
       client
-        .get('/resume')
-        .then((response) => setResume(response.data as Resume))
+        .get<Resume>('/resume')
+        .then(({ data }) => setResume(data))
         .catch((error) => console.error(error));
     });
     socket.on('projectDeleted', () => {
       client
-        .get('/resume')
-        .then((response) => setResume(response.data as Resume))
+        .get<Resume>('/resume')
+        .then(({ data }) => setResume(data))
         .catch((error) => console.error(error));
     });
     socket.on('projectsDeleted', () => {
       client
-        .get('/resume')
-        .then((response) => setResume(response.data as Resume))
+        .get<Resume>('/resume')
+        .then(({ data }) => setResume(data))
         .catch((error) => console.error(error));
     });
     return () => {

@@ -55,18 +55,20 @@ export function EditOrganization({
     if (Object.keys(errors).length) setErrors(errors);
     else {
       client
-        .put(`/organization/${organizationToEdit._id}`, organizationToEdit, {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+        .put<OrganizationDocument>(
+          `/organization/${organizationToEdit._id}`,
+          organizationToEdit,
+          {
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            },
           },
-        })
-        .then((response) => {
+        )
+        .then(({ data }) => {
           alert('Organization edited');
           setOrganizations(
             organizations.map((organization) =>
-              organization._id === response.data._id
-                ? response.data
-                : organization,
+              organization._id === data._id ? data : organization,
             ),
           );
           setOrganizationToEdit({
