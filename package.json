@@ -14,6 +14,7 @@
   "scripts": {
     "back": "turbo run dev --filter back...",
     "back-build": "turbo run build --filter back...",
+    "back-serve": "turbo run serve --filter back...",
     "build": "turbo run build",
     "front": "turbo run dev --filter front...",
     "front-build": "turbo run build --filter front...",
@@ -29,5 +30,6 @@
     "prettier": "^3.0.3",
     "turbo": "^1.10.14",
     "typescript": "^4.9.5"
-  }
+  },
+  "packageManager": "yarn@1.22.19"
 }

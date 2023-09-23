@@ -11,3 +11,5 @@ function loadFromEnv(varName: string): string {
 }
 
 export const JWT_SECRET = loadFromEnv('JWT_SECRET');
+
+export const DB_HOST = loadFromEnv('DB_HOST');

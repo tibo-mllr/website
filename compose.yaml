@@ -1,0 +1,27 @@
+version: '3'
+
+services:
+  back:
+    container_name: back
+    build:
+      dockerfile: Dockerfile.back
+    ports:
+      - 8000:8000
+    volumes:
+      - ./apps/back:/app
+      - /app/node_modules/
+    restart: always
+    depends_on:
+      - db
+
+  db:
+    container_name: db
+    image: mongo:6.0.6
+    volumes:
+      - data:/data/db
+    restart: always
+    expose:
+      - 27017
+
+volumes:
+  data:

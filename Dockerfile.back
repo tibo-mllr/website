@@ -1,0 +1,31 @@
+FROM node:18.14.1 AS base
+WORKDIR /app
+RUN yarn global add turbo
+
+FROM base AS PRUNE_STAGE
+WORKDIR /app
+COPY . .
+RUN turbo prune --scope back --docker
+
+FROM base AS INSTALL_STAGE
+WORKDIR /app
+COPY --from=PRUNE_STAGE /app/out/json .
+COPY --from=PRUNE_STAGE /app/out/yarn.lock .
+RUN yarn install:ci
+
+FROM base AS BUILD_STAGE
+WORKDIR /app
+COPY --from=INSTALL_STAGE /app .
+COPY --from=PRUNE_STAGE /app/out/full/ .
+COPY ./tsconfig.json ./turbo.json ./.eslintrc.json ./
+ENV DB_HOST=db
+RUN yarn back-build
+
+FROM base AS SERVE_STAGE
+WORKDIR /app
+COPY --from=BUILD_STAGE /app ./build
+COPY --from=INSTALL_STAGE /app ./install
+COPY --from=PRUNE_STAGE /app ./prune
+EXPOSE 8000
+ENTRYPOINT [ "tail", "-f", "/dev/null" ]
+# CMD ["yarn", "serve"]

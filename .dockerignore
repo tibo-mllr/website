@@ -1,0 +1,30 @@
+# Git stuff
+.git
+.gitignore
+
+# Node packages
+**/node_modules
+
+# Turbo
+**/.turbo
+**/.vscode
+**/tsconfig.tsbuildinfo
+**/out/
+
+# Build artifacts
+**/build
+**/dist
+**/.next/
+
+# Misc.
+**/.DS_Store
+**/LICENSE
+**/README.md
+
+
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
