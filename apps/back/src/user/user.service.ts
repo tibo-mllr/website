@@ -29,10 +29,8 @@ export class UserService {
 
   async create(newUser: FrontUser): Promise<UserDocument> {
     const existingUser = await this.get(newUser.username);
-    if (existingUser) {
-      console.log(existingUser);
-      throw new ConflictException('Username already used');
-    }
+    if (existingUser) throw new ConflictException('Username already used');
+
     const hashedPassword = await hash(newUser.password, 8);
     const user = {
       role: newUser.role,
@@ -51,10 +49,8 @@ export class UserService {
 
   async createSelf(newUser: FrontUser): Promise<UserDocument> {
     const existingUser = await this.get(newUser.username);
-    if (existingUser) {
-      console.log(existingUser);
-      throw new ConflictException('Username already used');
-    }
+    if (existingUser) throw new ConflictException('Username already used');
+
     const hashedPassword = await hash(newUser.password, 8);
     const user = {
       role: 'admin',

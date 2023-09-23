@@ -40,14 +40,14 @@ export function OrganizationView({
           organizations.filter((organization) => organization._id !== id),
         ),
       )
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
     client
       .get('/organization')
       .then((response) => setOrganizations(response.data))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {

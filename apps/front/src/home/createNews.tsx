@@ -63,7 +63,7 @@ export function CreateNews({
         })
         .catch((error) => {
           alert(error);
-          console.log(error);
+          console.error(error);
         });
       setSubmitted(false);
     }

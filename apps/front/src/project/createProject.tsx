@@ -162,12 +162,12 @@ export function CreateProject({
             })
             .catch((error) => {
               alert(error);
-              console.log(error);
+              console.error(error);
             });
         })
         .catch((error) => {
           alert(error);
-          console.log(error);
+          console.error(error);
         });
       setSubmitted(false);
     } else {
@@ -222,12 +222,12 @@ export function CreateProject({
               })
               .catch((error) => {
                 alert(error);
-                console.log(error);
+                console.error(error);
               });
           })
           .catch((error) => {
             alert(error);
-            console.log(error);
+            console.error(error);
           });
         setSubmitted(false);
       } else {
@@ -253,7 +253,7 @@ export function CreateProject({
           })
           .catch((error) => {
             alert(error);
-            console.log(error);
+            console.error(error);
           });
         setSubmitted(false);
       }

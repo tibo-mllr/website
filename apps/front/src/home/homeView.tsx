@@ -34,7 +34,7 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
           },
         })
         .then(() => setAllNews(allNews.filter((news) => news._id !== id)))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     }
   };
 
@@ -42,7 +42,7 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
     client
       .get('/news')
       .then((response) => setAllNews(response.data as NewsDocument[]))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
@@ -63,7 +63,7 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
       client
         .get('/news')
         .then((response) => setAllNews(response.data as NewsDocument[]))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     });
     return () => {
       socket.off('newsAdded');

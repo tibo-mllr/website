@@ -66,7 +66,7 @@ export function CreateUser({
           if (error.response.status === 409) alert('Username already used');
           else {
             alert(error);
-            console.log(error);
+            console.error(error);
           }
         });
       setSubmitted(false);

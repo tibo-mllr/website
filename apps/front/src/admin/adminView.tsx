@@ -37,7 +37,7 @@ export function AdminView({
           },
         })
         .then(() => setUsers(users.filter((user) => user._id !== id)))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     }
   };
 
@@ -49,7 +49,7 @@ export function AdminView({
         },
       })
       .then((response) => setUsers(response.data as FrontUserDocument[]))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {

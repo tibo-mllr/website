@@ -13,7 +13,7 @@ export function ResumeView(): ReactElement {
     client
       .get('/resume')
       .then((response) => setResume(response.data as Resume))
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   useEffect(() => {
@@ -21,25 +21,25 @@ export function ResumeView(): ReactElement {
       client
         .get('/resume')
         .then((response) => setResume(response.data as Resume))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     });
     socket.on('projectEdited', () => {
       client
         .get('/resume')
         .then((response) => setResume(response.data as Resume))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     });
     socket.on('projectDeleted', () => {
       client
         .get('/resume')
         .then((response) => setResume(response.data as Resume))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     });
     socket.on('projectsDeleted', () => {
       client
         .get('/resume')
         .then((response) => setResume(response.data as Resume))
-        .catch((error) => console.log(error));
+        .catch((error) => console.error(error));
     });
     return () => {
       socket.off('projectAdded');

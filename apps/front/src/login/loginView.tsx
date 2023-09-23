@@ -31,7 +31,7 @@ export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
       })
       .catch((error) => {
         alert('Erreur de connexion');
-        console.log(error);
+        console.error(error);
       });
   };
 
