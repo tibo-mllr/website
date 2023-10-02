@@ -2,21 +2,41 @@ import { UserRole } from '@website/shared-types';
 import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { fetchUsers } from 'redux/actions';
+import { addUser, deleteUser, editUser } from 'redux/slices';
+import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
 import CreateUser from './createUser';
 import EditUser from './editUser';
 import { FrontUserDocument } from './utilsAdmin';
 
-type AdminViewProps = {
-  showNew: boolean;
-  setShowNew: (showNew: boolean) => void;
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'users' | 'token' | 'userRole'> => ({
+  users: state.adminReducer.users,
+  token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
+});
+
+const dispatchProps = {
+  addUser,
+  deleteUser,
+  editUser,
+  fetchUsers,
 };
 
+const connector = connect(stateProps, dispatchProps);
+
 export function AdminView({
-  showNew,
-  setShowNew,
-}: AdminViewProps): ReactElement {
-  const [users, setUsers] = useState<FrontUserDocument[]>([]);
+  users,
+  token,
+  userRole,
+  addUser,
+  deleteUser,
+  editUser,
+  fetchUsers,
+}: ConnectedProps<typeof connector>): ReactElement {
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [userToEdit, setUserToEdit] = useState<FrontUserDocument>({
     _id: '',
@@ -33,43 +53,29 @@ export function AdminView({
       client
         .delete(`/user/${id}`, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => setUsers(users.filter((user) => user._id !== id)))
         .catch((error) => console.error(error));
     }
   };
 
   useEffect(() => {
-    client
-      .get<FrontUserDocument[]>(`/user/${sessionStorage.getItem('role')}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
-        },
-      })
-      .then(({ data }) => setUsers(data))
-      .catch((error) => console.error(error));
-  }, []);
+    fetchUsers();
+  }, [fetchUsers]);
 
   useEffect(() => {
-    socket.on('userAdded', (newUser: FrontUserDocument) =>
-      setUsers([...users, newUser]),
-    );
+    socket.on('userAdded', (newUser: FrontUserDocument) => addUser(newUser));
     socket.on('userEdited', (editedUser: FrontUserDocument) =>
-      setUsers(
-        users.map((user) => (user._id === editedUser._id ? editedUser : user)),
-      ),
+      editUser(editedUser),
     );
-    socket.on('userDeleted', (id: string) =>
-      setUsers(users.filter((user) => user._id !== id)),
-    );
+    socket.on('userDeleted', (id: string) => deleteUser(id));
     return () => {
       socket.off('userAdded');
       socket.off('userEdited');
       socket.off('userDeleted');
     };
-  }, [users]);
+  }, [addUser, deleteUser, editUser]);
 
   return (
     <>
@@ -120,24 +126,15 @@ export function AdminView({
           </Col>
         </Row>
       ))}
-      {sessionStorage.getItem('role') === 'superAdmin' && (
-        <CreateUser
-          show={showNew}
-          setShow={setShowNew}
-          users={users}
-          setUsers={setUsers}
-        />
-      )}
+      {userRole === 'superAdmin' && <CreateUser />}
       <EditUser
         userToEdit={userToEdit}
         setUserToEdit={setUserToEdit}
         show={showEdit}
         setShow={setShowEdit}
-        users={users}
-        setUsers={setUsers}
       />
     </>
   );
 }
 
-export default AdminView;
+export default connector(AdminView);

@@ -6,6 +6,8 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { OrganizationDocument } from './utilsOrganization';
 
@@ -14,18 +16,23 @@ type EditOrganizationProps = {
   setOrganizationToEdit: (organizationToEdit: OrganizationDocument) => void;
   show: boolean;
   setShow: (show: boolean) => void;
-  organizations: OrganizationDocument[];
-  setOrganizations: (organizations: OrganizationDocument[]) => void;
 };
+
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'token'> => ({
+  token: state.adminReducer.token,
+});
+
+const connector = connect(stateProps);
 
 export function EditOrganization({
   organizationToEdit,
   setOrganizationToEdit,
   show,
   setShow,
-  organizations,
-  setOrganizations,
-}: EditOrganizationProps): ReactElement {
+  token,
+}: EditOrganizationProps & ConnectedProps<typeof connector>): ReactElement {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -60,24 +67,12 @@ export function EditOrganization({
           organizationToEdit,
           {
             headers: {
-              Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+              Authorization: `Bearer ${token}`,
             },
           },
         )
-        .then(({ data }) => {
+        .then(() => {
           alert('Organization edited');
-          setOrganizations(
-            organizations.map((organization) =>
-              organization._id === data._id ? data : organization,
-            ),
-          );
-          setOrganizationToEdit({
-            _id: '',
-            name: '',
-            description: '',
-            location: '',
-            website: '',
-          });
           setShow(false);
         })
         .catch((error) => {
@@ -201,4 +196,4 @@ export function EditOrganization({
   );
 }
 
-export default EditOrganization;
+export default connector(EditOrganization);

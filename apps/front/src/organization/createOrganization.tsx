@@ -7,22 +7,33 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { switchShowNewOrganization } from 'redux/slices';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { OrganizationDocument } from './utilsOrganization';
 
-export type CreateOrganizationProps = {
-  show: boolean;
-  setShow: (show: boolean) => void;
-  organizations: OrganizationDocument[];
-  setOrganizations: (organizations: OrganizationDocument[]) => void;
+const stateProps = (
+  state: AppState,
+): Pick<
+  AppState['organizationReducer'] & AppState['adminReducer'],
+  'showNew' | 'token'
+> => ({
+  showNew: state.organizationReducer.showNew,
+  token: state.adminReducer.token,
+});
+
+const dispatchProps = {
+  setShow: switchShowNewOrganization,
 };
 
+const connector = connect(stateProps, dispatchProps);
+
 export function CreateOrganization({
-  show,
+  showNew,
+  token,
   setShow,
-  organizations,
-  setOrganizations,
-}: CreateOrganizationProps): ReactElement {
+}: ConnectedProps<typeof connector>): ReactElement {
   const emptyOrganization: Organization = {
     name: '',
     description: '',
@@ -62,12 +73,11 @@ export function CreateOrganization({
       client
         .post<OrganizationDocument>('/organization', newOrganization, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(() => {
           alert('Organization added');
-          setOrganizations([...organizations, data]);
           setNewOrganization(emptyOrganization);
           setShow(false);
         })
@@ -85,7 +95,7 @@ export function CreateOrganization({
 
   return (
     <Modal
-      show={show}
+      show={showNew}
       onHide={(): void => {
         setShow(false);
         setSubmitted(false);
@@ -189,4 +199,4 @@ export function CreateOrganization({
   );
 }
 
-export default CreateOrganization;
+export default connector(CreateOrganization);

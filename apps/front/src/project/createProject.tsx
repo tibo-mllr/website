@@ -19,28 +19,37 @@ import {
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
+import { ConnectedProps, connect } from 'react-redux';
+import { switchShowNewProject } from 'redux/slices';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { Project, ProjectDocument } from './utilsProject';
 
-type CreateProjectProps = {
-  show: boolean;
-  setShow: (showNew: boolean) => void;
-  projects: ProjectDocument[];
-  setProjects: (projects: ProjectDocument[]) => void;
-  organizations: OrganizationDocument[];
-  setOrganizations: (organizations: OrganizationDocument[]) => void;
-  competencies: string[];
-};
+const stateProps = (
+  state: AppState,
+): Pick<
+  AppState['projectReducer'] &
+    AppState['organizationReducer'] &
+    AppState['adminReducer'],
+  'showNew' | 'competencies' | 'organizations' | 'token'
+> => ({
+  showNew: state.projectReducer.showNew,
+  organizations: state.organizationReducer.organizations,
+  competencies: state.projectReducer.competencies,
+  token: state.adminReducer.token,
+});
+
+const dispatchProps = { setShow: switchShowNewProject };
+
+const connector = connect(stateProps, dispatchProps);
 
 export function CreateProject({
-  show,
-  setShow,
-  projects,
-  setProjects,
+  showNew,
   organizations,
-  setOrganizations,
   competencies,
-}: CreateProjectProps): ReactElement {
+  token,
+  setShow,
+}: ConnectedProps<typeof connector>): ReactElement {
   const emptyProject: Project = {
     role: '',
     title: '',
@@ -130,11 +139,10 @@ export function CreateProject({
       client
         .post<OrganizationDocument>('/organization', organizationToPost, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then(({ data }) => {
-          setOrganizations([...organizations, data]);
           client
             .post<ProjectDocument>(
               '/project',
@@ -145,15 +153,12 @@ export function CreateProject({
               },
               {
                 headers: {
-                  Authorization: `Bearer ${sessionStorage.getItem(
-                    'loginToken',
-                  )}`,
+                  Authorization: `Bearer ${token}`,
                 },
               },
             )
-            .then(({ data }) => {
+            .then(() => {
               alert('Project added');
-              setProjects([...projects, data]);
               setNewProject(emptyProject);
               setShow(false);
             })
@@ -184,17 +189,11 @@ export function CreateProject({
             newProject.organization,
             {
               headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+                Authorization: `Bearer ${token}`,
               },
             },
           )
           .then(({ data }) => {
-            setOrganizations([
-              ...organizations.filter(
-                (organization) => organization._id !== data._id,
-              ),
-              data,
-            ]);
             client
               .post<ProjectDocument>(
                 '/project',
@@ -205,15 +204,12 @@ export function CreateProject({
                 },
                 {
                   headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem(
-                      'loginToken',
-                    )}`,
+                    Authorization: `Bearer ${token}`,
                   },
                 },
               )
-              .then(({ data }) => {
+              .then(() => {
                 alert('Project added');
-                setProjects([...projects, data]);
                 setNewProject(emptyProject);
                 setShow(false);
               })
@@ -238,13 +234,12 @@ export function CreateProject({
             },
             {
               headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+                Authorization: `Bearer ${token}`,
               },
             },
           )
-          .then(({ data }) => {
+          .then(() => {
             alert('Project added');
-            setProjects([...projects, data]);
             setNewProject(emptyProject);
             setShow(false);
           })
@@ -263,7 +258,7 @@ export function CreateProject({
 
   return (
     <Modal
-      show={show}
+      show={showNew}
       onHide={(): void => {
         setShow(false);
         setSubmitted(false);
@@ -716,4 +711,4 @@ export function CreateProject({
   );
 }
 
-export default CreateProject;
+export default connector(CreateProject);

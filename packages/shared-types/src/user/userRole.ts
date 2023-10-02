@@ -1,7 +1,7 @@
 import { nativeEnum } from 'zod';
 
 export enum UserRole {
-  Admin = 'Admin',
+  Admin = 'admin',
   SuperAdmin = 'superAdmin',
 }
 export const userRoleSchema = nativeEnum(UserRole);

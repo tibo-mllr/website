@@ -7,6 +7,8 @@ import {
   useState,
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { FrontUserDocument } from './utilsAdmin';
 
@@ -15,18 +17,25 @@ type EditUserProps = {
   setUserToEdit: (userToEdit: FrontUserDocument) => void;
   show: boolean;
   setShow: (show: boolean) => void;
-  users: FrontUserDocument[];
-  setUsers: (users: FrontUserDocument[]) => void;
 };
+
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'token' | 'userRole'> => ({
+  token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
+});
+
+const connector = connect(stateProps);
 
 export function EditUser({
   userToEdit,
   setUserToEdit,
   show,
   setShow,
-  users,
-  setUsers,
-}: EditUserProps): ReactElement {
+  token,
+  userRole,
+}: EditUserProps & ConnectedProps<typeof connector>): ReactElement {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -48,16 +57,11 @@ export function EditUser({
       client
         .put(`/user/${userToEdit._id}`, userToEdit, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then(() => {
           alert('User edited');
-          setUsers(
-            users.map((user) =>
-              user._id === userToEdit._id ? userToEdit : user,
-            ),
-          );
           setShow(false);
         })
         .catch((error) => {
@@ -125,7 +129,7 @@ export function EditUser({
               autoComplete="new-password"
             />
           </Form.Group>
-          {sessionStorage.getItem('role') == 'superAdmin' && (
+          {userRole == 'superAdmin' && (
             <Form.Group className="mb-3">
               <Form.Label>Role</Form.Label>
               <Form.Select
@@ -154,4 +158,4 @@ export function EditUser({
   );
 }
 
-export default EditUser;
+export default connector(EditUser);

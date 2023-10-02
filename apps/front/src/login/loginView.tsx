@@ -2,17 +2,21 @@ import { UserRole } from '@website/shared-types';
 import { CreateUser } from 'admin';
 import { FormEvent, ReactElement, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { login, switchShowNewUser } from 'redux/slices';
 import { client } from 'utils';
 
-type LoginViewProps = {
-  setLoginToken: (loginToken: string) => void;
-};
+const dispatchProps = { login, setShowNew: switchShowNewUser };
 
-export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
+const connector = connect(null, dispatchProps);
+
+export function LoginView({
+  login,
+  setShowNew,
+}: ConnectedProps<typeof connector>): ReactElement {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [show, setShow] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -23,10 +27,8 @@ export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
         username: username,
         password: password,
       })
-      .then(({ data }) => {
-        setLoginToken(data.access_token);
-        sessionStorage.setItem('loginToken', data.access_token);
-        sessionStorage.setItem('role', data.role);
+      .then(({ data: { access_token, role } }) => {
+        login({ token: access_token, userRole: role });
         navigate('/admin');
       })
       .catch((error) => {
@@ -74,7 +76,9 @@ export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
                   <Col className="d-flex justify-content-end">
                     <Button
                       variant="outline-secondary"
-                      onClick={(): void => setShow(true)}
+                      onClick={(): ReturnType<typeof setShowNew> =>
+                        setShowNew(true)
+                      }
                     >
                       Créer un compte
                     </Button>
@@ -85,17 +89,9 @@ export function LoginView({ setLoginToken }: LoginViewProps): ReactElement {
           </Card>
         </Col>
       </Row>
-      <CreateUser
-        show={show}
-        setShow={setShow}
-        users={[]}
-        setUsers={(): void => {
-          return;
-        }}
-        newSelf
-      />
+      <CreateUser newSelf />
     </>
   );
 }
 
-export default LoginView;
+export default connector(LoginView);

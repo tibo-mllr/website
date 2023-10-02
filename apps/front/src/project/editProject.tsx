@@ -19,6 +19,8 @@ import {
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
+import { ConnectedProps, connect } from 'react-redux';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { ProjectDocument } from './utilsProject';
 
@@ -27,24 +29,32 @@ type EditProjectProps = {
   setProjectToEdit: (project: ProjectDocument) => void;
   show: boolean;
   setShow: (show: boolean) => void;
-  projects: ProjectDocument[];
-  setProjects: (projects: ProjectDocument[]) => void;
-  organizations: OrganizationDocument[];
-  setOrganizations: (organizations: OrganizationDocument[]) => void;
-  competencies: string[];
 };
+
+const stateProps = (
+  state: AppState,
+): Pick<
+  AppState['projectReducer'] &
+    AppState['organizationReducer'] &
+    AppState['adminReducer'],
+  'competencies' | 'organizations' | 'token'
+> => ({
+  competencies: state.projectReducer.competencies,
+  organizations: state.organizationReducer.organizations,
+  token: state.adminReducer.token,
+});
+
+const connector = connect(stateProps);
 
 export function EditProject({
   projectToEdit,
   setProjectToEdit,
   show,
   setShow,
-  projects,
-  setProjects,
-  organizations,
-  setOrganizations,
   competencies,
-}: EditProjectProps): ReactElement {
+  organizations,
+  token,
+}: EditProjectProps & ConnectedProps<typeof connector>): ReactElement {
   const [errors, setErrors] = useState<FormErrors>({});
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
   const [submitted, setSubmitted] = useState<boolean>(false);
@@ -117,11 +127,10 @@ export function EditProject({
       client
         .post<OrganizationDocument>('/organization', organizationToPost, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         .then(({ data }) => {
-          setOrganizations([...organizations, data]);
           client
             .put<ProjectDocument>(
               '/project/' + projectToEdit._id,
@@ -132,19 +141,12 @@ export function EditProject({
               },
               {
                 headers: {
-                  Authorization: `Bearer ${sessionStorage.getItem(
-                    'loginToken',
-                  )}`,
+                  Authorization: `Bearer ${token}`,
                 },
               },
             )
-            .then(({ data }) => {
+            .then(() => {
               alert('Project edited');
-              setProjects(
-                projects.map((project) =>
-                  project._id === data._id ? data : project,
-                ),
-              );
               setShow(false);
             })
             .catch((error) => {
@@ -174,17 +176,11 @@ export function EditProject({
             projectToEdit.organization,
             {
               headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+                Authorization: `Bearer ${token}`,
               },
             },
           )
           .then(({ data }) => {
-            setOrganizations([
-              ...organizations.filter(
-                (organization) => organization._id !== data._id,
-              ),
-              data,
-            ]);
             client
               .put<ProjectDocument>(
                 '/project/' + projectToEdit._id,
@@ -195,19 +191,12 @@ export function EditProject({
                 },
                 {
                   headers: {
-                    Authorization: `Bearer ${sessionStorage.getItem(
-                      'loginToken',
-                    )}`,
+                    Authorization: `Bearer ${token}`,
                   },
                 },
               )
-              .then(({ data }) => {
+              .then(() => {
                 alert('Project edited');
-                setProjects(
-                  projects.map((project) =>
-                    project._id === data._id ? data : project,
-                  ),
-                );
                 setShow(false);
               })
               .catch((error) => {
@@ -231,17 +220,12 @@ export function EditProject({
             },
             {
               headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+                Authorization: `Bearer ${token}`,
               },
             },
           )
-          .then(({ data }) => {
+          .then(() => {
             alert('Project edited');
-            setProjects(
-              projects.map((project) =>
-                project._id === data._id ? data : project,
-              ),
-            );
             setShow(false);
           })
           .catch((error) => {
@@ -712,4 +696,4 @@ export function EditProject({
   );
 }
 
-export default EditProject;
+export default connector(EditProject);

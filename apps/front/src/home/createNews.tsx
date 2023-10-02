@@ -7,22 +7,32 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { switchShowNewNews } from 'redux/slices';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
-import { NewsDocument } from './utilsHome';
 
-type CreateNewsProps = {
-  show: boolean;
-  setShow: (show: boolean) => void;
-  allNews: NewsDocument[];
-  setAllNews: (allNews: NewsDocument[]) => void;
+const stateProps = (
+  state: AppState,
+): Pick<
+  AppState['newsReducer'] & AppState['adminReducer'],
+  'showNew' | 'token'
+> => ({
+  showNew: state.newsReducer.showNew,
+  token: state.adminReducer.token,
+});
+
+const dispatchProps = {
+  setShow: switchShowNewNews,
 };
 
+const connector = connect(stateProps, dispatchProps);
+
 export function CreateNews({
-  show,
+  showNew,
+  token,
   setShow,
-  allNews,
-  setAllNews,
-}: CreateNewsProps): ReactElement {
+}: ConnectedProps<typeof connector>): ReactElement {
   const emptyNews: News = {
     title: '',
     content: '',
@@ -42,7 +52,9 @@ export function CreateNews({
     return errors;
   }, [newNews]);
 
-  const handleCreate = (event: FormEvent<HTMLFormElement>): void => {
+  const handleCreate = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
     setSubmitted(true);
     const errors = validateForm();
@@ -50,14 +62,13 @@ export function CreateNews({
     if (Object.keys(errors).length > 0) setErrors(errors);
     else {
       client
-        .post<NewsDocument>('/news', newNews, {
+        .post('/news', newNews, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(() => {
           alert('News added');
-          setAllNews([data, ...allNews]);
           setNewNews(emptyNews);
           setShow(false);
         })
@@ -75,7 +86,7 @@ export function CreateNews({
 
   return (
     <Modal
-      show={show}
+      show={showNew}
       onHide={(): void => {
         setShow(false);
         setSubmitted(false);
@@ -135,4 +146,4 @@ export function CreateNews({
   );
 }
 
-export default CreateNews;
+export default connector(CreateNews);

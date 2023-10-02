@@ -6,6 +6,8 @@ import {
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { NewsDocument } from './utilsHome';
 
@@ -14,18 +16,23 @@ type EditNewsProps = {
   setNewsToEdit: (newsToEdit: NewsDocument) => void;
   show: boolean;
   setShow: (show: boolean) => void;
-  allNews: NewsDocument[];
-  setAllNews: (allNews: NewsDocument[]) => void;
 };
+
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'token'> => ({
+  token: state.adminReducer.token,
+});
+
+const connector = connect(stateProps);
 
 export function EditNews({
   newsToEdit,
   setNewsToEdit,
   show,
   setShow,
-  allNews,
-  setAllNews,
-}: EditNewsProps): ReactElement {
+  token,
+}: EditNewsProps & ConnectedProps<typeof connector>): ReactElement {
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
@@ -38,7 +45,9 @@ export function EditNews({
     return errors;
   }, [newsToEdit]);
 
-  const handleEdit = (event: FormEvent<HTMLFormElement>): void => {
+  const handleEdit = async (
+    event: FormEvent<HTMLFormElement>,
+  ): Promise<void> => {
     event.preventDefault();
     setSubmitted(true);
     const errors = validateForm();
@@ -48,14 +57,11 @@ export function EditNews({
       client
         .put<NewsDocument>(`/news/${newsToEdit._id}`, newsToEdit, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(() => {
           alert('News edited');
-          setAllNews(
-            allNews.map((news) => (news._id === data._id ? data : news)),
-          );
           setShow(false);
         })
         .catch((error) => {
@@ -132,4 +138,4 @@ export function EditNews({
   );
 }
 
-export default EditNews;
+export default connector(EditNews);

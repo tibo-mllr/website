@@ -4,29 +4,25 @@ import { HomeView } from 'home';
 import { LoginView } from 'login';
 import { OrganizationView } from 'organization';
 import { ProjectView } from 'project';
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { AppState } from 'redux/types';
 import { ResumeView } from 'resume';
 
-function App(): ReactElement {
-  const [showNewData, setShowNewData] = useState<boolean>(false);
-  const [showNewOrganization, setShowNewOrganization] =
-    useState<boolean>(false);
-  const [showNewUser, setShowNewUser] = useState<boolean>(false);
-  const [showNewProject, setShowNewProject] = useState<boolean>(false);
-  const [loginToken, setLoginToken] = useState<string>(
-    sessionStorage.getItem('loginToken') || '',
-  );
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'token'> => ({
+  token: state.adminReducer.token,
+});
 
+const connector = connect(stateProps);
+
+function App({ token }: ConnectedProps<typeof connector>): ReactElement {
   return (
     <Router>
-      <Header
-        setShowNewData={setShowNewData}
-        setShowNewUser={setShowNewUser}
-        setShowNewProject={setShowNewProject}
-        setShowNewOrganization={setShowNewOrganization}
-      />
+      <Header />
       <main
         style={{
           paddingTop: '8px',
@@ -36,46 +32,12 @@ function App(): ReactElement {
       >
         <Container>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <HomeView showNew={showNewData} setShowNew={setShowNewData} />
-              }
-            />
+            <Route path="/" element={<HomeView />} />
             <Route path="/resume" element={<ResumeView />} />
-            <Route
-              path="/projects"
-              element={
-                <ProjectView
-                  showNew={showNewProject}
-                  setShowNew={setShowNewProject}
-                />
-              }
-            />
-            <Route
-              path="/organizations"
-              element={
-                <OrganizationView
-                  showNew={showNewOrganization}
-                  setShowNew={setShowNewOrganization}
-                />
-              }
-            />
-            <Route
-              path="/login"
-              element={<LoginView setLoginToken={setLoginToken} />}
-            />
-            {(!!sessionStorage.getItem('loginToken') || !!loginToken) && (
-              <Route
-                path="/admin"
-                element={
-                  <AdminView
-                    showNew={showNewUser}
-                    setShowNew={setShowNewUser}
-                  />
-                }
-              />
-            )}
+            <Route path="/projects" element={<ProjectView />} />
+            <Route path="/organizations" element={<OrganizationView />} />
+            <Route path="/login" element={<LoginView />} />
+            {!!token && <Route path="/admin" element={<AdminView />} />}
           </Routes>
         </Container>
       </main>
@@ -83,4 +45,4 @@ function App(): ReactElement {
   );
 }
 
-export default App;
+export default connector(App);

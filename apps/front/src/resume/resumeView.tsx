@@ -1,45 +1,42 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { client, socket } from 'utils';
-import { Resume } from './utilsResume';
+import { ConnectedProps, connect } from 'react-redux';
+import { fetchResume } from 'redux/actions';
+import { AppState } from 'redux/types';
+import { socket } from 'utils';
 
-export function ResumeView(): ReactElement {
-  const [resume, setResume] = useState<Resume>({
-    projects: [],
-    competencies: [],
-  });
+const stateProps = (
+  state: AppState,
+): Pick<AppState['projectReducer'], 'resume' | 'resumeLoading'> => ({
+  resume: state.projectReducer.resume,
+  resumeLoading: state.projectReducer.resumeLoading,
+});
 
+const dispatchProps = { fetchResume };
+
+const connector = connect(stateProps, dispatchProps);
+
+export function ResumeView({
+  resume,
+  resumeLoading,
+  fetchResume,
+}: ConnectedProps<typeof connector>): ReactElement {
   useEffect(() => {
-    client
-      .get<Resume>('/resume')
-      .then(({ data }) => setResume(data))
-      .catch((error) => console.error(error));
-  }, []);
+    fetchResume();
+  }, [fetchResume]);
 
   useEffect(() => {
     socket.on('projectAdded', () => {
-      client
-        .get<Resume>('/resume')
-        .then(({ data }) => setResume(data))
-        .catch((error) => console.error(error));
+      fetchResume();
     });
     socket.on('projectEdited', () => {
-      client
-        .get<Resume>('/resume')
-        .then(({ data }) => setResume(data))
-        .catch((error) => console.error(error));
+      fetchResume();
     });
     socket.on('projectDeleted', () => {
-      client
-        .get<Resume>('/resume')
-        .then(({ data }) => setResume(data))
-        .catch((error) => console.error(error));
+      fetchResume();
     });
     socket.on('projectsDeleted', () => {
-      client
-        .get<Resume>('/resume')
-        .then(({ data }) => setResume(data))
-        .catch((error) => console.error(error));
+      fetchResume();
     });
     return () => {
       socket.off('projectAdded');
@@ -47,7 +44,9 @@ export function ResumeView(): ReactElement {
       socket.off('projectDeleted');
       socket.off('projectsDeleted');
     };
-  }, []);
+  }, [fetchResume]);
+
+  if (resumeLoading) return <i>Loading...</i>;
 
   return (
     <Row>
@@ -162,4 +161,4 @@ export function ResumeView(): ReactElement {
   );
 }
 
-export default ResumeView;
+export default connector(ResumeView);

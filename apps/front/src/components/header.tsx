@@ -1,21 +1,43 @@
 import { logo, plusIcon } from 'assets';
 import { ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { ConnectedProps, connect } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  logout,
+  switchShowNewNews,
+  switchShowNewOrganization,
+  switchShowNewProject,
+  switchShowNewUser,
+} from 'redux/slices';
+import { AppState } from 'redux/types';
 
-type HeaderProps = {
-  setShowNewData: (showNew: boolean) => void;
-  setShowNewUser: (showNew: boolean) => void;
-  setShowNewProject: (showNew: boolean) => void;
-  setShowNewOrganization: (showNew: boolean) => void;
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'token' | 'userRole'> => ({
+  token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
+});
+
+const dispatchProps = {
+  setShowNewData: switchShowNewNews,
+  setShowNewOrganization: switchShowNewOrganization,
+  setShowNewProject: switchShowNewProject,
+  setShowNewUser: switchShowNewUser,
+  logout,
 };
 
-export function Header({
+const connector = connect(stateProps, dispatchProps);
+
+function Header({
+  token,
+  userRole,
   setShowNewData,
   setShowNewUser,
   setShowNewProject,
   setShowNewOrganization,
-}: HeaderProps): ReactElement {
+  logout,
+}: ConnectedProps<typeof connector>): ReactElement {
   const selected = window.location.pathname;
   const navigate = useNavigate();
 
@@ -33,48 +55,51 @@ export function Header({
             <b>Mini website project</b>
           </Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link
-              href="/"
-              className={selected === '/' ? 'bg-selected' : undefined}
+            <Link
+              to="/"
+              className={`nav-link ${selected === '/' && 'bg-selected'}`}
             >
               Home
-            </Nav.Link>
-            <Nav.Link
-              href="/resume"
-              className={selected === '/resume' ? 'bg-selected' : undefined}
+            </Link>
+            <Link
+              to="/resume"
+              className={`nav-link ${selected === '/resume' && 'bg-selected'}`}
             >
               Resume
-            </Nav.Link>
-            <Nav.Link
-              href="/projects"
-              className={selected === '/projects' ? 'bg-selected' : undefined}
+            </Link>
+            <Link
+              to="/projects"
+              className={`nav-link ${
+                selected === '/projects' && 'bg-selected'
+              }`}
             >
               Projects
-            </Nav.Link>
-            <Nav.Link
-              href="/organizations"
-              className={
-                selected === '/organizations' ? 'bg-selected' : undefined
-              }
+            </Link>
+            <Link
+              to="/organizations"
+              className={`nav-link ${
+                selected === '/organizations' && 'bg-selected'
+              }`}
             >
               Organizations
-            </Nav.Link>
-            {!!sessionStorage.getItem('loginToken') && (
-              <Nav.Link
-                href="/admin"
-                className={selected === '/admin' ? 'bg-selected' : undefined}
+            </Link>
+            {!!token && (
+              <Link
+                to="/admin"
+                className={`nav-link ${selected === '/admin' && 'bg-selected'}`}
               >
                 Admin
-              </Nav.Link>
+              </Link>
             )}
           </Nav>
           <Nav className="justify-content-end">
-            {!!sessionStorage.getItem('loginToken') &&
-              (sessionStorage.getItem('role') === 'admin' ||
-                sessionStorage.getItem('role') === 'superAdmin') &&
+            {!!token &&
+              (userRole === 'admin' || userRole === 'superAdmin') &&
               selected === '/' && (
                 <Button
-                  onClick={(): void => setShowNewData(true)}
+                  onClick={(): ReturnType<typeof setShowNewData> =>
+                    setShowNewData(true)
+                  }
                   style={{ marginRight: '8px' }}
                 >
                   <img
@@ -87,12 +112,13 @@ export function Header({
                   <b className="d-inline-block align-center">Add a news</b>
                 </Button>
               )}
-            {!!sessionStorage.getItem('loginToken') &&
-              (sessionStorage.getItem('role') === 'admin' ||
-                sessionStorage.getItem('role') === 'superAdmin') &&
+            {!!token &&
+              (userRole === 'admin' || userRole === 'superAdmin') &&
               selected === '/projects' && (
                 <Button
-                  onClick={(): void => setShowNewProject(true)}
+                  onClick={(): ReturnType<typeof setShowNewProject> =>
+                    setShowNewProject(true)
+                  }
                   style={{ marginRight: '8px' }}
                 >
                   <img
@@ -105,12 +131,13 @@ export function Header({
                   <b className="d-inline-block align-center">Add project</b>
                 </Button>
               )}
-            {!!sessionStorage.getItem('loginToken') &&
-              (sessionStorage.getItem('role') === 'admin' ||
-                sessionStorage.getItem('role') === 'superAdmin') &&
+            {!!token &&
+              (userRole === 'admin' || userRole === 'superAdmin') &&
               selected === '/organizations' && (
                 <Button
-                  onClick={(): void => setShowNewOrganization(true)}
+                  onClick={(): ReturnType<typeof setShowNewOrganization> =>
+                    setShowNewOrganization(true)
+                  }
                   style={{ marginRight: '8px' }}
                 >
                   <img
@@ -125,32 +152,32 @@ export function Header({
                   </b>
                 </Button>
               )}
-            {!!sessionStorage.getItem('loginToken') &&
-              sessionStorage.getItem('role') === 'superAdmin' &&
-              selected === '/admin' && (
-                <Button
-                  onClick={(): void => setShowNewUser(true)}
-                  style={{ marginRight: '8px' }}
-                >
-                  <img
-                    alt="Plus icon"
-                    src={plusIcon}
-                    height="16"
-                    className="d-inline-block align-center"
-                    style={{ paddingRight: '8px' }}
-                  />
-                  <b className="d-inline-block align-center">Add user</b>
-                </Button>
-              )}
-            {!sessionStorage.getItem('loginToken') ? (
-              <Nav.Link href="/login">Account</Nav.Link>
+            {!!token && userRole === 'superAdmin' && selected === '/admin' && (
+              <Button
+                onClick={(): ReturnType<typeof setShowNewUser> =>
+                  setShowNewUser(true)
+                }
+                style={{ marginRight: '8px' }}
+              >
+                <img
+                  alt="Plus icon"
+                  src={plusIcon}
+                  height="16"
+                  className="d-inline-block align-center"
+                  style={{ paddingRight: '8px' }}
+                />
+                <b className="d-inline-block align-center">Add user</b>
+              </Button>
+            )}
+            {!token ? (
+              <Link to="/login" className="nav-link">
+                Account
+              </Link>
             ) : (
               <Button
                 variant="outline-light"
                 onClick={(): void => {
-                  sessionStorage.removeItem('loginToken');
-                  sessionStorage.removeItem('role');
-                  sessionStorage.removeItem('id');
+                  logout();
                   navigate('/');
                 }}
               >
@@ -164,4 +191,4 @@ export function Header({
   );
 }
 
-export default Header;
+export default connector(Header);

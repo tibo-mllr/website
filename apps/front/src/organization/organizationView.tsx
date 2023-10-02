@@ -1,23 +1,50 @@
 import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { fetchOrganizations } from 'redux/actions';
+import {
+  addOrganization,
+  deleteOrganization,
+  editOrganization,
+} from 'redux/slices';
+import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
 import CreateOrganization from './createOrganization';
 import EditOrganization from './editOrganization';
 import { OrganizationDocument } from './utilsOrganization';
 
-type OrganizationViewProps = {
-  showNew: boolean;
-  setShowNew: (showNew: boolean) => void;
+const stateProps = (
+  state: AppState,
+): Pick<
+  AppState['organizationReducer'] & AppState['adminReducer'],
+  'organizations' | 'isLoading' | 'token' | 'userRole'
+> => ({
+  organizations: state.organizationReducer.organizations,
+  isLoading: state.organizationReducer.isLoading,
+  token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
+});
+
+const dispatchProps = {
+  addOrganization,
+  deleteOrganization,
+  editOrganization,
+  fetchOrganizations,
 };
 
+const connector = connect(stateProps, dispatchProps);
+
 export function OrganizationView({
-  showNew,
-  setShowNew,
-}: OrganizationViewProps): ReactElement {
-  const [organizations, setOrganizations] = useState<OrganizationDocument[]>(
-    [],
-  );
+  organizations,
+  isLoading,
+  token,
+  userRole,
+  addOrganization,
+  deleteOrganization,
+  editOrganization,
+  fetchOrganizations,
+}: ConnectedProps<typeof connector>): ReactElement {
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [organizationToEdit, setOrganizationToEdit] =
     useState<OrganizationDocument>({
@@ -29,53 +56,42 @@ export function OrganizationView({
     });
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/organization/${id}`, {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
-        },
-      })
-      .then(() =>
-        setOrganizations(
-          organizations.filter((organization) => organization._id !== id),
-        ),
-      )
-      .catch((error) => console.error(error));
+    const confirm = window.confirm(
+      'Are you sure you want to delete this organization and its linked projects ?',
+    );
+    if (confirm) {
+      client
+        .delete(`/organization/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .catch((error) => console.error(error));
+    }
   };
 
   useEffect(() => {
-    client
-      .get<OrganizationDocument[]>('/organization')
-      .then(({ data }) => setOrganizations(data))
-      .catch((error) => console.error(error));
-  }, []);
+    fetchOrganizations();
+  }, [fetchOrganizations]);
 
   useEffect(() => {
     socket.on('organizationAdded', (newOrganization: OrganizationDocument) =>
-      setOrganizations([...organizations, newOrganization]),
+      addOrganization(newOrganization),
     );
     socket.on(
       'organizationEdited',
       (editedOrganization: OrganizationDocument) =>
-        setOrganizations(
-          organizations.map((organization) =>
-            organization._id === editedOrganization._id
-              ? editedOrganization
-              : organization,
-          ),
-        ),
+        editOrganization(editedOrganization),
     );
-    socket.on('organizationDeleted', (id: string) =>
-      setOrganizations(
-        organizations.filter((organization) => organization._id !== id),
-      ),
-    );
+    socket.on('organizationDeleted', (id: string) => deleteOrganization(id));
     return () => {
       socket.off('organizationAdded');
       socket.off('organizationEdited');
       socket.off('organizationDeleted');
     };
-  }, [organizations]);
+  }, [organizations, addOrganization, deleteOrganization, editOrganization]);
+
+  if (isLoading) return <i>Loading...</i>;
 
   return (
     <>
@@ -101,41 +117,40 @@ export function OrganizationView({
                   <b>Website: </b>
                   <a href={organization.website}>{organization.website}</a>
                 </Card.Body>
-                {sessionStorage.getItem('loginToken') &&
-                  sessionStorage.getItem('role') === 'superAdmin' && (
-                    <Card.Footer>
-                      <Row>
-                        <Col className="d-flex justify-content-end">
-                          <Button
-                            onClick={(): void => {
-                              setShowEdit(true);
-                              setOrganizationToEdit(organization);
-                            }}
-                            style={{
-                              marginRight: '8px',
-                            }}
-                          >
-                            <img
-                              alt="Edit"
-                              src={editIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                          <Button
-                            onClick={(): void => handleDelete(organization._id)}
-                          >
-                            <img
-                              alt="Delete"
-                              src={binIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Card.Footer>
-                  )}
+                {!!token && userRole === 'superAdmin' && (
+                  <Card.Footer>
+                    <Row>
+                      <Col className="d-flex justify-content-end">
+                        <Button
+                          onClick={(): void => {
+                            setShowEdit(true);
+                            setOrganizationToEdit(organization);
+                          }}
+                          style={{
+                            marginRight: '8px',
+                          }}
+                        >
+                          <img
+                            alt="Edit"
+                            src={editIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                        <Button
+                          onClick={(): void => handleDelete(organization._id)}
+                        >
+                          <img
+                            alt="Delete"
+                            src={binIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                      </Col>
+                    </Row>
+                  </Card.Footer>
+                )}
               </Card>
             </Col>
           </Row>
@@ -143,27 +158,17 @@ export function OrganizationView({
       ) : (
         <i>No organization to display</i>
       )}
-      {sessionStorage.getItem('loginToken') && (
-        <CreateOrganization
-          show={showNew}
-          setShow={setShowNew}
-          organizations={organizations}
-          setOrganizations={setOrganizations}
+      {!!token && <CreateOrganization />}
+      {!!token && userRole === 'superAdmin' && (
+        <EditOrganization
+          organizationToEdit={organizationToEdit}
+          setOrganizationToEdit={setOrganizationToEdit}
+          show={showEdit}
+          setShow={setShowEdit}
         />
       )}
-      {sessionStorage.getItem('loginToken') &&
-        sessionStorage.getItem('role') === 'superAdmin' && (
-          <EditOrganization
-            organizationToEdit={organizationToEdit}
-            setOrganizationToEdit={setOrganizationToEdit}
-            show={showEdit}
-            setShow={setShowEdit}
-            organizations={organizations}
-            setOrganizations={setOrganizations}
-          />
-        )}
     </>
   );
 }
 
-export default OrganizationView;
+export default connector(OrganizationView);

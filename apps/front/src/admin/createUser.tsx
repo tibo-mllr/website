@@ -7,24 +7,35 @@ import {
   useState,
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
+import { ConnectedProps, connect } from 'react-redux';
+import { switchShowNewUser } from 'redux/slices';
+import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
 import { FrontUserDocument } from './utilsAdmin';
 
 type CreateUserProps = {
-  show: boolean;
-  setShow: (show: boolean) => void;
-  users: FrontUserDocument[];
-  setUsers: (users: FrontUserDocument[]) => void;
   newSelf?: boolean;
 };
 
+const stateProps = (
+  state: AppState,
+): Pick<AppState['adminReducer'], 'showNew' | 'token' | 'userRole'> => ({
+  showNew: state.adminReducer.showNew,
+  token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
+});
+
+const dispatchProps = { setShow: switchShowNewUser };
+
+const connector = connect(stateProps, dispatchProps);
+
 export function CreateUser({
-  show,
+  showNew,
   setShow,
-  users,
-  setUsers,
+  token,
+  userRole,
   newSelf = false,
-}: CreateUserProps): ReactElement {
+}: CreateUserProps & ConnectedProps<typeof connector>): ReactElement {
   const emptyUser: FrontUser = {
     username: '',
     password: '',
@@ -53,14 +64,13 @@ export function CreateUser({
       client
         .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then(({ data }) => {
+        .then(() => {
           alert(newSelf ? 'Account created' : 'User added');
           setNewUser(emptyUser);
           setShow(false);
-          setUsers([...users, data]);
         })
         .catch((error) => {
           if (error.response.status === 409) alert('Username already used');
@@ -79,7 +89,7 @@ export function CreateUser({
 
   return (
     <Modal
-      show={show}
+      show={showNew}
       onHide={(): void => {
         setShow(false);
         setSubmitted(false);
@@ -133,28 +143,27 @@ export function CreateUser({
               {erros.password}
             </Form.Control.Feedback>
           </Form.Group>
-          {sessionStorage.getItem('loginToken') &&
-            sessionStorage.getItem('role') == 'superAdmin' && (
-              <Form.Group className="mb-3">
-                <Form.Label>Role</Form.Label>
-                <Form.Select
-                  value={newUser.role}
-                  onChange={(event): void =>
-                    setNewUser({
-                      ...newUser,
-                      role: event.target.value as UserRole,
-                    })
-                  }
-                >
-                  <option disabled>Select a role</option>
-                  {Object.values(UserRole).map((role) => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            )}
+          {!!token && userRole == 'superAdmin' && (
+            <Form.Group className="mb-3">
+              <Form.Label>Role</Form.Label>
+              <Form.Select
+                value={newUser.role}
+                onChange={(event): void =>
+                  setNewUser({
+                    ...newUser,
+                    role: event.target.value as UserRole,
+                  })
+                }
+              >
+                <option disabled>Select a role</option>
+                {Object.values(UserRole).map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" type="submit">
@@ -166,4 +175,4 @@ export function CreateUser({
   );
 }
 
-export default CreateUser;
+export default connector(CreateUser);

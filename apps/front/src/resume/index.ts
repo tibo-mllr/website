@@ -1,1 +1,2 @@
-export * from './resumeView';
+export { default as ResumeView } from './resumeView';
+export * from './utilsResume';

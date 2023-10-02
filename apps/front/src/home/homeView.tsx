@@ -1,18 +1,46 @@
 import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
+import { connect, ConnectedProps } from 'react-redux';
+import { fetchNews } from 'redux/actions';
+import { addNews, deleteNews, editNews } from 'redux/slices';
+import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
 import CreateNews from './createNews';
 import EditNews from './editNews';
 import { NewsDocument } from './utilsHome';
 
-type HomeViewProps = {
-  showNew: boolean;
-  setShowNew: (showNew: boolean) => void;
+const stateProps = (
+  state: AppState,
+): Pick<
+  AppState['newsReducer'] & AppState['adminReducer'],
+  'allNews' | 'isLoading' | 'token' | 'userRole'
+> => ({
+  allNews: state.newsReducer.allNews,
+  isLoading: state.newsReducer.isLoading,
+  token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
+});
+
+const dispatchProps = {
+  addNews,
+  deleteNews,
+  editNews,
+  fetchNews,
 };
 
-export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
-  const [allNews, setAllNews] = useState<NewsDocument[]>([]);
+const connector = connect(stateProps, dispatchProps);
+
+function HomeView({
+  allNews,
+  isLoading,
+  token,
+  userRole,
+  addNews,
+  deleteNews,
+  editNews,
+  fetchNews,
+}: ConnectedProps<typeof connector>): ReactElement {
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({
     _id: '',
@@ -30,48 +58,32 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
       client
         .delete(`/news/${id}`, {
           headers: {
-            Authorization: `Bearer ${sessionStorage.getItem('loginToken')}`,
+            Authorization: `Bearer ${token}`,
           },
         })
-        .then(() => setAllNews(allNews.filter((news) => news._id !== id)))
         .catch((error) => console.error(error));
     }
   };
 
   useEffect(() => {
-    client
-      .get<NewsDocument[]>('/news')
-      .then(({ data }) => setAllNews(data))
-      .catch((error) => console.error(error));
-  }, []);
+    fetchNews();
+  }, [fetchNews]);
 
   useEffect(() => {
-    socket.on('newsAdded', (newNews: NewsDocument) =>
-      setAllNews([newNews, ...allNews]),
-    );
-    socket.on('newsEdited', (editedNews: NewsDocument) =>
-      setAllNews(
-        allNews.map((news) =>
-          news._id === editedNews._id ? editedNews : news,
-        ),
-      ),
-    );
-    socket.on('newsDeleted', (id: string) =>
-      setAllNews(allNews.filter((news) => news._id !== id)),
-    );
-    socket.on('severalNewsDeleted', () => {
-      client
-        .get<NewsDocument[]>('/news')
-        .then(({ data }) => setAllNews(data))
-        .catch((error) => console.error(error));
-    });
+    socket.on('newsAdded', (newNews: NewsDocument) => addNews(newNews));
+    socket.on('newsEdited', (editedNews: NewsDocument) => editNews(editedNews));
+    socket.on('newsDeleted', (id: string) => deleteNews(id));
+    socket.on('severalNewsDeleted', fetchNews);
+
     return () => {
       socket.off('newsAdded');
       socket.off('newsEdited');
       socket.off('newsDeleted');
       socket.off('severalNewsDeleted');
     };
-  }, [allNews]);
+  }, [addNews, deleteNews, editNews, fetchNews]);
+
+  if (isLoading) return <i>Loading...</i>;
 
   return (
     <>
@@ -101,35 +113,34 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
                         </>
                       )}
                     </Col>
-                    {!!sessionStorage.getItem('loginToken') &&
-                      sessionStorage.getItem('role') === 'superAdmin' && (
-                        <Col className="d-flex justify-content-end">
-                          <Button
-                            onClick={(): void => {
-                              setShowEdit(true);
-                              setNewsToEdit(news);
-                            }}
-                            style={{
-                              marginRight: '8px',
-                            }}
-                          >
-                            <img
-                              alt="Edit"
-                              src={editIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                          <Button onClick={(): void => handleDelete(news._id)}>
-                            <img
-                              alt="Delete"
-                              src={binIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                        </Col>
-                      )}
+                    {!!token && userRole === 'superAdmin' && (
+                      <Col className="d-flex justify-content-end">
+                        <Button
+                          onClick={(): void => {
+                            setShowEdit(true);
+                            setNewsToEdit(news);
+                          }}
+                          style={{
+                            marginRight: '8px',
+                          }}
+                        >
+                          <img
+                            alt="Edit"
+                            src={editIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                        <Button onClick={(): void => handleDelete(news._id)}>
+                          <img
+                            alt="Delete"
+                            src={binIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                      </Col>
+                    )}
                   </Row>
                 </Card.Footer>
               </Card>
@@ -139,27 +150,17 @@ export function HomeView({ showNew, setShowNew }: HomeViewProps): ReactElement {
       ) : (
         <i>Nothing to display</i>
       )}
-      {!!sessionStorage.getItem('loginToken') && (
-        <CreateNews
-          show={showNew}
-          setShow={setShowNew}
-          allNews={allNews}
-          setAllNews={setAllNews}
+      {!!token && <CreateNews />}
+      {!!token && userRole === 'superAdmin' && (
+        <EditNews
+          newsToEdit={newsToEdit}
+          setNewsToEdit={setNewsToEdit}
+          show={showEdit}
+          setShow={setShowEdit}
         />
       )}
-      {!!sessionStorage.getItem('loginToken') &&
-        sessionStorage.getItem('role') === 'superAdmin' && (
-          <EditNews
-            newsToEdit={newsToEdit}
-            setNewsToEdit={setNewsToEdit}
-            show={showEdit}
-            setShow={setShowEdit}
-            allNews={allNews}
-            setAllNews={setAllNews}
-          />
-        )}
     </>
   );
 }
 
-export default HomeView;
+export default connector(HomeView);
