@@ -1,2 +1,2 @@
-export { default as HomeView } from './homeView';
+export { default as HomeView } from './HomeView';
 export * from './utilsHome';

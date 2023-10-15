@@ -46,7 +46,7 @@ const stateProps = (
 
 const connector = connect(stateProps);
 
-export function EditProject({
+export function EditProjectModal({
   projectToEdit,
   setProjectToEdit,
   show,
@@ -696,4 +696,4 @@ export function EditProject({
   );
 }
 
-export default connector(EditProject);
+export default connector(EditProjectModal);

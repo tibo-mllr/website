@@ -1,2 +1,2 @@
-export { default as AdminView } from './adminView';
-export { default as CreateUser } from './createUser';
+export { default as AdminView } from './AdminView';
+export { default as CreateUserModal } from './CreateUserModal';

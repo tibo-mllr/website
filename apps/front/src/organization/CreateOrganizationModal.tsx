@@ -29,7 +29,7 @@ const dispatchProps = {
 
 const connector = connect(stateProps, dispatchProps);
 
-export function CreateOrganization({
+export function CreateOrganizationModal({
   showNew,
   token,
   setShow,
@@ -199,4 +199,4 @@ export function CreateOrganization({
   );
 }
 
-export default connector(CreateOrganization);
+export default connector(CreateOrganizationModal);

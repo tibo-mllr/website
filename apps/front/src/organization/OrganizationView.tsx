@@ -10,8 +10,8 @@ import {
 } from 'redux/slices';
 import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
-import CreateOrganization from './createOrganization';
-import EditOrganization from './editOrganization';
+import CreateOrganizationModal from './CreateOrganizationModal';
+import EditOrganizationModal from './EditOrganizationModal';
 import { OrganizationDocument } from './utilsOrganization';
 
 const stateProps = (
@@ -158,9 +158,9 @@ export function OrganizationView({
       ) : (
         <i>No organization to display</i>
       )}
-      {!!token && <CreateOrganization />}
+      {!!token && <CreateOrganizationModal />}
       {!!token && userRole === 'superAdmin' && (
-        <EditOrganization
+        <EditOrganizationModal
           organizationToEdit={organizationToEdit}
           setOrganizationToEdit={setOrganizationToEdit}
           show={showEdit}

@@ -26,7 +26,7 @@ const stateProps = (
 
 const connector = connect(stateProps);
 
-export function EditOrganization({
+export function EditOrganizationModal({
   organizationToEdit,
   setOrganizationToEdit,
   show,
@@ -96,7 +96,7 @@ export function EditOrganization({
       }}
     >
       <Modal.Header closeButton>
-        <Modal.Title>New Organization</Modal.Title>
+        <Modal.Title>Edit Organization</Modal.Title>
       </Modal.Header>
       <Form onSubmit={handleEdit}>
         <Modal.Body>
@@ -196,4 +196,4 @@ export function EditOrganization({
   );
 }
 
-export default connector(EditOrganization);
+export default connector(EditOrganizationModal);

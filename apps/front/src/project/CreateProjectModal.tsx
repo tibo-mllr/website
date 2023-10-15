@@ -43,7 +43,7 @@ const dispatchProps = { setShow: switchShowNewProject };
 
 const connector = connect(stateProps, dispatchProps);
 
-export function CreateProject({
+export function CreateProjectModal({
   showNew,
   organizations,
   competencies,
@@ -711,4 +711,4 @@ export function CreateProject({
   );
 }
 
-export default connector(CreateProject);
+export default connector(CreateProjectModal);

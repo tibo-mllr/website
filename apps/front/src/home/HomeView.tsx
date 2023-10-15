@@ -6,8 +6,8 @@ import { fetchNews } from 'redux/actions';
 import { addNews, deleteNews, editNews } from 'redux/slices';
 import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
-import CreateNews from './createNews';
-import EditNews from './editNews';
+import CreateNewsModal from './CreateNewsModal';
+import EditNewsModal from './EditNewsModal';
 import { NewsDocument } from './utilsHome';
 
 const stateProps = (
@@ -150,9 +150,9 @@ function HomeView({
       ) : (
         <i>Nothing to display</i>
       )}
-      {!!token && <CreateNews />}
+      {!!token && <CreateNewsModal />}
       {!!token && userRole === 'superAdmin' && (
-        <EditNews
+        <EditNewsModal
           newsToEdit={newsToEdit}
           setNewsToEdit={setNewsToEdit}
           show={showEdit}

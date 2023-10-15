@@ -7,8 +7,8 @@ import { fetchUsers } from 'redux/actions';
 import { addUser, deleteUser, editUser } from 'redux/slices';
 import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
-import CreateUser from './createUser';
-import EditUser from './editUser';
+import CreateUserModal from './CreateUserModal';
+import EditUserModal from './EditUserModal';
 import { FrontUserDocument } from './utilsAdmin';
 
 const stateProps = (
@@ -126,8 +126,8 @@ export function AdminView({
           </Col>
         </Row>
       ))}
-      {userRole === 'superAdmin' && <CreateUser />}
-      <EditUser
+      {userRole === 'superAdmin' && <CreateUserModal />}
+      <EditUserModal
         userToEdit={userToEdit}
         setUserToEdit={setUserToEdit}
         show={showEdit}

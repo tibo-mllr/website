@@ -20,8 +20,8 @@ import {
 } from 'redux/slices';
 import { AppState } from 'redux/types';
 import { client, socket } from 'utils';
-import CreateProject from './createProject';
-import EditProject from './editProject';
+import CreateProjectModal from './CreateProjectModal';
+import EditProjectModal from './EditProject';
 import { ProjectDocument } from './utilsProject';
 
 const stateProps = (
@@ -266,9 +266,9 @@ export function ProjectView({
           </p>
         </Modal.Body>
       </Modal>
-      {!!token && <CreateProject />}
+      {!!token && <CreateProjectModal />}
       {!!token && userRole === 'superAdmin' && (
-        <EditProject
+        <EditProjectModal
           projectToEdit={projectToEdit}
           setProjectToEdit={setProjectToEdit}
           show={showEdit}

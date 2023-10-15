@@ -1,3 +1,4 @@
+import { News } from '@website/shared-types';
 import {
   FormEvent,
   ReactElement,
@@ -7,45 +8,51 @@ import {
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
+import { switchShowNewNews } from 'redux/slices';
 import { AppState } from 'redux/types';
 import { FormErrors, client } from 'utils';
-import { NewsDocument } from './utilsHome';
-
-type EditNewsProps = {
-  newsToEdit: NewsDocument;
-  setNewsToEdit: (newsToEdit: NewsDocument) => void;
-  show: boolean;
-  setShow: (show: boolean) => void;
-};
 
 const stateProps = (
   state: AppState,
-): Pick<AppState['adminReducer'], 'token'> => ({
+): Pick<
+  AppState['newsReducer'] & AppState['adminReducer'],
+  'showNew' | 'token'
+> => ({
+  showNew: state.newsReducer.showNew,
   token: state.adminReducer.token,
 });
 
-const connector = connect(stateProps);
+const dispatchProps = {
+  setShow: switchShowNewNews,
+};
 
-export function EditNews({
-  newsToEdit,
-  setNewsToEdit,
-  show,
-  setShow,
+const connector = connect(stateProps, dispatchProps);
+
+export function CreateNewsModal({
+  showNew,
   token,
-}: EditNewsProps & ConnectedProps<typeof connector>): ReactElement {
+  setShow,
+}: ConnectedProps<typeof connector>): ReactElement {
+  const emptyNews: News = {
+    title: '',
+    content: '',
+    date: new Date(),
+    author: { username: '' },
+  };
+  const [newNews, setNewNews] = useState<News>(emptyNews);
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState<boolean>(false);
 
   const validateForm = useCallback((): FormErrors => {
     const errors: FormErrors = {};
 
-    if (!newsToEdit.title) errors.newtitle = 'Title is required';
-    if (!newsToEdit.content) errors.content = 'Content is required';
+    if (!newNews.title) errors.newtitle = 'Title is required';
+    if (!newNews.content) errors.content = 'Content is required';
 
     return errors;
-  }, [newsToEdit]);
+  }, [newNews]);
 
-  const handleEdit = async (
+  const handleCreate = async (
     event: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     event.preventDefault();
@@ -55,13 +62,14 @@ export function EditNews({
     if (Object.keys(errors).length > 0) setErrors(errors);
     else {
       client
-        .put<NewsDocument>(`/news/${newsToEdit._id}`, newsToEdit, {
+        .post('/news', newNews, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         })
         .then(() => {
-          alert('News edited');
+          alert('News added');
+          setNewNews(emptyNews);
           setShow(false);
         })
         .catch((error) => {
@@ -78,30 +86,30 @@ export function EditNews({
 
   return (
     <Modal
-      show={show}
+      show={showNew}
       onHide={(): void => {
         setShow(false);
         setSubmitted(false);
       }}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Edit</Modal.Title>
+        <Modal.Title>Create a news</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleEdit}>
+      <Form onSubmit={handleCreate}>
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Label>Title</Form.Label>
             <Form.Control
               type="text"
-              value={newsToEdit.title}
+              value={newNews.title}
               onChange={(event): void =>
-                setNewsToEdit({
-                  ...newsToEdit,
+                setNewNews({
+                  ...newNews,
                   title: event.target.value,
                 })
               }
-              isValid={!errors.title && !!newsToEdit.title}
-              isInvalid={!!errors.title && (!!newsToEdit.title || submitted)}
+              isValid={!errors.title && !!newNews.title}
+              isInvalid={!!errors.title && (!!newNews.title || submitted)}
               placeholder="Enter name"
             />
             <Form.Control.Feedback type="invalid">
@@ -112,17 +120,15 @@ export function EditNews({
             <Form.Label>Content</Form.Label>
             <Form.Control
               type="text"
-              value={newsToEdit.content}
+              value={newNews.content}
               onChange={(event): void =>
-                setNewsToEdit({
-                  ...newsToEdit,
+                setNewNews({
+                  ...newNews,
                   content: event.target.value,
                 })
               }
-              isValid={!errors.content && !!newsToEdit.content}
-              isInvalid={
-                !!errors.content && (!!newsToEdit.content || submitted)
-              }
+              isValid={!errors.content && !!newNews.content}
+              isInvalid={!!errors.content && (!!newNews.content || submitted)}
               placeholder="Enter content"
             />
             <Form.Control.Feedback type="invalid">
@@ -131,11 +137,13 @@ export function EditNews({
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button type="submit">Edit</Button>
+          <Button variant="primary" type="submit">
+            Add
+          </Button>
         </Modal.Footer>
       </Form>
     </Modal>
   );
 }
 
-export default connector(EditNews);
+export default connector(CreateNewsModal);

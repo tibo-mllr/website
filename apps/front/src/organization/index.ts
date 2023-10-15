@@ -1,2 +1,2 @@
-export { default as OrganizationView } from './organizationView';
+export { default as OrganizationView } from './OrganizationView';
 export * from './utilsOrganization';

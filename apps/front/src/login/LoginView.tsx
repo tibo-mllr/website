@@ -1,5 +1,5 @@
 import { UserRole } from '@website/shared-types';
-import { CreateUser } from 'admin';
+import { CreateUserModal } from 'admin';
 import { FormEvent, ReactElement, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
@@ -89,7 +89,7 @@ export function LoginView({
           </Card>
         </Col>
       </Row>
-      <CreateUser newSelf />
+      <CreateUserModal newSelf />
     </>
   );
 }
