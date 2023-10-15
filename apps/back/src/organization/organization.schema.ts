@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Organization } from '@website/shared-types';
+import { Organization as OrganizationType } from '@website/shared-types';
 import { HydratedDocument } from 'mongoose';
 
-export type OrganizationDocument = HydratedDocument<Organization>;
+export type OrganizationDocument = HydratedDocument<OrganizationType>;
 
 @Schema()
-export class OrganizationClass {
+export class Organization {
   @Prop({ required: true })
   name: string;
 
@@ -20,4 +20,4 @@ export class OrganizationClass {
 }
 
 export const OrganizationSchema =
-  SchemaFactory.createForClass<Organization>(OrganizationClass);
+  SchemaFactory.createForClass<OrganizationType>(Organization);

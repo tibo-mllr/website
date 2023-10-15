@@ -1,20 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Project, ProjectType } from '@website/shared-types';
+import { Project as ProjectTyping, ProjectType } from '@website/shared-types';
 import { HydratedDocument, Types } from 'mongoose';
-import { OrganizationClass } from 'organization/organization.schema';
+import { Organization } from 'organization/organization.schema';
 
-export type ProjectDocument = HydratedDocument<Project>;
+export type ProjectDocument = HydratedDocument<ProjectTyping>;
 
 @Schema()
-export class ProjectClass {
+export class Project {
   @Prop({ required: true })
   role: string;
 
   @Prop({ required: true })
   title: string;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: OrganizationClass.name })
-  organization: OrganizationClass;
+  @Prop({ required: true, type: Types.ObjectId, ref: Organization.name })
+  organization: Organization;
 
   @Prop({ required: true, enum: ProjectType, type: String })
   type: ProjectType;
@@ -35,4 +35,4 @@ export class ProjectClass {
   competencies: string[];
 }
 
-export const ProjectSchema = SchemaFactory.createForClass(ProjectClass);
+export const ProjectSchema = SchemaFactory.createForClass(Project);

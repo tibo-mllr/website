@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { News } from '@website/shared-types';
+import { News as NewsType } from '@website/shared-types';
 import { Gateway } from 'app.gateway';
 import { Model } from 'mongoose';
-import { NewsClass, NewsDocument } from './news.schema';
+import { News, NewsDocument } from './news.schema';
 
 @Injectable()
 export class NewsService {
   constructor(
-    @InjectModel(NewsClass.name) private newsModel: Model<NewsDocument>,
+    @InjectModel(News.name) private newsModel: Model<NewsDocument>,
     private gateway: Gateway,
   ) {}
 
@@ -21,7 +21,7 @@ export class NewsService {
       .exec();
   }
 
-  async create(news: News, userId: string): Promise<NewsDocument> {
+  async create(news: NewsType, userId: string): Promise<NewsDocument> {
     const createdNews = new this.newsModel({ ...news, author: userId });
     await createdNews.save().catch((error) => {
       throw error;

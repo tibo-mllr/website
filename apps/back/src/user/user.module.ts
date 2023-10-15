@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Gateway } from 'app.gateway';
-import { NewsClass, NewsSchema } from 'news/news.schema';
+import { News, NewsSchema } from 'news/news.schema';
 import { UsersController } from './user.controller';
-import { UserClass, UserSchema } from './user.schema';
+import { User, UserSchema } from './user.schema';
 import { UserService } from './user.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: UserClass.name, schema: UserSchema }]),
-    MongooseModule.forFeature([{ name: NewsClass.name, schema: NewsSchema }]),
+    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
+    MongooseModule.forFeature([{ name: News.name, schema: NewsSchema }]),
   ],
   providers: [UserService, Gateway],
   exports: [UserService],

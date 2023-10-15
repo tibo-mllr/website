@@ -1,12 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { News } from '@website/shared-types';
+import { News as NewsType } from '@website/shared-types';
 import { HydratedDocument, Types } from 'mongoose';
-import { UserClass } from 'user/user.schema';
+import { User } from 'user/user.schema';
 
-export type NewsDocument = HydratedDocument<News>;
+export type NewsDocument = HydratedDocument<NewsType>;
 
 @Schema()
-export class NewsClass {
+export class News {
   @Prop({ required: true })
   title: string;
 
@@ -16,14 +16,14 @@ export class NewsClass {
   @Prop({ required: true })
   date: Date;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: UserClass.name })
-  author: UserClass;
+  @Prop({ required: true, type: Types.ObjectId, ref: User.name })
+  author: User;
 
   @Prop({ default: false })
   edited: boolean;
 
-  @Prop({ default: null, type: Types.ObjectId, ref: UserClass.name })
-  editor: UserClass;
+  @Prop({ default: null, type: Types.ObjectId, ref: User.name })
+  editor: User;
 }
 
-export const NewsSchema = SchemaFactory.createForClass<News>(NewsClass);
+export const NewsSchema = SchemaFactory.createForClass<NewsType>(News);

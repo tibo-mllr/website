@@ -1,17 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Organization } from '@website/shared-types';
+import { Organization as OrganizationType } from '@website/shared-types';
 import { Gateway } from 'app.gateway';
 import { Model } from 'mongoose';
-import { ProjectClass, ProjectDocument } from 'project/project.schema';
-import { OrganizationClass, OrganizationDocument } from './organization.schema';
+import { Project, ProjectDocument } from 'project/project.schema';
+import { Organization, OrganizationDocument } from './organization.schema';
 
 @Injectable()
 export class OrganizationService {
   constructor(
-    @InjectModel(OrganizationClass.name)
+    @InjectModel(Organization.name)
     private organizationModel: Model<OrganizationDocument>,
-    @InjectModel(ProjectClass.name)
+    @InjectModel(Project.name)
     private projectModel: Model<ProjectDocument>,
     private gateway: Gateway,
   ) {}
@@ -20,7 +20,7 @@ export class OrganizationService {
     return await this.organizationModel.find().exec();
   }
 
-  async create(organization: Organization): Promise<OrganizationDocument> {
+  async create(organization: OrganizationType): Promise<OrganizationDocument> {
     const createdOrganization = new this.organizationModel(organization);
     await createdOrganization.save().catch((error) => {
       throw error;
@@ -31,7 +31,7 @@ export class OrganizationService {
 
   async update(
     id: string,
-    organization: Organization,
+    organization: OrganizationType,
   ): Promise<OrganizationDocument> {
     await this.organizationModel.findByIdAndUpdate(id, organization);
     const editedOrganization = await this.organizationModel.findById(id);

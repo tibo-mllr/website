@@ -3,18 +3,18 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ProjectType } from '@website/shared-types';
 import { Model } from 'mongoose';
 import {
-  OrganizationClass,
+  Organization,
   OrganizationDocument,
 } from 'organization/organization.schema';
-import { ProjectClass, ProjectDocument } from 'project/project.schema';
+import { Project, ProjectDocument } from 'project/project.schema';
 import { Resume } from './resume.entity';
 
 @Injectable()
 export class ResumeService {
   constructor(
-    @InjectModel(ProjectClass.name)
+    @InjectModel(Project.name)
     private projectModel: Model<ProjectDocument>,
-    @InjectModel(OrganizationClass.name)
+    @InjectModel(Organization.name)
     private organizationModel: Model<OrganizationDocument>,
   ) {}
 

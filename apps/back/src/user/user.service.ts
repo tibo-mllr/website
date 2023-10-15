@@ -4,14 +4,14 @@ import { FrontUser } from '@website/shared-types';
 import { Gateway } from 'app.gateway';
 import { hash } from 'bcrypt';
 import { Model } from 'mongoose';
-import { NewsClass, NewsDocument } from 'news/news.schema';
-import { UserClass, UserDocument } from './user.schema';
+import { News, NewsDocument } from 'news/news.schema';
+import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(UserClass.name) private userModel: Model<UserDocument>,
-    @InjectModel(NewsClass.name) private newsModel: Model<NewsDocument>,
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    @InjectModel(News.name) private newsModel: Model<NewsDocument>,
     private gateway: Gateway,
   ) {}
 

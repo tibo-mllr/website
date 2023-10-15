@@ -1,11 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { User, UserRole } from '@website/shared-types';
+import { User as UserType, UserRole } from '@website/shared-types';
 import { HydratedDocument } from 'mongoose';
 
-export type UserDocument = HydratedDocument<User>;
+export type UserDocument = HydratedDocument<UserType>;
 
 @Schema()
-export class UserClass {
+export class User {
   @Prop({ required: true })
   role: UserRole;
 
@@ -16,4 +16,4 @@ export class UserClass {
   hashedPassword: string;
 }
 
-export const UserSchema = SchemaFactory.createForClass<User>(UserClass);
+export const UserSchema = SchemaFactory.createForClass<UserType>(User);
