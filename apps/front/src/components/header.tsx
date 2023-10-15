@@ -56,8 +56,8 @@ function Header({
           </Navbar.Brand>
           <Nav className="me-auto">
             <Link
-              to="/"
-              className={`nav-link ${selected === '/' && 'bg-selected'}`}
+              to="/home"
+              className={`nav-link ${selected === '/home' && 'bg-selected'}`}
             >
               Home
             </Link>
@@ -95,7 +95,7 @@ function Header({
           <Nav className="justify-content-end">
             {!!token &&
               (userRole === 'admin' || userRole === 'superAdmin') &&
-              selected === '/' && (
+              selected === '/home' && (
                 <Button
                   onClick={(): ReturnType<typeof setShowNewData> =>
                     setShowNewData(true)

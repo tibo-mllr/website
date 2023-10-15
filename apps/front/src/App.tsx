@@ -7,7 +7,12 @@ import { ProjectView } from 'project';
 import { ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { AppState } from 'redux/types';
 import { ResumeView } from 'resume';
 
@@ -32,12 +37,17 @@ function App({ token }: ConnectedProps<typeof connector>): ReactElement {
       >
         <Container>
           <Routes>
-            <Route path="/" element={<HomeView />} />
+            <Route path="/home" element={<HomeView />} />
             <Route path="/resume" element={<ResumeView />} />
             <Route path="/projects" element={<ProjectView />} />
             <Route path="/organizations" element={<OrganizationView />} />
             <Route path="/login" element={<LoginView />} />
-            {!!token && <Route path="/admin" element={<AdminView />} />}
+            {token ? (
+              <Route path="/admin" element={<AdminView />} />
+            ) : (
+              <Route path="/admin" element={<Navigate to="/" />} />
+            )}
+            <Route path="/" element={<Navigate to="/home" />} />
           </Routes>
         </Container>
       </main>
