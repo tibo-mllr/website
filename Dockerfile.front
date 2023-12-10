@@ -1,0 +1,28 @@
+FROM node:18.14.1 AS base
+WORKDIR /app
+RUN yarn global add turbo serve
+
+FROM base AS PRUNE_STAGE
+WORKDIR /app
+COPY . .
+RUN turbo prune --scope front --docker
+
+FROM base AS INSTALL_STAGE
+WORKDIR /app
+COPY --from=PRUNE_STAGE /app/out/json .
+COPY --from=PRUNE_STAGE /app/out/yarn.lock .
+RUN yarn install:ci
+
+FROM base AS BUILD_STAGE
+WORKDIR /app
+COPY --from=INSTALL_STAGE /app .
+COPY --from=PRUNE_STAGE /app/out/full/ .
+COPY tsconfig.json turbo.json .eslintrc.json ./
+RUN yarn front-build
+
+FROM base AS SERVE_STAGE
+WORKDIR /app
+RUN mkdir build
+COPY --from=BUILD_STAGE /app/apps/front/build ./build
+EXPOSE 3000
+CMD ["serve", "-p", "3000", "-s", "build"]
