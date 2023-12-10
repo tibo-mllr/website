@@ -14,7 +14,6 @@
   "scripts": {
     "back": "turbo run dev --filter back...",
     "back-build": "turbo run build --filter back...",
-    "back-serve": "turbo run serve --filter back...",
     "build": "turbo run build",
     "front": "turbo run dev --filter front...",
     "front-build": "turbo run build --filter front...",

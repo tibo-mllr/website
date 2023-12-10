@@ -5,10 +5,22 @@ Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
 
 ## Prerequisites
 
-- NodeJS with yarn
-- A MongoDB instance
+- To run with Docker:
+  - Docker
+- To run locally
+  - NodeJS with yarn
+  - A MongoDB instance
 
-## Run[^1]
+## Run with Docker
+
+- Copy the [`apps/back/.env.template`](apps/back/.env.template) file to `apps/back/.env` and complete it accordingly.
+- Open a terminal and run `docker compose up -d`.
+
+  After some building time, the application is avaiable at [http://localhost:3000](http://localhost:3000).
+
+Once you're finished, don't forget to `docker compose down`.
+
+## Run locally
 
 - Copy the [`apps/back/.env.template`](apps/back/.env.template) file to `apps/back/.env` and complete it accordingly.
 - Open a terminal and run the following commands:
@@ -20,6 +32,4 @@ Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
 
   The website will be available at [http://localhost:3000](http://localhost:3000).
 
-  (Don't forget to stop the terminal with `Ctrl+C`, otherwise the ports may still be in use)
-
-[^1]: A Docker version is coming soon.
+One you're finished, don't forget to stop the terminal with `Ctrl+C` (otherwise the ports may still be in use).

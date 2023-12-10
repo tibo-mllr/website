@@ -18,14 +18,12 @@ WORKDIR /app
 COPY --from=INSTALL_STAGE /app .
 COPY --from=PRUNE_STAGE /app/out/full/ .
 COPY ./tsconfig.json ./turbo.json ./.eslintrc.json ./
-ENV DB_HOST=db
 RUN yarn back-build
 
 FROM base AS SERVE_STAGE
 WORKDIR /app
-COPY --from=BUILD_STAGE /app ./build
-COPY --from=INSTALL_STAGE /app ./install
-COPY --from=PRUNE_STAGE /app ./prune
+COPY --from=BUILD_STAGE /app .
 EXPOSE 8000
-ENTRYPOINT [ "tail", "-f", "/dev/null" ]
-# CMD ["yarn", "serve"]
+ENV DB_HOST=db
+WORKDIR /app/apps/back
+CMD ["yarn", "start:prod"]
