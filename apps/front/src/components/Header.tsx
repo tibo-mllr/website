@@ -45,14 +45,16 @@ function Header({
     <header style={{ maxHeight: '7vh' }}>
       <Navbar bg="dark" variant="dark" sticky="top">
         <Container fluid>
-          <Navbar.Brand href="/">
-            <img
-              alt="Anarchist logo"
-              src={logo}
-              height="30"
-              className="d-inline-block align-top"
-            />{' '}
-            <b>Mini website project</b>
+          <Navbar.Brand>
+            <Link to="/home" className="navbar-brand">
+              <img
+                alt="Anarchist logo"
+                src={logo}
+                height="30"
+                className="d-inline-block align-top"
+              />{' '}
+              <b>Mini website project</b>
+            </Link>
           </Navbar.Brand>
           <Nav className="me-auto">
             <Link
