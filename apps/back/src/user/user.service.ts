@@ -101,6 +101,9 @@ export class UserService {
     await this.newsModel.deleteMany({ editor: id }).exec();
     this.gateway.server.emit('severalNewsDeleted');
     this.gateway.server.emit('userDeleted', id);
-    return await this.userModel.findByIdAndDelete(id).exec();
+
+    return await this.userModel
+      .findByIdAndDelete(id, { returnDocument: 'after' })
+      .exec();
   }
 }

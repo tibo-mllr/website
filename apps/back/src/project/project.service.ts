@@ -42,6 +42,11 @@ export class ProjectService {
 
   async delete(id: string): Promise<ProjectDocument> {
     this.gateway.server.emit('projectDeleted', id);
-    return await this.projectModel.findByIdAndDelete(id);
+
+    return await this.projectModel
+      .findByIdAndDelete(id, {
+        returnDocument: 'after',
+      })
+      .exec();
   }
 }

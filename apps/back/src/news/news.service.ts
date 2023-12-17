@@ -51,6 +51,11 @@ export class NewsService {
 
   async delete(id: string): Promise<NewsDocument> {
     this.gateway.server.emit('newsDeleted', id);
-    return await this.newsModel.findByIdAndDelete(id);
+
+    return await this.newsModel
+      .findByIdAndDelete(id, {
+        returnDocument: 'after',
+      })
+      .exec();
   }
 }

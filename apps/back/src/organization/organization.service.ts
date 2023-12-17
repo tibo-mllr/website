@@ -43,6 +43,11 @@ export class OrganizationService {
     await this.projectModel.deleteMany({ organization: id });
     this.gateway.server.emit('projectsDeleted');
     this.gateway.server.emit('organizationDeleted', id);
-    return await this.organizationModel.findByIdAndDelete(id);
+
+    return await this.organizationModel
+      .findByIdAndDelete(id, {
+        returnDocument: 'after',
+      })
+      .exec();
   }
 }
