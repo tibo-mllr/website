@@ -17,5 +17,4 @@ yarn-error.log*
 # Misc
 .env.local
 .env.development.local
-.env.test.local
 .env.production.local
