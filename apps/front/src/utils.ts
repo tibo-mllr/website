@@ -11,3 +11,5 @@ export type FormErrors = {
 };
 
 export const socket = io(baseURL);
+
+export const DOCUMENT_TITLE = 'Website project';

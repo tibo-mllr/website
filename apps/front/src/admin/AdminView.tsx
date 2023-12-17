@@ -6,7 +6,7 @@ import { ConnectedProps, connect } from 'react-redux';
 import { fetchUsers } from 'redux/actions';
 import { addUser, deleteUser, editUser } from 'redux/slices';
 import { AppState } from 'redux/types';
-import { client, socket } from 'utils';
+import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateUserModal from './CreateUserModal';
 import EditUserModal from './EditUserModal';
 import { FrontUserDocument } from './utilsAdmin';
@@ -59,6 +59,10 @@ export function AdminView({
         .catch((error) => console.error(error));
     }
   };
+
+  useEffect(() => {
+    document.title = `Admin | ${DOCUMENT_TITLE}`;
+  }, []);
 
   useEffect(() => {
     fetchUsers();

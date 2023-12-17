@@ -19,7 +19,7 @@ import {
   editProject,
 } from 'redux/slices';
 import { AppState } from 'redux/types';
-import { client, socket } from 'utils';
+import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProject';
 import { ProjectDocument } from './utilsProject';
@@ -106,6 +106,10 @@ export function ProjectView({
         .catch((error) => console.error(error));
     }
   };
+
+  useEffect(() => {
+    document.title = `Projects | ${DOCUMENT_TITLE}`;
+  }, []);
 
   useEffect(() => {
     fetchProjects();

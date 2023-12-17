@@ -1,11 +1,11 @@
 import { UserRole } from '@website/shared-types';
 import { CreateUserModal } from 'admin';
-import { FormEvent, ReactElement, useState } from 'react';
+import { FormEvent, ReactElement, useEffect, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login, switchShowNewUser } from 'redux/slices';
-import { client } from 'utils';
+import { DOCUMENT_TITLE, client } from 'utils';
 
 const dispatchProps = { login, setShowNew: switchShowNewUser };
 
@@ -36,6 +36,10 @@ export function LoginView({
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    document.title = `Login | ${DOCUMENT_TITLE}`;
+  }, []);
 
   return (
     <>

@@ -3,7 +3,7 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
 import { fetchResume } from 'redux/actions';
 import { AppState } from 'redux/types';
-import { socket } from 'utils';
+import { DOCUMENT_TITLE, socket } from 'utils';
 
 const stateProps = (
   state: AppState,
@@ -21,6 +21,10 @@ export function ResumeView({
   resumeLoading,
   fetchResume,
 }: ConnectedProps<typeof connector>): ReactElement {
+  useEffect(() => {
+    document.title = `Resume | ${DOCUMENT_TITLE}`;
+  }, []);
+
   useEffect(() => {
     fetchResume();
   }, [fetchResume]);

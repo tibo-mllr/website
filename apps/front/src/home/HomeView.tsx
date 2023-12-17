@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import { fetchNews } from 'redux/actions';
 import { addNews, deleteNews, editNews } from 'redux/slices';
 import { AppState } from 'redux/types';
-import { client, socket } from 'utils';
+import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateNewsModal from './CreateNewsModal';
 import EditNewsModal from './EditNewsModal';
 import { NewsDocument } from './utilsHome';
@@ -64,6 +64,10 @@ function HomeView({
         .catch((error) => console.error(error));
     }
   };
+
+  useEffect(() => {
+    document.title = `Home | ${DOCUMENT_TITLE}`;
+  }, []);
 
   useEffect(() => {
     fetchNews();

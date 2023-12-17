@@ -9,7 +9,7 @@ import {
   editOrganization,
 } from 'redux/slices';
 import { AppState } from 'redux/types';
-import { client, socket } from 'utils';
+import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateOrganizationModal from './CreateOrganizationModal';
 import EditOrganizationModal from './EditOrganizationModal';
 import { OrganizationDocument } from './utilsOrganization';
@@ -69,6 +69,10 @@ export function OrganizationView({
         .catch((error) => console.error(error));
     }
   };
+
+  useEffect(() => {
+    document.title = `Organizations | ${DOCUMENT_TITLE}`;
+  }, []);
 
   useEffect(() => {
     fetchOrganizations();
