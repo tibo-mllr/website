@@ -1,0 +1,29 @@
+name: Build and publish Docker images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-front:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build image
+        run: docker build -t ghcr.io/tibo-mllr/website/front:latest -f Dockerfile.front .
+      - name: Push image to registry
+        run: |
+          docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
+          docker push ghcr.io/tibo-mllr/website/front:latest
+  build-back:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build image
+        run: docker build -t ghcr.io/tibo-mllr/website/back:latest -f Dockerfile.back .
+      - name: Push image to registry
+        run: |
+          docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
+          docker push ghcr.io/tibo-mllr/website/back:latest
