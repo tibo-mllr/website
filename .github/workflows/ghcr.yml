@@ -11,45 +11,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build image
-        run: docker build -t ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REGISTRY }}/front:latest -f Dockerfile.front .
-      - name: Login to GCP
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          version: '>= 363.0.0'
-      - name: Docker auth
-        run: gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev
+        run: docker build -t ghcr.io/tibo-mllr/website/front:latest -f Dockerfile.front .
       - name: Push image to registry
-        run: docker push ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REGISTRY }}/front:latest
-      - name: Deploy to Cloud Run
-        uses: 'google-github-actions/deploy-cloudrun@v2'
-        with:
-          service: 'front'
-          image: '${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REGISTRY }}/front:latest'
+        run: |
+          docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
+          docker push ghcr.io/tibo-mllr/website/front:latest
   build-back:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build image
-        run: docker build -t ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REGISTRY }}/back:latest -f Dockerfile.back .
-      - name: Login to GCP
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
-        with:
-          version: '>= 363.0.0'
-      - name: Docker auth
-        run: gcloud auth configure-docker ${{ vars.GCP_REGION }}-docker.pkg.dev
+        run: docker build -t ghcr.io/tibo-mllr/website/back:latest -f Dockerfile.back .
       - name: Push image to registry
-        run: docker push ${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REGISTRY }}/back:latest
-      # - name: Deploy to Cloud Run
-      #   uses: 'google-github-actions/deploy-cloudrun@v2'
-      #   with:
-      #     service: 'back'
-      #     image: '${{ vars.GCP_REGION }}-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/${{ vars.GCP_REGISTRY }}/back:latest'
+        run: |
+          docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
+          docker push ghcr.io/tibo-mllr/website/back:latest
