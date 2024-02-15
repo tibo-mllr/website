@@ -5,24 +5,60 @@ on:
     branches: [main]
 
 jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      front-changed: ${{ steps.filter.outputs.front }}
+      back-changed: ${{ steps.filter.outputs.back }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Path filtering
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            front:
+              - '.github/workflows/**'
+              - 'apps/front/**'
+              - 'packages/shared-types/**'
+              - 'Dockerfile.front'
+              - 'yarn.lock'
+            back:
+              - '.github/workflows/**'
+              - 'apps/back/**'
+              - 'packages/shared-types/**'
+              - 'Dockerfile.back'
+              - 'yarn.lock'
+
   build-front:
+    needs: check-changes
+    if: needs.check-changes.outputs.front-changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Build image
         run: docker build -t ghcr.io/tibo-mllr/website/front:latest -f Dockerfile.front .
+
       - name: Push image to registry
         run: |
           docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
           docker push ghcr.io/tibo-mllr/website/front:latest
+
   build-back:
+    needs: check-changes
+    if: needs.check-changes.outputs.back-changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Build image
         run: docker build -t ghcr.io/tibo-mllr/website/back:latest -f Dockerfile.back .
+
       - name: Push image to registry
         run: |
           docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
