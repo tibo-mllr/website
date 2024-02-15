@@ -4,7 +4,7 @@ import { FormEvent, ReactElement, useEffect, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { login, switchShowNewUser } from 'redux/slices';
+import { login, switchShowNewUser } from 'reducers/slices';
 import { DOCUMENT_TITLE, client } from 'utils';
 
 const dispatchProps = { login, setShowNew: switchShowNewUser };

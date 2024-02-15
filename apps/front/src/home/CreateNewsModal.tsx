@@ -8,8 +8,8 @@ import {
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
-import { switchShowNewNews } from 'redux/slices';
-import { AppState } from 'redux/types';
+import { switchShowNewNews } from 'reducers/slices';
+import { AppState } from 'reducers/types';
 import { FormErrors, client } from 'utils';
 
 const stateProps = (

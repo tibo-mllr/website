@@ -13,7 +13,7 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
-import { AppState } from 'redux/types';
+import { AppState } from 'reducers/types';
 import { ResumeView } from 'resume';
 
 const stateProps = (

@@ -1,6 +1,6 @@
 import { FrontUserDocument } from 'admin/utilsAdmin';
-import { receiveUsers, requestUsers } from 'redux/slices';
-import { AppThunk } from 'redux/types';
+import { receiveUsers, requestUsers } from 'reducers/slices';
+import { AppThunk } from 'reducers/types';
 import { client } from 'utils';
 
 export function fetchUsers(): AppThunk {

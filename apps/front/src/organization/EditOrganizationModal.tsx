@@ -7,7 +7,7 @@ import {
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
-import { AppState } from 'redux/types';
+import { AppState } from 'reducers/types';
 import { FormErrors, client } from 'utils';
 import { OrganizationDocument } from './utilsOrganization';
 

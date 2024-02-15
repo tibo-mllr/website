@@ -2,13 +2,13 @@ import { binIcon, editIcon } from 'assets';
 import { ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
-import { fetchOrganizations } from 'redux/actions';
+import { fetchOrganizations } from 'reducers/actions';
 import {
   addOrganization,
   deleteOrganization,
   editOrganization,
-} from 'redux/slices';
-import { AppState } from 'redux/types';
+} from 'reducers/slices';
+import { AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateOrganizationModal from './CreateOrganizationModal';
 import EditOrganizationModal from './EditOrganizationModal';
