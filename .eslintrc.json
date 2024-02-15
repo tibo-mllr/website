@@ -1,5 +1,9 @@
 {
-  "extends": ["prettier", "plugin:@typescript-eslint/recommended"],
+  "extends": [
+    "prettier",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:deprecation/recommended"
+  ],
   "parserOptions": {
     "ecmaVersion": 11,
     "sourceType": "module",
