@@ -8,7 +8,7 @@ import {
   fetchCompetencies,
   fetchOrganizations,
   fetchProjects,
-} from 'redux/actions';
+} from 'reducers/actions';
 import {
   addCompetencies,
   addOrganization,
@@ -17,8 +17,8 @@ import {
   deleteProject,
   editOrganization,
   editProject,
-} from 'redux/slices';
-import { AppState } from 'redux/types';
+} from 'reducers/slices';
+import { AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProject';

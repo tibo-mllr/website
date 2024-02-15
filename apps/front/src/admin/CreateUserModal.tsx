@@ -8,8 +8,8 @@ import {
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
 import { ConnectedProps, connect } from 'react-redux';
-import { switchShowNewUser } from 'redux/slices';
-import { AppState } from 'redux/types';
+import { switchShowNewUser } from 'reducers/slices';
+import { AppState } from 'reducers/types';
 import { FormErrors, client } from 'utils';
 import { FrontUserDocument } from './utilsAdmin';
 

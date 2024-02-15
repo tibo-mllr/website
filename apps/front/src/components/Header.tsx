@@ -9,8 +9,8 @@ import {
   switchShowNewOrganization,
   switchShowNewProject,
   switchShowNewUser,
-} from 'redux/slices';
-import { AppState } from 'redux/types';
+} from 'reducers/slices';
+import { AppState } from 'reducers/types';
 
 const stateProps = (
   state: AppState,

@@ -20,7 +20,7 @@ import {
 import { Typeahead } from 'react-bootstrap-typeahead';
 import { Option } from 'react-bootstrap-typeahead/types/types';
 import { ConnectedProps, connect } from 'react-redux';
-import { AppState } from 'redux/types';
+import { AppState } from 'reducers/types';
 import { FormErrors, client } from 'utils';
 import { ProjectDocument } from './utilsProject';
 
