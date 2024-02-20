@@ -3,14 +3,6 @@
 This is my personal website project. Might always be useful to have one. <br />
 Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
 
-## Prerequisites
-
-- To run with Docker:
-  - Docker
-- To run locally
-  - NodeJS with yarn
-  - A MongoDB instance
-
 ## Run with Docker
 
 - Copy the [`apps/back/.env.template`](apps/back/.env.template) file to `apps/back/.env` and complete it accordingly.
@@ -21,6 +13,12 @@ Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
 Once you're finished, don't forget to `docker compose down`.
 
 ## Run locally
+
+### Prerequisites
+
+- NodeJS (20.11.1)
+- npm and yarn (1.22.21)
+- A MongoDB instance (6.0.6)
 
 - Copy the [`apps/back/.env.template`](apps/back/.env.template) file to `apps/back/.env` and complete it accordingly.
 - Open a terminal and run the following commands:

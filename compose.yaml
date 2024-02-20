@@ -5,6 +5,8 @@ services:
     container_name: front
     build:
       dockerfile: Dockerfile.front
+    # If you have access to the package, comment the three previous lines and uncomment next one
+    # image: ghcr.io/tibo-mllr/website/front:latest
     ports:
       - 3000:3000
     restart: always
@@ -15,6 +17,13 @@ services:
     container_name: back
     build:
       dockerfile: Dockerfile.back
+    # If you have access to the package, comment the three previous lines and uncomment next one
+    # image: ghcr.io/tibo-mllr/website/back:latest
+    env_file:
+      - apps/back/.env
+    environment:
+      # Override DB_HOST to use the service name
+      - DB_HOST=db
     ports:
       - 8000:8000
     restart: always

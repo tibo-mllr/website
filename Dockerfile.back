@@ -24,6 +24,5 @@ FROM base AS SERVE_STAGE
 WORKDIR /app
 COPY --from=BUILD_STAGE /app .
 EXPOSE 8000
-ENV DB_HOST=db
 WORKDIR /app/apps/back
 CMD ["yarn", "start:prod"]
