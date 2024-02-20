@@ -1,4 +1,4 @@
-FROM node:18.14.1 AS base
+FROM node:20.11 AS base
 WORKDIR /app
 RUN yarn global add turbo serve
 
