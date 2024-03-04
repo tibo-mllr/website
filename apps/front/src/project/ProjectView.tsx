@@ -21,7 +21,7 @@ import {
 import { AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateProjectModal from './CreateProjectModal';
-import EditProjectModal from './EditProject';
+import EditProjectModal from './EditProjectModal';
 import { ProjectDocument } from './utilsProject';
 
 const stateProps = (
