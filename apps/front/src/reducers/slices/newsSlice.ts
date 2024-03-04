@@ -25,7 +25,7 @@ const newsSlice = createSlice({
       state.isLoading = false;
     },
     addNews(state, action: PayloadAction<NewsDocument>) {
-      state.allNews.push(action.payload);
+      state.allNews.unshift(action.payload);
     },
     deleteNews(state, action: PayloadAction<string>) {
       state.allNews = state.allNews.filter(
