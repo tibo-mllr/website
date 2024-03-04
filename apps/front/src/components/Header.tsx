@@ -99,9 +99,7 @@ function Header({
               (userRole === 'admin' || userRole === 'superAdmin') &&
               selected === '/home' && (
                 <Button
-                  onClick={(): ReturnType<typeof setShowNewData> =>
-                    setShowNewData(true)
-                  }
+                  onClick={() => setShowNewData(true)}
                   style={{ marginRight: '8px' }}
                 >
                   <img
@@ -118,9 +116,7 @@ function Header({
               (userRole === 'admin' || userRole === 'superAdmin') &&
               selected === '/projects' && (
                 <Button
-                  onClick={(): ReturnType<typeof setShowNewProject> =>
-                    setShowNewProject(true)
-                  }
+                  onClick={() => setShowNewProject(true)}
                   style={{ marginRight: '8px' }}
                 >
                   <img
@@ -137,9 +133,7 @@ function Header({
               (userRole === 'admin' || userRole === 'superAdmin') &&
               selected === '/organizations' && (
                 <Button
-                  onClick={(): ReturnType<typeof setShowNewOrganization> =>
-                    setShowNewOrganization(true)
-                  }
+                  onClick={() => setShowNewOrganization(true)}
                   style={{ marginRight: '8px' }}
                 >
                   <img
@@ -156,9 +150,7 @@ function Header({
               )}
             {!!token && userRole === 'superAdmin' && selected === '/admin' && (
               <Button
-                onClick={(): ReturnType<typeof setShowNewUser> =>
-                  setShowNewUser(true)
-                }
+                onClick={() => setShowNewUser(true)}
                 style={{ marginRight: '8px' }}
               >
                 <img
@@ -178,7 +170,7 @@ function Header({
             ) : (
               <Button
                 variant="outline-light"
-                onClick={(): void => {
+                onClick={() => {
                   logout();
                   navigate('/');
                 }}

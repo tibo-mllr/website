@@ -97,7 +97,7 @@ export function AdminView({
                 <Row>
                   <Col>
                     <Button
-                      onClick={(): void => {
+                      onClick={() => {
                         setShowEdit(true);
                         setUserToEdit(user);
                       }}
@@ -112,7 +112,7 @@ export function AdminView({
                   </Col>
                   <Col className="d-flex justify-content-end">
                     <Button
-                      onClick={(): void => {
+                      onClick={() => {
                         handleDelete(user._id);
                       }}
                     >

@@ -115,9 +115,7 @@ export function LoginView({
                       <Col className="d-flex justify-content-end">
                         <Button
                           variant="outline-secondary"
-                          onClick={(): ReturnType<typeof setShowNew> =>
-                            setShowNew(true)
-                          }
+                          onClick={() => setShowNew(true)}
                         >
                           Créer un compte
                         </Button>

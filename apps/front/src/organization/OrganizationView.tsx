@@ -126,7 +126,7 @@ export function OrganizationView({
                     <Row>
                       <Col className="d-flex justify-content-end">
                         <Button
-                          onClick={(): void => {
+                          onClick={() => {
                             setShowEdit(true);
                             setOrganizationToEdit(organization);
                           }}
@@ -141,9 +141,7 @@ export function OrganizationView({
                             className="d-inline-block align-center"
                           />
                         </Button>
-                        <Button
-                          onClick={(): void => handleDelete(organization._id)}
-                        >
+                        <Button onClick={() => handleDelete(organization._id)}>
                           <img
                             alt="Delete"
                             src={binIcon}

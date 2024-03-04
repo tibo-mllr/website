@@ -174,7 +174,7 @@ export function EditProjectModal({
   };
 
   return (
-    <Modal show={show} onHide={(): void => setShow(false)} size="lg">
+    <Modal show={show} onHide={() => setShow(false)} size="lg">
       <Modal.Header closeButton>
         <Modal.Title>Edit project</Modal.Title>
       </Modal.Header>
@@ -259,7 +259,7 @@ export function EditProjectModal({
                         onInputChange={(text) =>
                           setFieldValue('organization.name', text)
                         }
-                        onChange={(selected): void => {
+                        onChange={(selected) => {
                           if (selected.length)
                             setFieldValue('organization', selected[0]);
                           setFieldTouched('organization.name', true);
@@ -396,7 +396,7 @@ export function EditProjectModal({
                           </>
                         )}
                         <Button
-                          onClick={(): void => {
+                          onClick={() => {
                             setSelectEndDate(!selectEndDate);
                             setFieldValue('endDate', new Date());
                           }}

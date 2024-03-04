@@ -185,7 +185,7 @@ export function ProjectView({
                     </span>
                     <span
                       style={{ fontSize: '1em' }}
-                      onClick={(): void => {
+                      onClick={() => {
                         setShowOrganization(true);
                         setOrganization(project.organization);
                       }}
@@ -219,7 +219,7 @@ export function ProjectView({
                   {!!token && userRole === 'superAdmin' && (
                     <Col className="d-flex justify-content-end">
                       <Button
-                        onClick={(): void => {
+                        onClick={() => {
                           setShowEdit(true);
                           setProjectToEdit(project);
                         }}
@@ -234,7 +234,7 @@ export function ProjectView({
                           className="d-inline-block align-center"
                         />
                       </Button>
-                      <Button onClick={(): void => handleDelete(project._id)}>
+                      <Button onClick={() => handleDelete(project._id)}>
                         <img
                           alt="Delete"
                           src={binIcon}
@@ -252,10 +252,7 @@ export function ProjectView({
       ) : (
         <i>No project to display</i>
       )}
-      <Modal
-        show={showOrganization}
-        onHide={(): void => setShowOrganization(false)}
-      >
+      <Modal show={showOrganization} onHide={() => setShowOrganization(false)}>
         <Modal.Header closeButton>
           <Modal.Title>{organization.name}</Modal.Title>
         </Modal.Header>

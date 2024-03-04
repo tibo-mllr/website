@@ -48,12 +48,7 @@ export function EditUserModal({
   };
 
   return (
-    <Modal
-      show={show}
-      onHide={(): void => {
-        setShow(false);
-      }}
-    >
+    <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Card.Title>Edit user</Card.Title>
       </Modal.Header>

@@ -120,7 +120,7 @@ function HomeView({
                     {!!token && userRole === 'superAdmin' && (
                       <Col className="d-flex justify-content-end">
                         <Button
-                          onClick={(): void => {
+                          onClick={() => {
                             setShowEdit(true);
                             setNewsToEdit(news);
                           }}
@@ -135,7 +135,7 @@ function HomeView({
                             className="d-inline-block align-center"
                           />
                         </Button>
-                        <Button onClick={(): void => handleDelete(news._id)}>
+                        <Button onClick={() => handleDelete(news._id)}>
                           <img
                             alt="Delete"
                             src={binIcon}

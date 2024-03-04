@@ -266,7 +266,7 @@ export function CreateProjectModal({
                         onInputChange={(text) =>
                           setFieldValue('organization.name', text)
                         }
-                        onChange={(selected): void => {
+                        onChange={(selected) => {
                           if (selected.length) {
                             // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             delete (selected[0] as any).id;
@@ -407,7 +407,7 @@ export function CreateProjectModal({
                           </>
                         )}
                         <Button
-                          onClick={(): void => {
+                          onClick={() => {
                             setSelectEndDate(!selectEndDate);
                             setFieldValue('endDate', new Date());
                           }}

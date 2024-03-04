@@ -50,7 +50,7 @@ export function EditOrganizationModal({
   };
 
   return (
-    <Modal show={show} onHide={(): void => setShow(false)}>
+    <Modal show={show} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Edit Organization</Modal.Title>
       </Modal.Header>
