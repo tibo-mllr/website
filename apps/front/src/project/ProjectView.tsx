@@ -213,7 +213,9 @@ export function ProjectView({
                 <Card.Footer>
                   {project.link && (
                     <Col>
-                      <a href={project.link}>See more</a>
+                      <a href={project.link} target="_blank">
+                        See more
+                      </a>
                     </Col>
                   )}
                   {!!token && userRole === 'superAdmin' && (
@@ -263,7 +265,9 @@ export function ProjectView({
           </p>
           <p>
             <b>Website: </b>
-            <a href={organization.website}>{organization.website}</a>
+            <a href={organization.website} target="_blank">
+              {organization.website}
+            </a>
           </p>
         </Modal.Body>
       </Modal>

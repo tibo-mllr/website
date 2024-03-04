@@ -119,7 +119,9 @@ export function OrganizationView({
                   <br />
                   <br />
                   <b>Website: </b>
-                  <a href={organization.website}>{organization.website}</a>
+                  <a href={organization.website} target="_blank">
+                    {organization.website}
+                  </a>
                 </Card.Body>
                 {!!token && userRole === 'superAdmin' && (
                   <Card.Footer>
