@@ -18,7 +18,7 @@ export function LoginView({
 }: ConnectedProps<typeof connector>): ReactElement {
   const navigate = useNavigate();
 
-  const handleSignUp = (values: {
+  const handleSignIn = (values: {
     username: string;
     password: string;
   }): void => {
@@ -62,7 +62,7 @@ export function LoginView({
                 }
                 return errors;
               }}
-              onSubmit={handleSignUp}
+              onSubmit={handleSignIn}
             >
               {({
                 values,
