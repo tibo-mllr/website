@@ -12,11 +12,11 @@
     "packages/*"
   ],
   "scripts": {
-    "back": "turbo run dev --filter back",
-    "back-build": "turbo run build --filter back",
+    "back": "turbo run dev --filter back...",
+    "back-build": "turbo run build --filter back...",
     "build": "turbo run build",
-    "front": "turbo run dev --filter front",
-    "front-build": "turbo run build --filter front",
+    "front": "turbo run dev --filter front...",
+    "front-build": "turbo run build --filter front...",
     "install:ci": "yarn install --frozen-lockfile",
     "start": "turbo dev --parallel",
     "types-build": "turbo run build --filter shared-types"
