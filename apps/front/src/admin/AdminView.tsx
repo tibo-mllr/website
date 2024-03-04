@@ -133,7 +133,6 @@ export function AdminView({
       {userRole === 'superAdmin' && <CreateUserModal />}
       <EditUserModal
         userToEdit={userToEdit}
-        setUserToEdit={setUserToEdit}
         show={showEdit}
         setShow={setShowEdit}
       />

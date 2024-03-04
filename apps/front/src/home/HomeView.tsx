@@ -158,7 +158,6 @@ function HomeView({
       {!!token && userRole === 'superAdmin' && (
         <EditNewsModal
           newsToEdit={newsToEdit}
-          setNewsToEdit={setNewsToEdit}
           show={showEdit}
           setShow={setShowEdit}
         />

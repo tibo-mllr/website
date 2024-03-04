@@ -17,6 +17,6 @@ export const projectSchema = z.object({
   endDate: z.date().optional(),
   description: z.string(),
   link: z.string().url().optional(),
-  competencies: z.string().array(),
+  competencies: z.string().array().min(1),
 });
 export type Project = z.infer<typeof projectSchema>;

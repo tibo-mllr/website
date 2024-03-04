@@ -1,16 +1,12 @@
-import { type News } from '@website/shared-types';
-import {
-  type FormEvent,
-  type ReactElement,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { newsSchema, type News } from '@website/shared-types';
+import { Formik } from 'formik';
+import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import { switchShowNewNews } from 'reducers/slices';
 import { type AppState } from 'reducers/types';
-import { type FormErrors, client } from 'utils';
+import { client } from 'utils';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 const stateProps = (
   state: AppState,
@@ -33,115 +29,90 @@ export function CreateNewsModal({
   token,
   setShow,
 }: ConnectedProps<typeof connector>): ReactElement {
-  const emptyNews: News = {
+  const emptyNews: Omit<News, 'author'> = {
     title: '',
     content: '',
     date: new Date(),
-    author: { username: '' },
-  };
-  const [newNews, setNewNews] = useState<News>(emptyNews);
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState<boolean>(false);
-
-  const validateForm = useCallback((): FormErrors => {
-    const errors: FormErrors = {};
-
-    if (!newNews.title) errors.newtitle = 'Title is required';
-    if (!newNews.content) errors.content = 'Content is required';
-
-    return errors;
-  }, [newNews]);
-
-  const handleCreate = async (
-    event: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    event.preventDefault();
-    setSubmitted(true);
-    const errors = validateForm();
-
-    if (Object.keys(errors).length > 0) setErrors(errors);
-    else {
-      client
-        .post('/news', newNews, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(() => {
-          alert('News added');
-          setNewNews(emptyNews);
-          setShow(false);
-        })
-        .catch((error) => {
-          alert(error);
-          console.error(error);
-        });
-      setSubmitted(false);
-    }
   };
 
-  useEffect(() => {
-    setErrors(validateForm());
-  }, [validateForm]);
+  const handleCreate = (values: Omit<News, 'author'>): void => {
+    client
+      .post('/news', values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        alert('News added');
+        setShow(false);
+      })
+      .catch((error) => {
+        alert(error);
+        console.error(error);
+      });
+  };
 
   return (
-    <Modal
-      show={showNew}
-      onHide={(): void => {
-        setShow(false);
-        setSubmitted(false);
-      }}
-    >
+    <Modal show={showNew} onHide={() => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Create a news</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleCreate}>
-        <Modal.Body>
-          <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              value={newNews.title}
-              onChange={(event): void =>
-                setNewNews({
-                  ...newNews,
-                  title: event.target.value,
-                })
-              }
-              isValid={!errors.title && !!newNews.title}
-              isInvalid={!!errors.title && (!!newNews.title || submitted)}
-              placeholder="Enter name"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.title}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Content</Form.Label>
-            <Form.Control
-              type="text"
-              value={newNews.content}
-              onChange={(event): void =>
-                setNewNews({
-                  ...newNews,
-                  content: event.target.value,
-                })
-              }
-              isValid={!errors.content && !!newNews.content}
-              isInvalid={!!errors.content && (!!newNews.content || submitted)}
-              placeholder="Enter content"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.content}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" type="submit">
-            Add
-          </Button>
-        </Modal.Footer>
-      </Form>
+      <Formik
+        initialValues={emptyNews}
+        validationSchema={toFormikValidationSchema(
+          newsSchema.omit({ author: true }),
+        )}
+        onSubmit={handleCreate}
+      >
+        {({
+          values,
+          touched,
+          errors,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={values.title}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Enter name"
+                  isInvalid={touched.title && !!errors.title}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.title}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Content</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="content"
+                  value={values.content}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  placeholder="Enter content"
+                  isInvalid={touched.content && !!errors.content}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.content}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" type="submit">
+                Add
+              </Button>
+            </Modal.Footer>
+          </Form>
+        )}
+      </Formik>
     </Modal>
   );
 }

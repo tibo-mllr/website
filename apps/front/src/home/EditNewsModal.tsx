@@ -1,19 +1,15 @@
-import {
-  type FormEvent,
-  type ReactElement,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { newsSchema } from '@website/shared-types';
+import { Formik } from 'formik';
+import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import { type AppState } from 'reducers/types';
-import { type FormErrors, client } from 'utils';
+import { client } from 'utils';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { type NewsDocument } from './utilsHome';
 
 type EditNewsProps = {
   newsToEdit: NewsDocument;
-  setNewsToEdit: (newsToEdit: NewsDocument) => void;
   show: boolean;
   setShow: (show: boolean) => void;
 };
@@ -28,112 +24,86 @@ const connector = connect(stateProps);
 
 export function EditNewsModal({
   newsToEdit,
-  setNewsToEdit,
   show,
   setShow,
   token,
 }: EditNewsProps & ConnectedProps<typeof connector>): ReactElement {
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [submitted, setSubmitted] = useState<boolean>(false);
-
-  const validateForm = useCallback((): FormErrors => {
-    const errors: FormErrors = {};
-
-    if (!newsToEdit.title) errors.newtitle = 'Title is required';
-    if (!newsToEdit.content) errors.content = 'Content is required';
-
-    return errors;
-  }, [newsToEdit]);
-
-  const handleEdit = async (
-    event: FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    event.preventDefault();
-    setSubmitted(true);
-    const errors = validateForm();
-
-    if (Object.keys(errors).length > 0) setErrors(errors);
-    else {
-      client
-        .put<NewsDocument>(`/news/${newsToEdit._id}`, newsToEdit, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(() => {
-          alert('News edited');
-          setShow(false);
-        })
-        .catch((error) => {
-          alert(error);
-          console.error(error);
-        });
-      setSubmitted(false);
-    }
+  const handleEdit = async (values: NewsDocument): Promise<void> => {
+    client
+      .put<NewsDocument>(`/news/${newsToEdit._id}`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        alert('News edited');
+        setShow(false);
+      })
+      .catch((error) => {
+        alert(error);
+        console.error(error);
+      });
   };
 
-  useEffect(() => {
-    setErrors(validateForm());
-  }, [validateForm]);
-
   return (
-    <Modal
-      show={show}
-      onHide={(): void => {
-        setShow(false);
-        setSubmitted(false);
-      }}
-    >
+    <Modal show={show} onHide={(): void => setShow(false)}>
       <Modal.Header closeButton>
         <Modal.Title>Edit news</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={handleEdit}>
-        <Modal.Body>
-          <Form.Group className="mb-3">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="text"
-              value={newsToEdit.title}
-              onChange={(event): void =>
-                setNewsToEdit({
-                  ...newsToEdit,
-                  title: event.target.value,
-                })
-              }
-              isValid={!errors.title && !!newsToEdit.title}
-              isInvalid={!!errors.title && (!!newsToEdit.title || submitted)}
-              placeholder="Enter name"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.title}
-            </Form.Control.Feedback>
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Content</Form.Label>
-            <Form.Control
-              type="text"
-              value={newsToEdit.content}
-              onChange={(event): void =>
-                setNewsToEdit({
-                  ...newsToEdit,
-                  content: event.target.value,
-                })
-              }
-              isValid={!errors.content && !!newsToEdit.content}
-              isInvalid={
-                !!errors.content && (!!newsToEdit.content || submitted)
-              }
-              placeholder="Enter content"
-            />
-            <Form.Control.Feedback type="invalid">
-              {errors.content}
-            </Form.Control.Feedback>
-          </Form.Group>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button type="submit">Edit</Button>
-        </Modal.Footer>
-      </Form>
+      <Formik
+        initialValues={newsToEdit}
+        validationSchema={toFormikValidationSchema(
+          newsSchema.omit({ author: true, date: true, editor: true }),
+        )}
+        onSubmit={handleEdit}
+      >
+        {({
+          values,
+          touched,
+          errors,
+          handleBlur,
+          handleChange,
+          handleSubmit,
+        }) => (
+          <Form onSubmit={handleSubmit}>
+            <Modal.Body>
+              <Form.Group className="mb-3">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="title"
+                  value={values.title}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  isInvalid={touched.title && !!errors.title}
+                  placeholder="Enter name"
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.title}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Content</Form.Label>
+                <Form.Control
+                  type="text"
+                  name="content"
+                  value={values.content}
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  isInvalid={touched.content && !!errors.content}
+                  placeholder="Enter content"
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.content}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button type="submit">Edit</Button>
+            </Modal.Footer>
+          </Form>
+        )}
+      </Formik>
     </Modal>
   );
 }

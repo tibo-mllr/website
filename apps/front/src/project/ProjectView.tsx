@@ -274,7 +274,6 @@ export function ProjectView({
       {!!token && userRole === 'superAdmin' && (
         <EditProjectModal
           projectToEdit={projectToEdit}
-          setProjectToEdit={setProjectToEdit}
           show={showEdit}
           setShow={setShowEdit}
         />

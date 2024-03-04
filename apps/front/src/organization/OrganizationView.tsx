@@ -166,7 +166,6 @@ export function OrganizationView({
       {!!token && userRole === 'superAdmin' && (
         <EditOrganizationModal
           organizationToEdit={organizationToEdit}
-          setOrganizationToEdit={setOrganizationToEdit}
           show={showEdit}
           setShow={setShowEdit}
         />
