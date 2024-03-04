@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { NewsDocument } from 'home';
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { type NewsDocument } from 'home';
 
 type NewsState = {
   allNews: NewsDocument[];

@@ -1,12 +1,12 @@
 import {
-  CanActivate,
-  CustomDecorator,
-  ExecutionContext,
+  type CanActivate,
+  type CustomDecorator,
+  type ExecutionContext,
   Injectable,
   SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { UserRole } from '@website/shared-types';
+import { type UserRole } from '@website/shared-types';
 
 export const Roles = (...roles: UserRole[]): CustomDecorator<'role'> => {
   return SetMetadata('role', roles);

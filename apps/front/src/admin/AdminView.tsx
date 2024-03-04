@@ -1,15 +1,15 @@
 import { UserRole } from '@website/shared-types';
 import { binIcon, editIcon } from 'assets';
-import { ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import { fetchUsers } from 'reducers/actions';
 import { addUser, deleteUser, editUser } from 'reducers/slices';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateUserModal from './CreateUserModal';
 import EditUserModal from './EditUserModal';
-import { FrontUserDocument } from './utilsAdmin';
+import { type FrontUserDocument } from './utilsAdmin';
 
 const stateProps = (
   state: AppState,

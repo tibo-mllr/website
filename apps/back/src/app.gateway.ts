@@ -1,5 +1,5 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'http';
+import { type Server } from 'http';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class Gateway {

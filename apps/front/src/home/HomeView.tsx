@@ -1,14 +1,14 @@
 import { binIcon, editIcon } from 'assets';
-import { ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { connect, ConnectedProps } from 'react-redux';
+import { connect, type ConnectedProps } from 'react-redux';
 import { fetchNews } from 'reducers/actions';
 import { addNews, deleteNews, editNews } from 'reducers/slices';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateNewsModal from './CreateNewsModal';
 import EditNewsModal from './EditNewsModal';
-import { NewsDocument } from './utilsHome';
+import { type NewsDocument } from './utilsHome';
 
 const stateProps = (
   state: AppState,

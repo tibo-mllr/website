@@ -6,14 +6,14 @@ import {
   Param,
   Post,
   Put,
-  RawBodyRequest,
+  type RawBodyRequest,
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { News, UserRole } from '@website/shared-types';
+import { type News, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
-import { NewsDocument } from './news.schema';
+import { type NewsDocument } from './news.schema';
 import { NewsService } from './news.service';
 
 @Controller('news')

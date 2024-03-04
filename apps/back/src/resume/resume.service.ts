@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ProjectType } from '@website/shared-types';
-import { Model } from 'mongoose';
+import { type ProjectType } from '@website/shared-types';
+import { type Model } from 'mongoose';
 import {
   Organization,
-  OrganizationDocument,
+  type OrganizationDocument,
 } from 'organization/organization.schema';
-import { Project, ProjectDocument } from 'project/project.schema';
-import { Resume } from './resume.entity';
+import { Project, type ProjectDocument } from 'project/project.schema';
+import { type Resume } from './resume.entity';
 
 @Injectable()
 export class ResumeService {
@@ -52,10 +52,10 @@ export class ResumeService {
           return !a.endDate
             ? -1
             : !b.endDate
-            ? 1
-            : b.endDate > a.endDate
-            ? 1
-            : -1;
+              ? 1
+              : b.endDate > a.endDate
+                ? 1
+                : -1;
         },
       );
       for (const project of type.projects) {

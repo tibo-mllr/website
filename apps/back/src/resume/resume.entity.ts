@@ -1,5 +1,5 @@
-import { ProjectType } from '@website/shared-types';
-import { ProjectDocument } from 'project/project.schema';
+import { type ProjectType } from '@website/shared-types';
+import { type ProjectDocument } from 'project/project.schema';
 
 export class Resume {
   projects: {

@@ -1,8 +1,8 @@
-import { UserRole } from '@website/shared-types';
+import { type UserRole } from '@website/shared-types';
 import { CreateUserModal } from 'admin';
-import { FormEvent, ReactElement, useEffect, useState } from 'react';
+import { type FormEvent, type ReactElement, useEffect, useState } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login, switchShowNewUser } from 'reducers/slices';
 import { DOCUMENT_TITLE, client } from 'utils';

@@ -1,7 +1,7 @@
 import { logo, plusIcon } from 'assets';
-import { ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   logout,
@@ -10,7 +10,7 @@ import {
   switchShowNewProject,
   switchShowNewUser,
 } from 'reducers/slices';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 
 const stateProps = (
   state: AppState,

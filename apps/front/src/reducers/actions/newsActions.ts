@@ -1,7 +1,7 @@
-import { NewsDocument } from 'home';
+import { type NewsDocument } from 'home';
 import { client } from 'utils';
 import { receiveNews, requestNews } from '../slices';
-import { AppThunk } from '../types';
+import { type AppThunk } from '../types';
 
 export function fetchNews(): AppThunk {
   return async (dispatch) => {

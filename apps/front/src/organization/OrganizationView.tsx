@@ -1,18 +1,18 @@
 import { binIcon, editIcon } from 'assets';
-import { ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import { fetchOrganizations } from 'reducers/actions';
 import {
   addOrganization,
   deleteOrganization,
   editOrganization,
 } from 'reducers/slices';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateOrganizationModal from './CreateOrganizationModal';
 import EditOrganizationModal from './EditOrganizationModal';
-import { OrganizationDocument } from './utilsOrganization';
+import { type OrganizationDocument } from './utilsOrganization';
 
 const stateProps = (
   state: AppState,

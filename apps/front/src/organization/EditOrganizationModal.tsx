@@ -1,15 +1,15 @@
 import {
-  FormEvent,
-  ReactElement,
+  type FormEvent,
+  type ReactElement,
   useCallback,
   useEffect,
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
-import { AppState } from 'reducers/types';
-import { FormErrors, client } from 'utils';
-import { OrganizationDocument } from './utilsOrganization';
+import { type ConnectedProps, connect } from 'react-redux';
+import { type AppState } from 'reducers/types';
+import { type FormErrors, client } from 'utils';
+import { type OrganizationDocument } from './utilsOrganization';
 
 type EditOrganizationProps = {
   organizationToEdit: OrganizationDocument;

@@ -1,9 +1,9 @@
 import { ProjectType } from '@website/shared-types';
 import { binIcon, editIcon } from 'assets';
-import { OrganizationDocument } from 'organization';
-import { ReactElement, useEffect, useState } from 'react';
+import { type OrganizationDocument } from 'organization';
+import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import {
   fetchCompetencies,
   fetchOrganizations,
@@ -18,11 +18,11 @@ import {
   editOrganization,
   editProject,
 } from 'reducers/slices';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, client, socket } from 'utils';
 import CreateProjectModal from './CreateProjectModal';
 import EditProjectModal from './EditProjectModal';
-import { ProjectDocument } from './utilsProject';
+import { type ProjectDocument } from './utilsProject';
 
 const stateProps = (
   state: AppState,

@@ -1,17 +1,17 @@
-import { Organization } from '@website/shared-types';
+import { type Organization } from '@website/shared-types';
 import {
-  FormEvent,
-  ReactElement,
+  type FormEvent,
+  type ReactElement,
   useCallback,
   useEffect,
   useState,
 } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import { switchShowNewOrganization } from 'reducers/slices';
-import { AppState } from 'reducers/types';
-import { FormErrors, client } from 'utils';
-import { OrganizationDocument } from './utilsOrganization';
+import { type AppState } from 'reducers/types';
+import { type FormErrors, client } from 'utils';
+import { type OrganizationDocument } from './utilsOrganization';
 
 const stateProps = (
   state: AppState,

@@ -1,7 +1,7 @@
-import { OrganizationDocument } from 'organization';
+import { type OrganizationDocument } from 'organization';
 import { client } from 'utils';
 import { receiveOrganizations, requestOrganizations } from '../slices';
-import { AppThunk } from '../types';
+import { type AppThunk } from '../types';
 
 export function fetchOrganizations(): AppThunk {
   return async (dispatch) => {

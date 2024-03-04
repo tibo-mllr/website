@@ -8,10 +8,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { Organization, UserRole } from '@website/shared-types';
+import { type Organization, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
-import { OrganizationDocument } from './organization.schema';
+import { type OrganizationDocument } from './organization.schema';
 import { OrganizationService } from './organization.service';
 
 @Controller('organization')

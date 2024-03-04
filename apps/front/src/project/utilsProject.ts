@@ -1,5 +1,5 @@
-import { Project as NormalProject } from '@website/shared-types';
-import { OrganizationDocument } from 'organization';
+import { type Project as NormalProject } from '@website/shared-types';
+import { type OrganizationDocument } from 'organization';
 
 export type Project = Omit<NormalProject, 'organization'> & {
   organization: OrganizationDocument;

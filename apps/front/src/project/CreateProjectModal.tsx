@@ -1,9 +1,9 @@
 import { ProjectType } from '@website/shared-types';
 import { binIcon, plusIcon } from 'assets';
-import { OrganizationDocument } from 'organization';
+import { type OrganizationDocument } from 'organization';
 import {
-  FormEvent,
-  ReactElement,
+  type FormEvent,
+  type ReactElement,
   useCallback,
   useEffect,
   useState,
@@ -18,12 +18,12 @@ import {
   Row,
 } from 'react-bootstrap';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { Option } from 'react-bootstrap-typeahead/types/types';
-import { ConnectedProps, connect } from 'react-redux';
+import { type Option } from 'react-bootstrap-typeahead/types/types';
+import { type ConnectedProps, connect } from 'react-redux';
 import { switchShowNewProject } from 'reducers/slices';
-import { AppState } from 'reducers/types';
-import { FormErrors, client } from 'utils';
-import { Project, ProjectDocument } from './utilsProject';
+import { type AppState } from 'reducers/types';
+import { type FormErrors, client } from 'utils';
+import { type Project, type ProjectDocument } from './utilsProject';
 
 const stateProps = (
   state: AppState,

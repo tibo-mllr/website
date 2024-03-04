@@ -2,13 +2,13 @@ import {
   Controller,
   Post,
   Request,
-  RawBodyRequest,
+  type RawBodyRequest,
   UseGuards,
 } from '@nestjs/common';
-import { UserRole } from '@website/shared-types';
+import { type UserRole } from '@website/shared-types';
 import { AuthService } from 'auth/auth.service';
 import { LocalAuthGuard } from 'auth/local-auth.guard';
-import { UserDocument } from 'user/user.schema';
+import { type UserDocument } from 'user/user.schema';
 
 @Controller()
 export class AppController {

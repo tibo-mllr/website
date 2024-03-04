@@ -1,16 +1,16 @@
 import { UserRole } from '@website/shared-types';
 import {
-  FormEvent,
-  ReactElement,
+  type FormEvent,
+  type ReactElement,
   useCallback,
   useEffect,
   useState,
 } from 'react';
 import { Button, Card, Form, Modal } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
-import { AppState } from 'reducers/types';
-import { FormErrors, client } from 'utils';
-import { FrontUserDocument } from './utilsAdmin';
+import { type ConnectedProps, connect } from 'react-redux';
+import { type AppState } from 'reducers/types';
+import { type FormErrors, client } from 'utils';
+import { type FrontUserDocument } from './utilsAdmin';
 
 type EditUserProps = {
   userToEdit: FrontUserDocument;

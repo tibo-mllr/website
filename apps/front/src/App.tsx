@@ -4,16 +4,16 @@ import { HomeView } from 'home';
 import { LoginView } from 'login';
 import { OrganizationView } from 'organization';
 import { ProjectView } from 'project';
-import { ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from 'react-router-dom';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 import { ResumeView } from 'resume';
 
 const stateProps = (

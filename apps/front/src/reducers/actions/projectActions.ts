@@ -1,5 +1,5 @@
-import { ProjectDocument } from 'project';
-import { Resume } from 'resume';
+import { type ProjectDocument } from 'project';
+import { type Resume } from 'resume';
 import { client } from 'utils';
 import {
   receiveCompetencies,
@@ -8,7 +8,7 @@ import {
   requestProjects,
   requestResume,
 } from '../slices';
-import { AppThunk } from '../types';
+import { type AppThunk } from '../types';
 
 export function fetchProjects(): AppThunk {
   return async (dispatch) => {

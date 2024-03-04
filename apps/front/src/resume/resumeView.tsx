@@ -1,8 +1,8 @@
-import { ReactElement, useEffect } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { ConnectedProps, connect } from 'react-redux';
+import { type ConnectedProps, connect } from 'react-redux';
 import { fetchResume } from 'reducers/actions';
-import { AppState } from 'reducers/types';
+import { type AppState } from 'reducers/types';
 import { DOCUMENT_TITLE, socket } from 'utils';
 
 const stateProps = (
