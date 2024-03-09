@@ -10,9 +10,10 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { type FrontUser, UserRole } from '@website/shared-types';
+import { UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
+import { CreateSelfUserDto, CreateUserDto, UpdateUserDto } from './user.dto';
 import { type UserDocument } from './user.schema';
 import { UserService } from './user.service';
 
@@ -46,14 +47,14 @@ export class UsersController {
   @Post()
   @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
-  async create(@Body() user: FrontUser): Promise<UserDocument> {
+  async create(@Body() user: CreateUserDto): Promise<UserDocument> {
     return await this.userService.create(user).catch((error) => {
       throw error;
     });
   }
 
   @Post('/new')
-  async createSelf(@Body() user: FrontUser): Promise<UserDocument> {
+  async createSelf(@Body() user: CreateSelfUserDto): Promise<UserDocument> {
     return await this.userService.createSelf(user).catch((error) => {
       throw error;
     });
@@ -64,7 +65,7 @@ export class UsersController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
-    @Body() user: FrontUser,
+    @Body() user: UpdateUserDto,
   ): Promise<UserDocument> {
     return await this.userService.update(id, user).catch((error) => {
       throw error;

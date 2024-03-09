@@ -8,9 +8,13 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { type Organization, UserRole } from '@website/shared-types';
+import { UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
+import {
+  CreateOrganizationDto,
+  UpdateOrganizationDto,
+} from './organization.dto';
 import { type OrganizationDocument } from './organization.schema';
 import { OrganizationService } from './organization.service';
 
@@ -26,7 +30,7 @@ export class OrganizationController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(
-    @Body() organization: Organization,
+    @Body() organization: CreateOrganizationDto,
   ): Promise<OrganizationDocument> {
     return await this.organizationService
       .create(organization)
@@ -40,7 +44,7 @@ export class OrganizationController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
-    @Body() organization: Organization,
+    @Body() organization: UpdateOrganizationDto,
   ): Promise<OrganizationDocument> {
     return await this.organizationService
       .update(id, organization)

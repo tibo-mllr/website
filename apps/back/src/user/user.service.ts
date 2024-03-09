@@ -1,10 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { type FrontUser } from '@website/shared-types';
 import { Gateway } from 'app.gateway';
 import { hash } from 'bcrypt';
 import { type Model } from 'mongoose';
 import { News, type NewsDocument } from 'news/news.schema';
+import { CreateSelfUserDto, CreateUserDto, UpdateUserDto } from './user.dto';
 import { User, type UserDocument } from './user.schema';
 
 @Injectable()
@@ -27,7 +27,7 @@ export class UserService {
     return await this.userModel.find({}, { hashedPassword: 0 }).exec();
   }
 
-  async create(newUser: FrontUser): Promise<UserDocument> {
+  async create(newUser: CreateUserDto): Promise<UserDocument> {
     const existingUser = await this.get(newUser.username);
     if (existingUser) throw new ConflictException('Username already used');
 
@@ -47,7 +47,7 @@ export class UserService {
     return userToSend;
   }
 
-  async createSelf(newUser: FrontUser): Promise<UserDocument> {
+  async createSelf(newUser: CreateSelfUserDto): Promise<UserDocument> {
     const existingUser = await this.get(newUser.username);
     if (existingUser) throw new ConflictException('Username already used');
 
@@ -67,7 +67,7 @@ export class UserService {
     return userToSend;
   }
 
-  async update(id: string, user: FrontUser): Promise<UserDocument> {
+  async update(id: string, user: UpdateUserDto): Promise<UserDocument> {
     if (user.password) {
       hash(user.password, 8, async (_, hashedPassword) => {
         const updatedUser = {

@@ -10,4 +10,12 @@ module.exports = {
   env: {
     node: true,
   },
+  overrides: [
+    {
+      files: ['*.dto.ts'],
+      rules: {
+        'max-classes-per-file': 'off',
+      },
+    },
+  ],
 };

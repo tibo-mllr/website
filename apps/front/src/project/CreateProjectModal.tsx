@@ -51,7 +51,7 @@ export function CreateProjectModal({
     title: '',
     description: '',
     competencies: [],
-    link: '',
+    link: undefined,
     type: ProjectType.Education,
     organization: {
       _id: '',
@@ -61,7 +61,7 @@ export function CreateProjectModal({
       website: '',
     },
     startDate: new Date(),
-    endDate: new Date(),
+    endDate: undefined,
   };
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
 

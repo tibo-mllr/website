@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { type Project as ProjectTyping } from '@website/shared-types';
 import { Gateway } from 'app.gateway';
 import { type Model } from 'mongoose';
+import { type CreateProjectDto, type UpdateProjectDto } from './project.dto';
 import { Project, type ProjectDocument } from './project.schema';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class ProjectService {
     return await this.projectModel.distinct('competencies').exec();
   }
 
-  async create(project: ProjectTyping): Promise<ProjectDocument> {
+  async create(project: CreateProjectDto): Promise<ProjectDocument> {
     const createdProject = new this.projectModel(project);
     await createdProject.save().catch((error) => {
       throw error;
@@ -31,7 +31,10 @@ export class ProjectService {
     return createdProject;
   }
 
-  async update(id: string, project: ProjectTyping): Promise<ProjectDocument> {
+  async update(
+    id: string,
+    project: UpdateProjectDto,
+  ): Promise<ProjectDocument> {
     await this.projectModel.findByIdAndUpdate(id, project);
     const editedProject = await this.projectModel
       .findById(id)

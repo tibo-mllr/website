@@ -8,9 +8,10 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { type Project, UserRole } from '@website/shared-types';
+import { UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
+import { CreateProjectDto, UpdateProjectDto } from './project.dto';
 import { type ProjectDocument } from './project.schema';
 import { ProjectService } from './project.service';
 
@@ -30,7 +31,7 @@ export class ProjectController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Body() project: Project): Promise<ProjectDocument> {
+  async create(@Body() project: CreateProjectDto): Promise<ProjectDocument> {
     return await this.projectService.create(project).catch((error) => {
       throw error;
     });
@@ -41,7 +42,7 @@ export class ProjectController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
-    @Body() project: Project,
+    @Body() project: UpdateProjectDto,
   ): Promise<ProjectDocument> {
     return await this.projectService.update(id, project).catch((error) => {
       throw error;

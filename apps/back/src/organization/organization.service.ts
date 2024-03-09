@@ -1,9 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { type Organization as OrganizationType } from '@website/shared-types';
 import { Gateway } from 'app.gateway';
 import { type Model } from 'mongoose';
 import { Project, type ProjectDocument } from 'project/project.schema';
+import {
+  type CreateOrganizationDto,
+  type UpdateOrganizationDto,
+} from './organization.dto';
 import { Organization, type OrganizationDocument } from './organization.schema';
 
 @Injectable()
@@ -20,7 +23,9 @@ export class OrganizationService {
     return await this.organizationModel.find().exec();
   }
 
-  async create(organization: OrganizationType): Promise<OrganizationDocument> {
+  async create(
+    organization: CreateOrganizationDto,
+  ): Promise<OrganizationDocument> {
     const createdOrganization = new this.organizationModel(organization);
     await createdOrganization.save().catch((error) => {
       throw error;
@@ -31,7 +36,7 @@ export class OrganizationService {
 
   async update(
     id: string,
-    organization: OrganizationType,
+    organization: UpdateOrganizationDto,
   ): Promise<OrganizationDocument> {
     await this.organizationModel.findByIdAndUpdate(id, organization);
     const editedOrganization = await this.organizationModel.findById(id);

@@ -13,7 +13,7 @@ import {
 import { type News, UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
-import { type NewsDocument } from './news.schema';
+import { CreateNewsDto, UpdateNewsDto } from './news.dto';
 import { NewsService } from './news.service';
 
 @Controller('news')
@@ -28,7 +28,7 @@ export class NewsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   async create(
-    @Body() news: News,
+    @Body() news: CreateNewsDto,
     @Request()
     req: RawBodyRequest<{
       user: { _id: string };
@@ -44,7 +44,7 @@ export class NewsController {
   @UseGuards(JwtAuthGuard, RoleGuard)
   async update(
     @Param('id') id: string,
-    @Body() newNews: NewsDocument,
+    @Body() newNews: UpdateNewsDto,
     @Request() req: RawBodyRequest<{ user: { _id: string } }>,
   ): Promise<News> {
     return await this.newsService.update(id, newNews, req.user._id);
