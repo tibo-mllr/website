@@ -8,6 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UserRole } from '@website/shared-types';
 import { JwtAuthGuard } from 'auth/jwt-auth.guard';
 import { RoleGuard, Roles } from 'auth/role.guard';
@@ -18,17 +19,21 @@ import {
 import { type OrganizationDocument } from './organization.schema';
 import { OrganizationService } from './organization.service';
 
+@ApiTags('Organizations')
 @Controller('organization')
 export class OrganizationController {
   constructor(private readonly organizationService: OrganizationService) {}
 
   @Get()
+  @ApiOperation({ description: 'Get all organizations' })
   async getAll(): Promise<OrganizationDocument[]> {
     return await this.organizationService.getAll();
   }
 
   @Post()
+  @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
+  @ApiOperation({ description: 'Create a new organization' })
   async create(
     @Body() organization: CreateOrganizationDto,
   ): Promise<OrganizationDocument> {
@@ -40,8 +45,10 @@ export class OrganizationController {
   }
 
   @Put('/:id')
+  @ApiBearerAuth()
   @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiOperation({ description: 'Update an organization' })
   async update(
     @Param('id') id: string,
     @Body() organization: UpdateOrganizationDto,
@@ -54,8 +61,10 @@ export class OrganizationController {
   }
 
   @Delete('/:id')
+  @ApiBearerAuth()
   @Roles(UserRole.SuperAdmin)
   @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiOperation({ description: 'Delete an organization' })
   async delete(@Param('id') id: string): Promise<OrganizationDocument> {
     return await this.organizationService.delete(id);
   }

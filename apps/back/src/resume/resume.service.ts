@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { type ProjectType } from '@website/shared-types';
 import { type Model } from 'mongoose';
 import {
   Organization,
   type OrganizationDocument,
 } from 'organization/organization.schema';
 import { Project, type ProjectDocument } from 'project/project.schema';
-import { type Resume } from './resume.entity';
+import { AggregatedProject, type Resume } from './resume.entity';
 
 @Injectable()
 export class ResumeService {
@@ -70,10 +69,7 @@ export class ResumeService {
       .exec();
 
     return {
-      projects: types as {
-        _id: ProjectType;
-        projects: ProjectDocument[];
-      }[],
+      projects: types as AggregatedProject[],
       competencies: competencies,
     };
   }

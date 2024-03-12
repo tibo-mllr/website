@@ -48,3 +48,13 @@ export class UpdateUserDto {
   @IsNotEmpty()
   password?: string;
 }
+
+export class LoginUserDto {
+  @IsString()
+  @IsNotEmpty()
+  username: string;
+
+  @IsString()
+  @IsNotEmpty()
+  password: string;
+}
