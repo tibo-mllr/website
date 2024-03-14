@@ -1,7 +1,6 @@
-import { ProjectType, projectSchema } from '@website/shared-types';
+import { PartialBy, ProjectType, projectSchema } from '@website/shared-types';
 import { binIcon, plusIcon } from 'assets';
 import { Formik } from 'formik';
-import { type OrganizationDocument } from 'organization';
 import { type ReactElement, useState } from 'react';
 import {
   Button,
@@ -19,7 +18,11 @@ import { switchShowNewProject } from 'reducers/slices';
 import { type AppState } from 'reducers/types';
 import { client } from 'utils';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { type Project, type ProjectDocument } from './utilsProject';
+import {
+  handleOrganization,
+  type Project,
+  type ProjectDocument,
+} from './utilsProject';
 
 const stateProps = (
   state: AppState,
@@ -71,118 +74,35 @@ export function CreateProjectModal({
     return begin.getTime() <= end.getTime();
   };
 
-  const handleCreate = (newProject: Project): void => {
-    if (!newProject.organization._id) {
-      const organizationToPost: Partial<OrganizationDocument> =
-        newProject.organization;
-      delete organizationToPost._id;
-      client
-        .post<OrganizationDocument>('/organization', organizationToPost, {
+  const handleCreate = async (
+    newProject: PartialBy<Project, 'organization'>,
+  ): Promise<void> => {
+    const organizationId = await handleOrganization(
+      organizations,
+      newProject.organization,
+      token,
+    );
+
+    try {
+      await client.post<ProjectDocument>(
+        '/project',
+        {
+          ...newProject,
+          organization: organizationId,
+          endDate: selectEndDate ? newProject.endDate : undefined,
+        },
+        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
-        .then(({ data }) => {
-          client
-            .post<ProjectDocument>(
-              '/project',
-              {
-                ...newProject,
-                organization: data._id,
-                endDate: selectEndDate ? newProject.endDate : undefined,
-              },
-              {
-                headers: {
-                  Authorization: `Bearer ${token}`,
-                },
-              },
-            )
-            .then(() => {
-              alert('Project added');
-              setShow(false);
-            })
-            .catch((error) => {
-              alert(error);
-              console.error(error);
-            });
-        })
-        .catch((error) => {
-          alert(error);
-          console.error(error);
-        });
-    } else {
-      const organizationToCheck = organizations.find(
-        (organization) => organization._id === newProject.organization._id,
+        },
       );
-      if (
-        organizationToCheck?.name !== newProject.organization.name ||
-        organizationToCheck?.description !==
-          newProject.organization.description ||
-        organizationToCheck?.location !== newProject.organization.location ||
-        organizationToCheck?.website !== newProject.organization.website
-      ) {
-        client
-          .put<OrganizationDocument>(
-            '/organization/' + newProject.organization._id,
-            newProject.organization,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          )
-          .then(({ data }) => {
-            client
-              .post<ProjectDocument>(
-                '/project',
-                {
-                  ...newProject,
-                  organization: data._id,
-                  endDate: selectEndDate ? newProject.endDate : undefined,
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`,
-                  },
-                },
-              )
-              .then(() => {
-                alert('Project added');
-                setShow(false);
-              })
-              .catch((error) => {
-                alert(error);
-                console.error(error);
-              });
-          })
-          .catch((error) => {
-            alert(error);
-            console.error(error);
-          });
-      } else {
-        client
-          .post<ProjectDocument>(
-            '/project',
-            {
-              ...newProject,
-              organization: newProject.organization._id,
-              endDate: selectEndDate ? newProject.endDate : undefined,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
-          )
-          .then(() => {
-            alert('Project added');
-            setShow(false);
-          })
-          .catch((error) => {
-            alert(error);
-            console.error(error);
-          });
-      }
+
+      alert('Project added');
+      setShow(false);
+    } catch (error) {
+      alert(error);
+      console.error(error);
     }
   };
 
@@ -225,7 +145,7 @@ export function CreateProjectModal({
                   value={values.role}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="Role"
+                  placeholder="Role (e.g. Developer)"
                   isInvalid={touched.role && !!errors.role}
                 />
                 <Form.Control.Feedback type="invalid">
@@ -240,120 +160,134 @@ export function CreateProjectModal({
                   value={values.title}
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  placeholder="Title"
+                  placeholder="Title (e.g. Project name)"
                   isInvalid={touched.title && !!errors.title}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.title}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Card>
-                <Card.Title>Organization</Card.Title>
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Name</Form.Label>
-                      <Typeahead
-                        id="organization.name"
-                        isInvalid={
-                          touched.organization?.name &&
-                          !!errors.organization?.name
-                        }
-                        allowNew
-                        onBlur={() =>
-                          setFieldTouched('organization.name', true)
-                        }
-                        onInputChange={(text) =>
-                          setFieldValue('organization.name', text)
-                        }
-                        onChange={(selected) => {
-                          if (selected.length) {
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            delete (selected[0] as any).id;
-                            setFieldValue('organization', selected[0]);
-                            setFieldTouched('organization.name', true);
+              {values.type === ProjectType.TechExperiences && (
+                <Card>
+                  <Card.Title>Organization</Card.Title>
+                  <Row>
+                    <Col>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Name</Form.Label>
+                        <Typeahead
+                          id="organization.name"
+                          isInvalid={
+                            touched.organization?.name &&
+                            !!errors.organization?.name
                           }
-                        }}
-                        selected={[values.organization.name as Option]}
-                        labelKey={'name'}
-                        options={organizations}
-                        placeholder="Organization"
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.organization?.name}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Location</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="organization.location"
-                        value={values.organization.location}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder="Location"
-                        isInvalid={
-                          touched.organization &&
-                          !!errors.organization?.location
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.organization?.location}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Website</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="organization.website"
-                        value={values.organization.website}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder="Website"
-                        isInvalid={
-                          touched.organization && !!errors.organization?.website
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.organization?.website}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Description</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="organization.description"
-                        value={values.organization.description}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        placeholder="Description"
-                        isInvalid={
-                          touched.organization &&
-                          !!errors.organization?.description
-                        }
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.organization?.description}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </Card>
+                          allowNew
+                          onBlur={() =>
+                            setFieldTouched('organization.name', true)
+                          }
+                          onInputChange={(text) =>
+                            setFieldValue('organization.name', text)
+                          }
+                          onChange={(selected) => {
+                            if (selected.length) {
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              delete (selected[0] as any).id;
+                              setFieldValue('organization', selected[0]);
+                              setFieldTouched('organization.name', true);
+                            }
+                          }}
+                          selected={[values.organization.name as Option]}
+                          labelKey={'name'}
+                          options={organizations}
+                          placeholder="Organization"
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.organization?.name}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Location</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="organization.location"
+                          value={values.organization.location}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder="Location"
+                          isInvalid={
+                            touched.organization &&
+                            !!errors.organization?.location
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.organization?.location}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Website</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="organization.website"
+                          value={values.organization.website}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder="Website"
+                          isInvalid={
+                            touched.organization &&
+                            !!errors.organization?.website
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.organization?.website}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Form.Group className="mb-3">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="organization.description"
+                          value={values.organization.description}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder="Description"
+                          isInvalid={
+                            touched.organization &&
+                            !!errors.organization?.description
+                          }
+                        />
+                        <Form.Control.Feedback type="invalid">
+                          {errors.organization?.description}
+                        </Form.Control.Feedback>
+                      </Form.Group>
+                    </Col>
+                  </Row>
+                </Card>
+              )}
               <Form.Group className="mb-3">
                 <Form.Label>Type</Form.Label>
                 <Form.Select
                   name="type"
                   value={values.type}
                   onBlur={handleBlur}
-                  onChange={handleChange}
+                  onChange={(event) => {
+                    if (event.target.value === 'Tech Experiences')
+                      setFieldValue('organization', {
+                        _id: '',
+                        name: '',
+                        description: '',
+                        location: '',
+                        website: '',
+                      });
+                    else setFieldValue('organization', undefined);
+                    handleChange(event);
+                  }}
                 >
                   <option disabled>Select a type</option>
                   {Object.values(ProjectType).map((type) => (
@@ -558,7 +492,22 @@ export function CreateProjectModal({
               </Card>
             </Modal.Body>
             <Modal.Footer>
-              <Button type="submit">Add</Button>
+              <Button
+                type="submit"
+                onClick={() => {
+                  if (
+                    !values.organization?.name &&
+                    !values.organization?._id &&
+                    !values.organization?.description &&
+                    !values.organization?.location &&
+                    !values.organization?.website &&
+                    values.type !== ProjectType.TechExperiences
+                  )
+                    setFieldValue('organization', undefined);
+                }}
+              >
+                Add
+              </Button>
             </Modal.Footer>
           </Form>
         )}

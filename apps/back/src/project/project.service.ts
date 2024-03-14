@@ -35,7 +35,10 @@ export class ProjectService {
     id: string,
     project: UpdateProjectDto,
   ): Promise<ProjectDocument> {
-    await this.projectModel.findByIdAndUpdate(id, project);
+    await this.projectModel.findByIdAndUpdate(id, {
+      ...project,
+      organization: project.organization ? project.organization : null,
+    });
     const editedProject = await this.projectModel
       .findById(id)
       .populate('organization');

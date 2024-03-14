@@ -11,7 +11,7 @@ export const projectTypeSchema = z.nativeEnum(ProjectType);
 export const projectSchema = z.object({
   role: z.string(),
   title: z.string(),
-  organization: organizationSchema,
+  organization: organizationSchema.optional(),
   type: projectTypeSchema,
   startDate: z.date(),
   endDate: z.date().optional(),

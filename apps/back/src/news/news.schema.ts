@@ -20,10 +20,10 @@ export class News {
   author: User;
 
   @Prop({ default: false })
-  edited: boolean;
+  edited?: boolean;
 
   @Prop({ default: null, type: Types.ObjectId, ref: User.name })
-  editor: User;
+  editor?: User;
 }
 
 export const NewsSchema = SchemaFactory.createForClass<NewsType>(News);

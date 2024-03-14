@@ -16,8 +16,8 @@ export class Project {
   @Prop({ required: true })
   title: string;
 
-  @Prop({ required: true, type: Types.ObjectId, ref: Organization.name })
-  organization: Organization;
+  @Prop({ type: Types.ObjectId, ref: Organization.name })
+  organization?: Organization;
 
   @Prop({ required: true, enum: ProjectType, type: String })
   type: ProjectType;
@@ -26,13 +26,13 @@ export class Project {
   startDate: Date;
 
   @Prop()
-  endDate: Date;
+  endDate?: Date;
 
   @Prop({ required: true })
   description: string;
 
   @Prop()
-  link: string;
+  link?: string;
 
   @Prop({ required: true, default: [] })
   competencies: string[];

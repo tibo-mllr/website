@@ -183,16 +183,19 @@ export function ProjectView({
                       {project.role}
                       {' | '}
                     </span>
-                    <span
-                      style={{ fontSize: '1em' }}
-                      onClick={() => {
-                        setShowOrganization(true);
-                        setOrganization(project.organization);
-                      }}
-                    >
-                      <u>{project.organization.name}</u>
-                      {' | '}
-                    </span>
+                    {project.organization && (
+                      <span
+                        style={{ fontSize: '1em' }}
+                        onClick={() => {
+                          setShowOrganization(true);
+                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                          setOrganization(project.organization!);
+                        }}
+                      >
+                        <u>{project.organization.name}</u>
+                        {' | '}
+                      </span>
+                    )}
                     <span style={{ fontSize: '0.75em' }}>
                       {new Date(project.startDate).toLocaleDateString()} -{' '}
                       {project.endDate

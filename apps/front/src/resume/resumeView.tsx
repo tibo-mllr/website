@@ -125,7 +125,7 @@ export function ResumeView({
                                 fontSize: '1em',
                               }}
                             >
-                              <u>{project.organization.name}</u>
+                              <u>{project.organization?.name}</u>
                               {' | '}
                             </span>
                             <span

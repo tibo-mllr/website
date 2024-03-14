@@ -8,6 +8,7 @@ import {
   IsOptional,
   IsString,
   IsUrl,
+  ValidateIf,
 } from 'class-validator';
 
 export class CreateProjectDto {
@@ -21,6 +22,7 @@ export class CreateProjectDto {
 
   @IsString()
   @IsNotEmpty()
+  @ValidateIf((o) => o.type === ProjectType.TechExperiences)
   organization: string;
 
   @IsNotEmpty()
