@@ -36,15 +36,19 @@ export class NewsService {
     newNews: UpdateNewsDto,
     userId: string,
   ): Promise<NewsDocument> {
-    await this.newsModel.findByIdAndUpdate(id, {
-      ...newNews,
-      edited: true,
-      editor: userId,
-    });
     const editedNews = await this.newsModel
-      .findById(id)
+      .findByIdAndUpdate(
+        id,
+        {
+          ...newNews,
+          edited: true,
+          editor: userId,
+        },
+        { returnDocument: 'after' },
+      )
       .populate('author', 'username')
       .populate('editor', 'username');
+
     this.gateway.server.emit('newsEdited', editedNews);
     return editedNews;
   }

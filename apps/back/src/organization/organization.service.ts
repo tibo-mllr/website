@@ -38,8 +38,12 @@ export class OrganizationService {
     id: string,
     organization: UpdateOrganizationDto,
   ): Promise<OrganizationDocument> {
-    await this.organizationModel.findByIdAndUpdate(id, organization);
-    const editedOrganization = await this.organizationModel.findById(id);
+    const editedOrganization = await this.organizationModel.findByIdAndUpdate(
+      id,
+      organization,
+      { returnDocument: 'after' },
+    );
+
     this.gateway.server.emit('organizationEdited', editedOrganization);
     return editedOrganization;
   }
