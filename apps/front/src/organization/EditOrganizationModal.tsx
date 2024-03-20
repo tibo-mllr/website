@@ -1,11 +1,8 @@
-import { organizationSchema } from '@website/shared-types';
-import { Formik } from 'formik';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import { type AppState } from 'reducers/types';
 import { client } from 'utils';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
 import OrganizationForm from './OrganizationForm';
 import { type OrganizationDocument } from './utilsOrganization';
 
@@ -55,30 +52,11 @@ export function EditOrganizationModal({
       <Modal.Header closeButton>
         <Modal.Title>Edit Organization</Modal.Title>
       </Modal.Header>
-      <Formik
+      <OrganizationForm
+        edit
         initialValues={organizationToEdit}
-        validationSchema={toFormikValidationSchema(organizationSchema)}
         onSubmit={handleEdit}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <OrganizationForm
-            values={values}
-            touched={touched}
-            errors={errors}
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            edit
-          />
-        )}
-      </Formik>
+      />
     </Modal>
   );
 }

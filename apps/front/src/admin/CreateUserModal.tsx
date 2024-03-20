@@ -3,7 +3,6 @@ import {
   UserRole,
   frontUserSchema,
 } from '@website/shared-types';
-import { Formik } from 'formik';
 import { type ReactElement } from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -20,9 +19,10 @@ type CreateUserProps = {
 
 const stateProps = (
   state: AppState,
-): Pick<AppState['adminReducer'], 'showNew' | 'token'> => ({
+): Pick<AppState['adminReducer'], 'showNew' | 'token' | 'userRole'> => ({
   showNew: state.adminReducer.showNew,
   token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
 });
 
 const dispatchProps = { setShow: switchShowNewUser };
@@ -33,6 +33,7 @@ export function CreateUserModal({
   showNew,
   setShow,
   token,
+  userRole,
   newSelf = false,
 }: CreateUserProps & ConnectedProps<typeof connector>): ReactElement {
   const emptyUser: FrontUser = {
@@ -66,32 +67,16 @@ export function CreateUserModal({
       <Modal.Header closeButton>
         <Card.Title>New user</Card.Title>
       </Modal.Header>
-      <Formik
+      <UserForm
         initialValues={emptyUser}
         onSubmit={async (values) => {
           handleCreate(values);
         }}
         validationSchema={toFormikValidationSchema(frontUserSchema)}
-      >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-        }) => (
-          <UserForm
-            values={values}
-            errors={errors}
-            touched={touched}
-            handleChange={handleChange}
-            handleBlur={handleBlur}
-            handleSubmit={handleSubmit}
-            create
-          />
-        )}
-      </Formik>
+        token={token}
+        userRole={userRole}
+        create
+      />
     </Modal>
   );
 }

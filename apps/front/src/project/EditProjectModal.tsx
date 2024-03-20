@@ -1,11 +1,8 @@
-import { projectSchema } from '@website/shared-types';
-import { Formik } from 'formik';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import { type AppState } from 'reducers/types';
 import { client } from 'utils';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
 import ProjectForm from './ProjectForm';
 import {
   Project,
@@ -41,12 +38,6 @@ export function EditProjectModal({
   const [selectEndDate, setSelectEndDate] = useState<boolean>(
     !!projectToEdit.endDate,
   );
-
-  const checkTimeStamp = (begin: Date, end: Date): boolean => {
-    begin = new Date(begin);
-    end = new Date(end);
-    return begin.getTime() <= end.getTime();
-  };
 
   const handleEdit = async (values: Project): Promise<void> => {
     console.log('values', values);
@@ -84,7 +75,12 @@ export function EditProjectModal({
       <Modal.Header closeButton>
         <Modal.Title>Edit project</Modal.Title>
       </Modal.Header>
-      <Formik
+
+      <ProjectForm
+        selectEndDate={selectEndDate}
+        setSelectEndDate={setSelectEndDate}
+        organization={projectToEdit.organization}
+        edit
         initialValues={{
           ...projectToEdit,
           startDate: new Date(projectToEdit.startDate),
@@ -99,44 +95,8 @@ export function EditProjectModal({
             website: '',
           },
         }}
-        validationSchema={toFormikValidationSchema(projectSchema)}
-        validate={(values) => {
-          if (
-            values.endDate &&
-            !checkTimeStamp(values.startDate, values.endDate)
-          ) {
-            return { endDate: 'End date must be after start date' };
-          }
-          return {};
-        }}
         onSubmit={handleEdit}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          setFieldTouched,
-          setFieldValue,
-        }) => (
-          <ProjectForm
-            values={values}
-            touched={touched}
-            errors={errors}
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            setFieldTouched={setFieldTouched}
-            setFieldValue={setFieldValue}
-            selectEndDate={selectEndDate}
-            setSelectEndDate={setSelectEndDate}
-            organization={projectToEdit.organization}
-            edit
-          />
-        )}
-      </Formik>
+      />
     </Modal>
   );
 }

@@ -1,12 +1,10 @@
-import { organizationSchema, type Organization } from '@website/shared-types';
-import { Formik } from 'formik';
+import { type Organization } from '@website/shared-types';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import { switchShowNewOrganization } from 'reducers/slices';
 import { type AppState } from 'reducers/types';
 import { client } from 'utils';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
 import OrganizationForm from './OrganizationForm';
 import { type OrganizationDocument } from './utilsOrganization';
 
@@ -60,30 +58,11 @@ export function CreateOrganizationModal({
       <Modal.Header closeButton>
         <Modal.Title>New Organization</Modal.Title>
       </Modal.Header>
-      <Formik
+      <OrganizationForm
+        create
         initialValues={emptyOrganization}
-        validationSchema={toFormikValidationSchema(organizationSchema)}
         onSubmit={handleCreate}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <OrganizationForm
-            values={values}
-            touched={touched}
-            errors={errors}
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            create
-          />
-        )}
-      </Formik>
+      />
     </Modal>
   );
 }

@@ -1,5 +1,4 @@
 import { frontUserSchema } from '@website/shared-types';
-import { Formik } from 'formik';
 import { type ReactElement } from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -17,8 +16,9 @@ type EditUserProps = {
 
 const stateProps = (
   state: AppState,
-): Pick<AppState['adminReducer'], 'token'> => ({
+): Pick<AppState['adminReducer'], 'token' | 'userRole'> => ({
   token: state.adminReducer.token,
+  userRole: state.adminReducer.userRole,
 });
 
 const connector = connect(stateProps);
@@ -28,6 +28,7 @@ export function EditUserModal({
   show,
   setShow,
   token,
+  userRole,
 }: EditUserProps & ConnectedProps<typeof connector>): ReactElement {
   const handleEdit = (values: FrontUserDocument): void => {
     client
@@ -51,7 +52,7 @@ export function EditUserModal({
       <Modal.Header closeButton>
         <Card.Title>Edit user</Card.Title>
       </Modal.Header>
-      <Formik
+      <UserForm
         initialValues={userToEdit}
         validationSchema={toFormikValidationSchema(
           frontUserSchema.omit({ password: true }).extend({
@@ -59,26 +60,10 @@ export function EditUserModal({
           }),
         )}
         onSubmit={handleEdit}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <UserForm
-            values={values}
-            touched={touched}
-            errors={errors}
-            handleBlur={handleBlur}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            edit
-          />
-        )}
-      </Formik>
+        token={token}
+        userRole={userRole}
+        edit
+      />
     </Modal>
   );
 }
