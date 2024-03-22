@@ -1,4 +1,5 @@
 import { frontUserSchema } from '@website/shared-types';
+import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -30,6 +31,7 @@ export function EditUserModal({
   token,
   userRole,
 }: EditUserProps & ConnectedProps<typeof connector>): ReactElement {
+  const { enqueueSnackbar } = useSnackbar();
   const handleEdit = (values: FrontUserDocument): void => {
     client
       .put(`/user/${userToEdit._id}`, values, {
@@ -38,11 +40,11 @@ export function EditUserModal({
         },
       })
       .then(() => {
-        alert('User edited');
+        enqueueSnackbar('User edited', { variant: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        alert(error);
+        enqueueSnackbar(error, { variant: 'error' });
         console.error(error);
       });
   };

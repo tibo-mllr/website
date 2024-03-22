@@ -1,4 +1,5 @@
 import { type Project as NormalProject } from '@website/shared-types';
+import { EnqueueSnackbar } from 'notistack';
 import { type OrganizationDocument } from 'organization';
 import { client } from 'utils';
 
@@ -13,6 +14,7 @@ export type ProjectDocument = Omit<Project, 'organization'> & {
 
 export const handleOrganization = async (
   organizations: OrganizationDocument[],
+  enqueueSnackbar: EnqueueSnackbar,
   organization?: OrganizationDocument,
   token?: string,
 ): Promise<string | undefined> => {
@@ -22,24 +24,18 @@ export const handleOrganization = async (
     const organizationToPost: Partial<OrganizationDocument> = organization;
     delete organizationToPost._id;
 
-    try {
-      const {
-        data: { _id },
-      } = await client.post<OrganizationDocument>(
-        '/organization',
-        organizationToPost,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    return client
+      .post<OrganizationDocument>('/organization', organizationToPost, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
-
-      return _id;
-    } catch (error) {
-      alert(error);
-      console.error(error);
-    }
+      })
+      .then(({ data: { _id } }) => _id)
+      .catch((error) => {
+        enqueueSnackbar(error, { variant: 'error' });
+        console.error(error);
+        throw error;
+      });
   }
 
   const organizationToCheck = organizations.find(
@@ -51,19 +47,22 @@ export const handleOrganization = async (
     organizationToCheck?.location !== organization.location ||
     organizationToCheck?.website !== organization.website
   ) {
-    const {
-      data: { _id },
-    } = await client.put<OrganizationDocument>(
-      '/organization/' + organization._id,
-      organization,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    return client
+      .put<OrganizationDocument>(
+        '/organization/' + organization._id,
+        organization,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      },
-    );
-
-    return _id;
+      )
+      .then(({ data: { _id } }) => _id)
+      .catch((error) => {
+        enqueueSnackbar(error, { variant: 'error' });
+        console.error(error);
+        throw error;
+      });
   }
 
   return organization._id;

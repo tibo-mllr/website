@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -26,6 +27,8 @@ export function EditOrganizationModal({
   setShow,
   token,
 }: EditOrganizationProps & ConnectedProps<typeof connector>): ReactElement {
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleEdit = (values: OrganizationDocument): void => {
     client
       .put<OrganizationDocument>(
@@ -38,11 +41,11 @@ export function EditOrganizationModal({
         },
       )
       .then(() => {
-        alert('Organization edited');
+        enqueueSnackbar('Organization edited', { variant: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        alert(error);
+        enqueueSnackbar(error, { variant: 'error' });
         console.error(error);
       });
   };

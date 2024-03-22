@@ -1,4 +1,5 @@
 import { PartialBy, ProjectType } from '@website/shared-types';
+import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -54,17 +55,20 @@ export function CreateProjectModal({
   };
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleCreate = async (
     newProject: PartialBy<Project, 'organization'>,
   ): Promise<void> => {
     const organizationId = await handleOrganization(
       organizations,
+      enqueueSnackbar,
       newProject.organization,
       token,
     );
 
-    try {
-      await client.post<ProjectDocument>(
+    client
+      .post<ProjectDocument>(
         '/project',
         {
           ...newProject,
@@ -76,14 +80,15 @@ export function CreateProjectModal({
             Authorization: `Bearer ${token}`,
           },
         },
-      );
-
-      alert('Project added');
-      setShow(false);
-    } catch (error) {
-      alert(error);
-      console.error(error);
-    }
+      )
+      .then(() => {
+        enqueueSnackbar('Project added', { variant: 'success' });
+        setShow(false);
+      })
+      .catch((error) => {
+        enqueueSnackbar(error, { variant: 'error' });
+        console.error(error);
+      });
   };
 
   return (

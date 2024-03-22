@@ -1,4 +1,5 @@
 import { type Organization } from '@website/shared-types';
+import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -36,6 +37,8 @@ export function CreateOrganizationModal({
     website: '',
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleCreate = (newOrganization: Organization): void => {
     client
       .post<OrganizationDocument>('/organization', newOrganization, {
@@ -44,11 +47,11 @@ export function CreateOrganizationModal({
         },
       })
       .then(() => {
-        alert('Organization added');
+        enqueueSnackbar('Organization added', { variant: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        alert(error);
+        enqueueSnackbar(error, { variant: 'error' });
         console.error(error);
       });
   };

@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -26,6 +27,7 @@ export function EditNewsModal({
   setShow,
   token,
 }: EditNewsProps & ConnectedProps<typeof connector>): ReactElement {
+  const { enqueueSnackbar } = useSnackbar();
   const handleEdit = async (values: NewsDocument): Promise<void> => {
     client
       .put<NewsDocument>(`/news/${newsToEdit._id}`, values, {
@@ -34,11 +36,11 @@ export function EditNewsModal({
         },
       })
       .then(() => {
-        alert('News edited');
+        enqueueSnackbar('News edited', { variant: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        alert(error);
+        enqueueSnackbar(error, { variant: 'error' });
         console.error(error);
       });
   };

@@ -1,4 +1,5 @@
 import { type News } from '@website/shared-types';
+import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -34,6 +35,8 @@ export function CreateNewsModal({
     date: new Date(),
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleCreate = (values: Omit<News, 'author'>): void => {
     client
       .post('/news', values, {
@@ -42,11 +45,11 @@ export function CreateNewsModal({
         },
       })
       .then(() => {
-        alert('News added');
+        enqueueSnackbar('News added', { variant: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        alert(error);
+        enqueueSnackbar(error, { variant: 'error' });
         console.error(error);
       });
   };

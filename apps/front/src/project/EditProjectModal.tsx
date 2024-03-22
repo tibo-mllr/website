@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -39,15 +40,18 @@ export function EditProjectModal({
     !!projectToEdit.endDate,
   );
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleEdit = async (values: Project): Promise<void> => {
     const organizationId = await handleOrganization(
       organizations,
+      enqueueSnackbar,
       values.organization,
       token,
     );
 
-    try {
-      await client.put<ProjectDocument>(
+    client
+      .put<ProjectDocument>(
         '/project/' + projectToEdit._id,
         {
           ...values,
@@ -59,14 +63,15 @@ export function EditProjectModal({
             Authorization: `Bearer ${token}`,
           },
         },
-      );
-
-      alert('Project edited');
-      setShow(false);
-    } catch (error) {
-      alert(error);
-      console.error(error);
-    }
+      )
+      .then(() => {
+        enqueueSnackbar('Project edited', { variant: 'success' });
+        setShow(false);
+      })
+      .catch((error) => {
+        enqueueSnackbar(error, { variant: 'error' });
+        console.error(error);
+      });
   };
 
   return (

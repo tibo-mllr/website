@@ -3,6 +3,7 @@ import {
   UserRole,
   frontUserSchema,
 } from '@website/shared-types';
+import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -42,6 +43,8 @@ export function CreateUserModal({
     role: UserRole.Admin,
   };
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleCreate = (newUser: FrontUser): void => {
     client
       .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser, {
@@ -50,13 +53,16 @@ export function CreateUserModal({
         },
       })
       .then(() => {
-        alert(newSelf ? 'Account created' : 'User added');
+        enqueueSnackbar(newSelf ? 'Account created' : 'User added', {
+          variant: 'success',
+        });
         setShow(false);
       })
       .catch((error) => {
-        if (error.response.status === 409) alert('Username already used');
+        if (error.response?.status === 409)
+          enqueueSnackbar('Username already exists', { variant: 'error' });
         else {
-          alert(error);
+          enqueueSnackbar(error, { variant: 'error' });
           console.error(error);
         }
       });

@@ -2,6 +2,7 @@ import { type UserRole } from '@website/shared-types';
 import { CreateUserModal } from 'admin';
 import { PasswordField, TextFieldWithLabel } from 'components';
 import { Formik } from 'formik';
+import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -19,6 +20,8 @@ export function LoginView({
 }: ConnectedProps<typeof connector>): ReactElement {
   const navigate = useNavigate();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleSignIn = (values: {
     username: string;
     password: string;
@@ -33,7 +36,7 @@ export function LoginView({
         navigate('/admin');
       })
       .catch((error) => {
-        alert('Erreur de connexion');
+        enqueueSnackbar('Erreur de connexion', { variant: 'error' });
         console.error(error);
       });
   };
