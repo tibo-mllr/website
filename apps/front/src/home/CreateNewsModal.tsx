@@ -1,4 +1,4 @@
-import { type News } from '@website/shared-types';
+import { newsSchema, type News } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
@@ -6,6 +6,7 @@ import { type ConnectedProps, connect } from 'react-redux';
 import { switchShowNewNews } from 'reducers/slices';
 import { type AppState } from 'reducers/types';
 import { client } from 'utils';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 import NewsForm from './NewsForm';
 
 const stateProps = (
@@ -59,7 +60,14 @@ export function CreateNewsModal({
       <Modal.Header closeButton>
         <Modal.Title>Create a news</Modal.Title>
       </Modal.Header>
-      <NewsForm create initialValues={emptyNews} onSubmit={handleCreate} />
+      <NewsForm
+        create
+        initialValues={emptyNews}
+        validationSchema={toFormikValidationSchema(
+          newsSchema.omit({ author: true }),
+        )}
+        onSubmit={handleCreate}
+      />
     </Modal>
   );
 }

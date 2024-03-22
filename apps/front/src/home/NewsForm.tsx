@@ -1,9 +1,8 @@
-import { newsSchema, type News } from '@website/shared-types';
+import { type News } from '@website/shared-types';
 import { TextFieldWithLabel } from 'components';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { type NewsDocument } from './utilsHome';
 
 type EditProps = { edit: true; create?: never };
@@ -15,12 +14,7 @@ export default function NewsForm<
   T extends NewsDocument | Omit<News, 'author'>,
 >({ edit, create, ...props }: NewsFormProps<T>): ReactElement {
   return (
-    <Formik
-      validationSchema={toFormikValidationSchema(
-        newsSchema.omit({ author: true }),
-      )}
-      {...props}
-    >
+    <Formik {...props}>
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Modal.Body>

@@ -1,9 +1,11 @@
+import { newsSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import { type AppState } from 'reducers/types';
 import { client } from 'utils';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
 import NewsForm from './NewsForm';
 import { type NewsDocument } from './utilsHome';
 
@@ -50,7 +52,14 @@ export function EditNewsModal({
       <Modal.Header closeButton>
         <Modal.Title>Edit news</Modal.Title>
       </Modal.Header>
-      <NewsForm edit initialValues={newsToEdit} onSubmit={handleEdit} />
+      <NewsForm
+        edit
+        initialValues={newsToEdit}
+        validationSchema={toFormikValidationSchema(
+          newsSchema.omit({ author: true, date: true, editor: true }),
+        )}
+        onSubmit={handleEdit}
+      />
     </Modal>
   );
 }
