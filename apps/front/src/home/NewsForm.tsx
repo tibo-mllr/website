@@ -1,10 +1,6 @@
 import { newsSchema, type News } from '@website/shared-types';
-import {
-  ErrorMessage,
-  Formik,
-  type FormikConfig,
-  type FormikValues,
-} from 'formik';
+import { TextFieldWithLabel } from 'components';
+import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
@@ -25,54 +21,22 @@ export default function NewsForm<
       )}
       {...props}
     >
-      {({
-        values,
-        touched,
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-      }) => (
+      {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                name="title"
-                value={values.title}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Enter name"
-                isInvalid={touched.title && !!errors.title}
-              />
-              <ErrorMessage name="title">
-                {(errorMessage) => (
-                  <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                  </Form.Control.Feedback>
-                )}
-              </ErrorMessage>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Content</Form.Label>
-              <Form.Control
-                type="text"
-                name="content"
-                value={values.content}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Enter content"
-                isInvalid={touched.content && !!errors.content}
-              />
-              <ErrorMessage name="content">
-                {(errorMessage) => (
-                  <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                  </Form.Control.Feedback>
-                )}
-              </ErrorMessage>
-            </Form.Group>
+            <TextFieldWithLabel
+              name="title"
+              label="Title"
+              placeholder="Enter title"
+              groupClassName="mb-3"
+            />
+            <TextFieldWithLabel
+              as="textarea"
+              name="content"
+              label="Content"
+              placeholder="Enter content"
+              groupClassName="mb-3"
+            />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="primary" type="submit">

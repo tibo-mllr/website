@@ -40,7 +40,6 @@ export function EditProjectModal({
   );
 
   const handleEdit = async (values: Project): Promise<void> => {
-    console.log('values', values);
     const organizationId = await handleOrganization(
       organizations,
       values.organization,

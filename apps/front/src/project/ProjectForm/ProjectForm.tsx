@@ -1,10 +1,6 @@
 import { projectSchema, ProjectType } from '@website/shared-types';
-import {
-  Formik,
-  type FormikValues,
-  type FormikConfig,
-  ErrorMessage,
-} from 'formik';
+import { SelectFieldWithLabel, TextFieldWithLabel } from 'components';
+import { Formik, type FormikValues, type FormikConfig } from 'formik';
 import { type OrganizationDocument } from 'organization';
 import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
@@ -62,130 +58,63 @@ export default function ProjectForm<
       }}
       {...props}
     >
-      {({
-        values,
-        touched,
-        errors,
-        handleBlur,
-        handleChange,
-        handleSubmit,
-        setFieldValue,
-      }) => (
+      {({ values, handleChange, handleSubmit, setFieldValue }) => (
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
-            <Form.Group className="mb-3">
-              <Form.Label>Role</Form.Label>
-              <Form.Control
-                type="text"
-                name="role"
-                value={values.role}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Role (e.g. Developer)"
-                isInvalid={touched.role && !!errors.role}
-              />
-              <ErrorMessage name="role">
-                {(errorMessage) => (
-                  <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                  </Form.Control.Feedback>
-                )}
-              </ErrorMessage>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                name="title"
-                value={values.title}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Title (e.g. Project name)"
-                isInvalid={touched.title && !!errors.title}
-              />
-              <ErrorMessage name="title">
-                {(errorMessage) => (
-                  <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                  </Form.Control.Feedback>
-                )}
-              </ErrorMessage>
-            </Form.Group>
+            <TextFieldWithLabel
+              name="role"
+              label="Role"
+              placeholder="Role (e.g. Developer)"
+              groupClassName="mb-3"
+            />
+            <TextFieldWithLabel
+              name="title"
+              label="Title"
+              placeholder="Title (e.g. Project name)"
+              groupClassName="mb-3"
+            />
             {values.type === ProjectType.TechExperiences && (
               <OrganizationSection />
             )}
-            <Form.Group className="mb-3">
-              <Form.Label>Type</Form.Label>
-              <Form.Select
-                name="type"
-                value={values.type}
-                onBlur={handleBlur}
-                onChange={(event) => {
-                  if (event.target.value === 'Tech Experiences')
-                    setFieldValue(
-                      'organization',
-                      organization ?? {
-                        _id: '',
-                        name: '',
-                        description: '',
-                        location: '',
-                        website: '',
-                      },
-                    );
-                  else setFieldValue('organization', undefined);
-                  handleChange(event);
-                }}
-              >
-                <option disabled>Select a type</option>
-                {Object.values(ProjectType).map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
+            <SelectFieldWithLabel
+              name="type"
+              label="Type"
+              options={Object.values(ProjectType)}
+              helperOption="Select a type"
+              onChange={(event) => {
+                if (event.target.value === 'Tech Experiences')
+                  setFieldValue(
+                    'organization',
+                    organization ?? {
+                      _id: '',
+                      name: '',
+                      description: '',
+                      location: '',
+                      website: '',
+                    },
+                  );
+                else setFieldValue('organization', undefined);
+                handleChange(event);
+              }}
+              groupClassName="mb-3"
+            />
             <DatesSection
               selectEndDate={selectEndDate}
               setSelectEndDate={setSelectEndDate}
             />
-            <Form.Group className="mb-3">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                type="text"
-                name="description"
-                value={values.description}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Description"
-                isInvalid={touched.description && !!errors.description}
-              />
-              <ErrorMessage name="description">
-                {(errorMessage) => (
-                  <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                  </Form.Control.Feedback>
-                )}
-              </ErrorMessage>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Link</Form.Label>
-              <Form.Control
-                type="text"
-                name="link"
-                value={values.link}
-                onBlur={handleBlur}
-                onChange={handleChange}
-                placeholder="Link"
-                isInvalid={touched.link && !!errors.link}
-              />
-              <ErrorMessage name="link">
-                {(errorMessage) => (
-                  <Form.Control.Feedback type="invalid">
-                    {errorMessage}
-                  </Form.Control.Feedback>
-                )}
-              </ErrorMessage>
-            </Form.Group>
+            <TextFieldWithLabel
+              as="textarea"
+              name="description"
+              label="Description"
+              placeholder="Description"
+              groupClassName="mb-3"
+            />
+            <TextFieldWithLabel
+              name="link"
+              label="Link"
+              placeholder="Link"
+              groupClassName="mb-3"
+            />
             <CompetenciesSection />
           </Modal.Body>
           <Modal.Footer>
