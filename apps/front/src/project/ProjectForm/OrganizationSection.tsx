@@ -1,3 +1,4 @@
+import { type Organization } from '@website/shared-types';
 import { TextFieldWithLabel, TypeaheadField } from 'components';
 import { useFormikContext } from 'formik';
 import { type OrganizationDocument } from 'organization';
@@ -31,7 +32,17 @@ function OrganizationSection<
             name="organization.name"
             label="Name"
             allowNew
-            onSelected={(selected) => setFieldValue('organization', selected)}
+            onSelected={(selected) => {
+              if ((selected as OrganizationDocument)._id)
+                setFieldValue('organization', selected);
+              else
+                setFieldValue('organization', {
+                  name: (selected as Organization).name,
+                  description: '',
+                  location: '',
+                  website: '',
+                });
+            }}
             groupClassName="mb-3"
             options={organizations}
             placeholder="Organization"
