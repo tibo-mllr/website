@@ -108,6 +108,7 @@ export default function ProjectForm<
               label="Description"
               placeholder="Description"
               groupClassName="mb-3"
+              style={{ height: '20vh' }}
             />
             <TextFieldWithLabel
               name="link"

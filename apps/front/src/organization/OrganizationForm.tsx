@@ -34,6 +34,7 @@ export default function OrganizationForm<
               label="Description"
               placeholder="Enter description"
               groupClassName="mb-3"
+              style={{ height: '20vh' }}
             />
             <TextFieldWithLabel
               name="location"

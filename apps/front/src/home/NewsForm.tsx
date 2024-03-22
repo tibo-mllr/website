@@ -30,6 +30,7 @@ export default function NewsForm<
               label="Content"
               placeholder="Enter content"
               groupClassName="mb-3"
+              style={{ height: '20vh' }}
             />
           </Modal.Body>
           <Modal.Footer>

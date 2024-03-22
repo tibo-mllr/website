@@ -23,7 +23,7 @@ function OrganizationSection<
   const { setFieldValue } = useFormikContext<T>();
 
   return (
-    <Card>
+    <Card className="mb-3 p-2">
       <Card.Title>Organization</Card.Title>
       <Row>
         <Col md={4}>
@@ -44,6 +44,7 @@ function OrganizationSection<
             label="Location"
             placeholder="Location"
             groupClassName="mb-3"
+            floating={false}
           />
         </Col>
         <Col md={4}>
@@ -52,6 +53,7 @@ function OrganizationSection<
             label="Website"
             placeholder="Website"
             groupClassName="mb-3"
+            floating={false}
           />
         </Col>
         <Col>
@@ -60,7 +62,7 @@ function OrganizationSection<
             name="organization.description"
             label="Description"
             placeholder="Description"
-            groupClassName="mb-3"
+            style={{ height: '10vh' }}
           />
         </Col>
       </Row>

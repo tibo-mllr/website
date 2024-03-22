@@ -33,12 +33,13 @@ export default function UserForm<T extends FrontUserDocument | FrontUser>({
               name="username"
               label="Username"
               placeholder="Enter username"
+              autoComplete="username"
               groupClassName="mb-3"
             />
             <PasswordField
               name="password"
-              label="Password"
               placeholder="Enter password"
+              autoComplete="new-password"
               groupClassName="mb-3"
             />
             {!!token && userRole == 'superAdmin' && (

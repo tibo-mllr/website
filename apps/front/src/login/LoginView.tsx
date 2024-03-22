@@ -75,12 +75,13 @@ export function LoginView({
                       name="username"
                       label="Username"
                       placeholder="Enter username"
+                      autoComplete="username"
                     />
                     <PasswordField
                       name="password"
-                      label="Password"
                       placeholder="Enter password"
                       groupClassName="mb-3"
+                      autoComplete="current-password"
                     />
                   </Card.Body>
                   <Card.Footer>

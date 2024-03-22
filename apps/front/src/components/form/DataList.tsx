@@ -1,6 +1,7 @@
 import { type ReactElement } from 'react';
 import {
   Button,
+  FloatingLabel,
   Form,
   type FormControlProps,
   InputGroup,
@@ -25,9 +26,10 @@ export function DataList({
 }: DataListProps): ReactElement {
   return (
     <Form.Group className={groupClassName}>
-      <Form.Label>{label}</Form.Label>
       <InputGroup>
-        <TextField name={name} {...props} list={listId} tooltipError />
+        <FloatingLabel label={label}>
+          <TextField name={name} {...props} list={listId} tooltipError />
+        </FloatingLabel>
         <Button onClick={onDeleteOption}>Delete</Button>
       </InputGroup>
     </Form.Group>
