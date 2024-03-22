@@ -1,3 +1,4 @@
+import { formatDate } from 'date-fns';
 import { ErrorMessage, useField } from 'formik';
 import { type ReactElement } from 'react';
 import { Form, type FormControlProps } from 'react-bootstrap';
@@ -20,7 +21,7 @@ export function DatePicker({
         {...field}
         {...props}
         type="date"
-        value={field.value?.toISOString().split('T')[0]}
+        value={field.value ? formatDate(field.value, 'yyyy-MM-dd') : ''}
         onChange={(event) => helpers.setValue(new Date(event.target.value))}
         isInvalid={meta.touched && !!meta.error}
       />
