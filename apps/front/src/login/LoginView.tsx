@@ -1,5 +1,6 @@
 import { type UserRole } from '@website/shared-types';
 import { CreateUserModal } from 'admin';
+import { PasswordField, TextFieldWithLabel } from 'components';
 import { Formik } from 'formik';
 import { type ReactElement, useEffect } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
@@ -64,52 +65,26 @@ export function LoginView({
               }}
               onSubmit={handleSignIn}
             >
-              {({
-                values,
-                touched,
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-              }) => (
+              {({ handleSubmit }) => (
                 <Form onSubmit={handleSubmit}>
                   <Card.Body>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Nom d'utilisateur</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="username"
-                        placeholder="Entrez votre nom d'utilisateur"
-                        value={values.username}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={touched.username && !!errors.username}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.username}
-                      </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group className="mb-3">
-                      <Form.Label>Mot de passe</Form.Label>
-                      <Form.Control
-                        type="password"
-                        name="password"
-                        placeholder="Entrez votre mot de passe"
-                        value={values.password}
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        isInvalid={touched.password && !!errors.password}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {errors.password}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                    <TextFieldWithLabel
+                      name="username"
+                      label="Username"
+                      placeholder="Enter username"
+                    />
+                    <PasswordField
+                      name="password"
+                      label="Password"
+                      placeholder="Enter password"
+                      groupClassName="mb-3"
+                    />
                   </Card.Body>
                   <Card.Footer>
                     <Row>
                       <Col>
                         <Button variant="outline-secondary" type="submit">
-                          Se connecter
+                          Connect
                         </Button>
                       </Col>
                       <Col className="d-flex justify-content-end">
@@ -117,7 +92,7 @@ export function LoginView({
                           variant="outline-secondary"
                           onClick={() => setShowNew(true)}
                         >
-                          Créer un compte
+                          Create account
                         </Button>
                       </Col>
                     </Row>

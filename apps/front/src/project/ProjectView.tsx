@@ -78,7 +78,6 @@ export function ProjectView({
     title: '',
     description: '',
     competencies: [],
-    link: '',
     type: ProjectType.Education,
     organization: {
       _id: '',
@@ -88,7 +87,6 @@ export function ProjectView({
       website: '',
     },
     startDate: new Date(),
-    endDate: new Date(),
   });
   const [showEdit, setShowEdit] = useState<boolean>(false);
 
