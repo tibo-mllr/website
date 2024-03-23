@@ -13,9 +13,8 @@ import { type FrontUserDocument } from './utilsAdmin';
 
 const stateProps = (
   state: AppState,
-): Pick<AppState['adminReducer'], 'users' | 'token' | 'userRole'> => ({
+): Pick<AppState['adminReducer'], 'users' | 'userRole'> => ({
   users: state.adminReducer.users,
-  token: state.adminReducer.token,
   userRole: state.adminReducer.userRole,
 });
 
@@ -30,7 +29,6 @@ const connector = connect(stateProps, dispatchProps);
 
 export function AdminView({
   users,
-  token,
   userRole,
   addUser,
   deleteUser,
@@ -50,13 +48,7 @@ export function AdminView({
       'Are you sure you want to delete this user?',
     );
     if (confirm) {
-      client
-        .delete(`/user/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .catch((error) => console.error(error));
+      client.delete(`/user/${id}`).catch((error) => console.error(error));
     }
   };
 

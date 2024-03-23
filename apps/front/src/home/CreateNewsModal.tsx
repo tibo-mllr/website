@@ -11,12 +11,8 @@ import NewsForm from './NewsForm';
 
 const stateProps = (
   state: AppState,
-): Pick<
-  AppState['newsReducer'] & AppState['adminReducer'],
-  'showNew' | 'token'
-> => ({
+): Pick<AppState['newsReducer'], 'showNew'> => ({
   showNew: state.newsReducer.showNew,
-  token: state.adminReducer.token,
 });
 
 const dispatchProps = {
@@ -27,7 +23,6 @@ const connector = connect(stateProps, dispatchProps);
 
 export function CreateNewsModal({
   showNew,
-  token,
   setShow,
 }: ConnectedProps<typeof connector>): ReactElement {
   const emptyNews: Omit<News, 'author'> = {
@@ -40,11 +35,7 @@ export function CreateNewsModal({
 
   const handleCreate = (values: Omit<News, 'author'>): void => {
     client
-      .post('/news', values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post('/news', values)
       .then(() => {
         enqueueSnackbar('News added', { variant: 'success' });
         setShow(false);

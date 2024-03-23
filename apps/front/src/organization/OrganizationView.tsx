@@ -61,11 +61,7 @@ export function OrganizationView({
     );
     if (confirm) {
       client
-        .delete(`/organization/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        .delete(`/organization/${id}`)
         .catch((error) => console.error(error));
     }
   };

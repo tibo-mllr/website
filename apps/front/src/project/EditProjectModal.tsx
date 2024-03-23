@@ -19,12 +19,8 @@ type EditProjectProps = {
 
 const stateProps = (
   state: AppState,
-): Pick<
-  AppState['organizationReducer'] & AppState['adminReducer'],
-  'organizations' | 'token'
-> => ({
+): Pick<AppState['organizationReducer'], 'organizations'> => ({
   organizations: state.organizationReducer.organizations,
-  token: state.adminReducer.token,
 });
 
 const connector = connect(stateProps);
@@ -34,7 +30,6 @@ export function EditProjectModal({
   show,
   setShow,
   organizations,
-  token,
 }: EditProjectProps & ConnectedProps<typeof connector>): ReactElement {
   const [selectEndDate, setSelectEndDate] = useState<boolean>(
     !!projectToEdit.endDate,
@@ -47,23 +42,14 @@ export function EditProjectModal({
       organizations,
       enqueueSnackbar,
       values.organization,
-      token,
     );
 
     client
-      .put<ProjectDocument>(
-        '/project/' + projectToEdit._id,
-        {
-          ...values,
-          organization: organizationId,
-          endDate: selectEndDate ? values.endDate : undefined,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      .put<ProjectDocument>('/project/' + projectToEdit._id, {
+        ...values,
+        organization: organizationId,
+        endDate: selectEndDate ? values.endDate : undefined,
+      })
       .then(() => {
         enqueueSnackbar('Project edited', { variant: 'success' });
         setShow(false);

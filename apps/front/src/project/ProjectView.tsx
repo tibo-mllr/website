@@ -95,13 +95,7 @@ export function ProjectView({
       'Are you sure you want to delete this project ?',
     );
     if (confirm) {
-      client
-        .delete(`/project/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .catch((error) => console.error(error));
+      client.delete(`/project/${id}`).catch((error) => console.error(error));
     }
   };
 

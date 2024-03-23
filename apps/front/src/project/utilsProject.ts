@@ -16,7 +16,6 @@ export const handleOrganization = async (
   organizations: OrganizationDocument[],
   enqueueSnackbar: EnqueueSnackbar,
   organization?: OrganizationDocument,
-  token?: string,
 ): Promise<string | undefined> => {
   if (!organization) return undefined;
 
@@ -25,11 +24,7 @@ export const handleOrganization = async (
     delete organizationToPost._id;
 
     return client
-      .post<OrganizationDocument>('/organization', organizationToPost, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post<OrganizationDocument>('/organization', organizationToPost)
       .then(({ data: { _id } }) => _id)
       .catch((error) => {
         enqueueSnackbar(error, { variant: 'error' });
@@ -51,11 +46,6 @@ export const handleOrganization = async (
       .put<OrganizationDocument>(
         '/organization/' + organization._id,
         organization,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       )
       .then(({ data: { _id } }) => _id)
       .catch((error) => {

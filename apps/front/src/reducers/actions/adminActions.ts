@@ -6,14 +6,14 @@ import { client } from 'utils';
 export function fetchUsers(): AppThunk {
   return async (dispatch, getState) => {
     const {
-      adminReducer: { userRole, token },
+      adminReducer: { userRole },
     } = getState();
+
     try {
       dispatch(requestUsers());
 
       const { data } = await client.get<FrontUserDocument[]>(
         `/user/${userRole}`,
-        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       dispatch(receiveUsers(data));

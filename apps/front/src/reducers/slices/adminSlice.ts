@@ -1,6 +1,7 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { type UserRole } from '@website/shared-types';
 import { type FrontUserDocument } from 'admin/utilsAdmin';
+import { removeAuth, setAuth } from 'utils';
 
 type AdminState = {
   userRole?: UserRole;
@@ -26,15 +27,13 @@ const adminSlice = createSlice({
     login(state, action: PayloadAction<{ userRole: UserRole; token: string }>) {
       state.userRole = action.payload.userRole;
       state.token = action.payload.token;
-      sessionStorage.setItem('userRole', action.payload.userRole);
-      sessionStorage.setItem('token', action.payload.token);
+      setAuth(action.payload.token, action.payload.userRole);
     },
     logout(state) {
       state.userRole = undefined;
       state.token = undefined;
       state.users = [];
-      sessionStorage.removeItem('userRole');
-      sessionStorage.removeItem('token');
+      removeAuth();
     },
     requestUsers(state) {
       state.isLoading = true;

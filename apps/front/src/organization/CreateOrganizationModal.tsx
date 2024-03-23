@@ -11,12 +11,8 @@ import { type OrganizationDocument } from './utilsOrganization';
 
 const stateProps = (
   state: AppState,
-): Pick<
-  AppState['organizationReducer'] & AppState['adminReducer'],
-  'showNew' | 'token'
-> => ({
+): Pick<AppState['organizationReducer'], 'showNew'> => ({
   showNew: state.organizationReducer.showNew,
-  token: state.adminReducer.token,
 });
 
 const dispatchProps = {
@@ -27,7 +23,6 @@ const connector = connect(stateProps, dispatchProps);
 
 export function CreateOrganizationModal({
   showNew,
-  token,
   setShow,
 }: ConnectedProps<typeof connector>): ReactElement {
   const emptyOrganization: Organization = {
@@ -41,11 +36,7 @@ export function CreateOrganizationModal({
 
   const handleCreate = (newOrganization: Organization): void => {
     client
-      .post<OrganizationDocument>('/organization', newOrganization, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post<OrganizationDocument>('/organization', newOrganization)
       .then(() => {
         enqueueSnackbar('Organization added', { variant: 'success' });
         setShow(false);

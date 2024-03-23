@@ -4,7 +4,7 @@ import { HomeView } from 'home';
 import { LoginView } from 'login';
 import { OrganizationView } from 'organization';
 import { ProjectView } from 'project';
-import { type ReactElement } from 'react';
+import { useEffect, type ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
 import {
@@ -15,6 +15,7 @@ import {
 } from 'react-router-dom';
 import { type AppState } from 'reducers/types';
 import { ResumeView } from 'resume';
+import { client } from 'utils';
 
 const stateProps = (
   state: AppState,
@@ -25,6 +26,10 @@ const stateProps = (
 const connector = connect(stateProps);
 
 function App({ token }: ConnectedProps<typeof connector>): ReactElement {
+  useEffect(() => {
+    if (token) client.defaults.headers.common.Authorization = `Bearer ${token}`;
+  }, [token]);
+
   return (
     <Router>
       <Header />

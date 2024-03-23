@@ -47,11 +47,7 @@ export function CreateUserModal({
 
   const handleCreate = (newUser: FrontUser): void => {
     client
-      .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser)
       .then(() => {
         enqueueSnackbar(newSelf ? 'Account created' : 'User added', {
           variant: 'success',

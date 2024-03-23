@@ -55,13 +55,7 @@ function HomeView({
       'Are you sure you want to delete this news ?',
     );
     if (confirm) {
-      client
-        .delete(`/news/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .catch((error) => console.error(error));
+      client.delete(`/news/${id}`).catch((error) => console.error(error));
     }
   };
 

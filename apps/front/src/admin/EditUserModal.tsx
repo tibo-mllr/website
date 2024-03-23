@@ -34,11 +34,7 @@ export function EditUserModal({
   const { enqueueSnackbar } = useSnackbar();
   const handleEdit = (values: FrontUserDocument): void => {
     client
-      .put(`/user/${userToEdit._id}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put(`/user/${userToEdit._id}`, values)
       .then(() => {
         enqueueSnackbar('User edited', { variant: 'success' });
         setShow(false);

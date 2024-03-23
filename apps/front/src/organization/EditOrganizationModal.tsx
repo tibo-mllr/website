@@ -1,8 +1,6 @@
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
-import { type AppState } from 'reducers/types';
 import { client } from 'utils';
 import OrganizationForm from './OrganizationForm';
 import { type OrganizationDocument } from './utilsOrganization';
@@ -13,20 +11,11 @@ type EditOrganizationProps = {
   setShow: (show: boolean) => void;
 };
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['adminReducer'], 'token'> => ({
-  token: state.adminReducer.token,
-});
-
-const connector = connect(stateProps);
-
-export function EditOrganizationModal({
+export default function EditOrganizationModal({
   organizationToEdit,
   show,
   setShow,
-  token,
-}: EditOrganizationProps & ConnectedProps<typeof connector>): ReactElement {
+}: EditOrganizationProps): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleEdit = (values: OrganizationDocument): void => {
@@ -34,11 +23,6 @@ export function EditOrganizationModal({
       .put<OrganizationDocument>(
         `/organization/${organizationToEdit._id}`,
         values,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
       )
       .then(() => {
         enqueueSnackbar('Organization edited', { variant: 'success' });
@@ -63,5 +47,3 @@ export function EditOrganizationModal({
     </Modal>
   );
 }
-
-export default connector(EditOrganizationModal);

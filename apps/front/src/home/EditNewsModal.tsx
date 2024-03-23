@@ -2,8 +2,6 @@ import { newsSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
-import { type AppState } from 'reducers/types';
 import { client } from 'utils';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import NewsForm from './NewsForm';
@@ -15,28 +13,15 @@ type EditNewsProps = {
   setShow: (show: boolean) => void;
 };
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['adminReducer'], 'token'> => ({
-  token: state.adminReducer.token,
-});
-
-const connector = connect(stateProps);
-
-export function EditNewsModal({
+export default function EditNewsModal({
   newsToEdit,
   show,
   setShow,
-  token,
-}: EditNewsProps & ConnectedProps<typeof connector>): ReactElement {
+}: EditNewsProps): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
   const handleEdit = async (values: NewsDocument): Promise<void> => {
     client
-      .put<NewsDocument>(`/news/${newsToEdit._id}`, values, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
+      .put<NewsDocument>(`/news/${newsToEdit._id}`, values)
       .then(() => {
         enqueueSnackbar('News edited', { variant: 'success' });
         setShow(false);
@@ -63,5 +48,3 @@ export function EditNewsModal({
     </Modal>
   );
 }
-
-export default connector(EditNewsModal);

@@ -16,14 +16,11 @@ import {
 const stateProps = (
   state: AppState,
 ): Pick<
-  AppState['projectReducer'] &
-    AppState['organizationReducer'] &
-    AppState['adminReducer'],
-  'showNew' | 'organizations' | 'token'
+  AppState['projectReducer'] & AppState['organizationReducer'],
+  'showNew' | 'organizations'
 > => ({
   showNew: state.projectReducer.showNew,
   organizations: state.organizationReducer.organizations,
-  token: state.adminReducer.token,
 });
 
 const dispatchProps = { setShow: switchShowNewProject };
@@ -33,7 +30,6 @@ const connector = connect(stateProps, dispatchProps);
 export function CreateProjectModal({
   showNew,
   organizations,
-  token,
   setShow,
 }: ConnectedProps<typeof connector>): ReactElement {
   const emptyProject: Project = {
@@ -64,23 +60,14 @@ export function CreateProjectModal({
       organizations,
       enqueueSnackbar,
       newProject.organization,
-      token,
     );
 
     client
-      .post<ProjectDocument>(
-        '/project',
-        {
-          ...newProject,
-          organization: organizationId,
-          endDate: selectEndDate ? newProject.endDate : undefined,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
+      .post<ProjectDocument>('/project', {
+        ...newProject,
+        organization: organizationId,
+        endDate: selectEndDate ? newProject.endDate : undefined,
+      })
       .then(() => {
         enqueueSnackbar('Project added', { variant: 'success' });
         setShow(false);
