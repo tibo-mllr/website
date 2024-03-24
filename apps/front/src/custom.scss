@@ -2,8 +2,8 @@
 @import '~bootstrap/scss/functions';
 
 // ** 2. Include any default variable overrides here **
-$primary: #fc243c;
-$dark: #444;
+$primary: #712cf9;
+$light: #bebebe;
 
 // ** 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets) **
 @import '~bootstrap/scss/variables';
@@ -11,7 +11,7 @@ $dark: #444;
 
 // ** 4. Include any default map overrides here **
 $custom-colors: (
-  selected: #575757,
+  selected: darken($primary, 20%),
 );
 
 $theme-colors: map-merge($theme-colors, $custom-colors);
