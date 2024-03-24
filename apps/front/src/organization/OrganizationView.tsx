@@ -1,4 +1,5 @@
 import { binIcon, editIcon } from 'assets';
+import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -55,6 +56,8 @@ export function OrganizationView({
       website: '',
     });
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleDelete = (id: string): void => {
     const confirm = window.confirm(
       'Are you sure you want to delete this organization and its linked projects ?',
@@ -62,7 +65,13 @@ export function OrganizationView({
     if (confirm) {
       client
         .delete(`/organization/${id}`)
-        .catch((error) => console.error(error));
+        .then(() =>
+          enqueueSnackbar('Organization deleted', { variant: 'success' }),
+        )
+        .catch((error) => {
+          enqueueSnackbar('Error deleting organization', { variant: 'error' });
+          console.error(error);
+        });
     }
   };
 

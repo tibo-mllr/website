@@ -1,5 +1,6 @@
 import { UserRole } from '@website/shared-types';
 import { binIcon, editIcon } from 'assets';
+import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
@@ -43,12 +44,20 @@ export function AdminView({
     role: UserRole.Admin,
   });
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleDelete = (id: string): void => {
     const confirm = window.confirm(
       'Are you sure you want to delete this user?',
     );
     if (confirm) {
-      client.delete(`/user/${id}`).catch((error) => console.error(error));
+      client
+        .delete(`/user/${id}`)
+        .then(() => enqueueSnackbar('User deleted', { variant: 'success' }))
+        .catch((error) => {
+          enqueueSnackbar('Error deleting user', { variant: 'error' });
+          console.error(error);
+        });
     }
   };
 

@@ -1,4 +1,5 @@
 import { binIcon, editIcon } from 'assets';
+import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { connect, type ConnectedProps } from 'react-redux';
@@ -50,12 +51,20 @@ function HomeView({
     author: { username: '' },
   });
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleDelete = (id: string): void => {
     const confirm = window.confirm(
       'Are you sure you want to delete this news ?',
     );
     if (confirm) {
-      client.delete(`/news/${id}`).catch((error) => console.error(error));
+      client
+        .delete(`/news/${id}`)
+        .then(() => enqueueSnackbar('News deleted', { variant: 'success' }))
+        .catch((error) => {
+          enqueueSnackbar('Error deleting news', { variant: 'error' });
+          console.error(error);
+        });
     }
   };
 
