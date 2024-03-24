@@ -42,8 +42,8 @@ function Header({
   const navigate = useNavigate();
 
   return (
-    <header style={{ maxHeight: '7vh' }}>
-      <Navbar bg="dark" variant="dark" sticky="top">
+    <header>
+      <Navbar className="h-100">
         <Container fluid>
           <Navbar.Brand>
             <Link to="/home" className="navbar-brand">
@@ -100,16 +100,10 @@ function Header({
               selected === '/home' && (
                 <Button
                   onClick={() => setShowNewData(true)}
-                  style={{ marginRight: '8px' }}
+                  className="btn-add"
                 >
-                  <img
-                    alt="Plus icon"
-                    src={plusIcon}
-                    height="16"
-                    className="d-inline-block align-center"
-                    style={{ paddingRight: '8px' }}
-                  />
-                  <b className="d-inline-block align-center">Add a news</b>
+                  <img alt="Plus icon" src={plusIcon} height="16" />
+                  <b>Add a news</b>
                 </Button>
               )}
             {!!token &&
@@ -117,16 +111,10 @@ function Header({
               selected === '/projects' && (
                 <Button
                   onClick={() => setShowNewProject(true)}
-                  style={{ marginRight: '8px' }}
+                  className="btn-add"
                 >
-                  <img
-                    alt="Plus icon"
-                    src={plusIcon}
-                    height="16"
-                    className="d-inline-block align-center"
-                    style={{ paddingRight: '8px' }}
-                  />
-                  <b className="d-inline-block align-center">Add project</b>
+                  <img alt="Plus icon" src={plusIcon} height="16" />
+                  <b>Add project</b>
                 </Button>
               )}
             {!!token &&
@@ -134,33 +122,16 @@ function Header({
               selected === '/organizations' && (
                 <Button
                   onClick={() => setShowNewOrganization(true)}
-                  style={{ marginRight: '8px' }}
+                  className="btn-add"
                 >
-                  <img
-                    alt="Plus icon"
-                    src={plusIcon}
-                    height="16"
-                    className="d-inline-block align-center"
-                    style={{ paddingRight: '8px' }}
-                  />
-                  <b className="d-inline-block align-center">
-                    Add organization
-                  </b>
+                  <img alt="Plus icon" src={plusIcon} height="16" />
+                  <b>Add organization</b>
                 </Button>
               )}
             {!!token && userRole === 'superAdmin' && selected === '/admin' && (
-              <Button
-                onClick={() => setShowNewUser(true)}
-                style={{ marginRight: '8px' }}
-              >
-                <img
-                  alt="Plus icon"
-                  src={plusIcon}
-                  height="16"
-                  className="d-inline-block align-center"
-                  style={{ paddingRight: '8px' }}
-                />
-                <b className="d-inline-block align-center">Add user</b>
+              <Button onClick={() => setShowNewUser(true)} className="btn-add">
+                <img alt="Plus icon" src={plusIcon} height="16" />
+                <b>Add user</b>
               </Button>
             )}
             {!token ? (
@@ -169,7 +140,7 @@ function Header({
               </Link>
             ) : (
               <Button
-                variant="outline-light"
+                className="btn-logout"
                 onClick={() => {
                   logout();
                   navigate('/');

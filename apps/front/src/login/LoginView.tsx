@@ -87,15 +87,10 @@ export function LoginView({
                   <Card.Footer>
                     <Row>
                       <Col>
-                        <Button variant="outline-secondary" type="submit">
-                          Connect
-                        </Button>
+                        <Button type="submit">Connect</Button>
                       </Col>
                       <Col className="d-flex justify-content-end">
-                        <Button
-                          variant="outline-secondary"
-                          onClick={() => setShowNew(true)}
-                        >
+                        <Button onClick={() => setShowNew(true)}>
                           Create account
                         </Button>
                       </Col>

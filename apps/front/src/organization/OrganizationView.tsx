@@ -96,13 +96,13 @@ export function OrganizationView({
   return (
     <>
       <Row>
-        <h1 style={{ textAlign: 'center' }}>
+        <h1 className="text-center">
           These are the organizations I worked for
         </h1>
       </Row>
       {organizations.length ? (
         organizations.map((organization) => (
-          <Row style={{ marginBottom: '8px' }} key={organization._id}>
+          <Row className="my-3" key={organization._id}>
             <Col>
               <Card>
                 <Card.Header>
@@ -122,14 +122,11 @@ export function OrganizationView({
                 {!!token && userRole === 'superAdmin' && (
                   <Card.Footer>
                     <Row>
-                      <Col className="d-flex justify-content-end">
+                      <Col className="d-flex justify-content-end gap-2">
                         <Button
                           onClick={() => {
                             setShowEdit(true);
                             setOrganizationToEdit(organization);
-                          }}
-                          style={{
-                            marginRight: '8px',
                           }}
                         >
                           <img

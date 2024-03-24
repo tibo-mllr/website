@@ -160,24 +160,23 @@ export function ProjectView({
   return (
     <>
       <Row>
-        <h1 style={{ textAlign: 'center' }}>
-          These are the projects I worked on
-        </h1>
+        <h1 className="text-center">These are the projects I worked on</h1>
       </Row>
       {projects.length ? (
         projects.map((project) => (
-          <Row key={project._id} style={{ marginBottom: '8px' }}>
+          <Row className="my-3" key={project._id}>
             <Col>
               <Card>
                 <Card.Header>
                   <Card.Title>
-                    <span style={{ fontSize: '1.5em' }}>
+                    <span className="fs-2">
                       {project.role}
                       {' | '}
                     </span>
                     {project.organization && (
                       <span
-                        style={{ fontSize: '1em' }}
+                        className="fs-4 "
+                        role="button"
                         onClick={() => {
                           setShowOrganization(true);
                           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -188,12 +187,12 @@ export function ProjectView({
                         {' | '}
                       </span>
                     )}
-                    <span style={{ fontSize: '0.75em' }}>
+                    <i className="fs-6">
                       {new Date(project.startDate).toLocaleDateString()} -{' '}
                       {project.endDate
                         ? new Date(project.endDate).toLocaleDateString()
                         : 'Present'}
-                    </span>
+                    </i>
                   </Card.Title>
                 </Card.Header>
                 <Card.Body>
@@ -214,14 +213,11 @@ export function ProjectView({
                     </Col>
                   )}
                   {!!token && userRole === 'superAdmin' && (
-                    <Col className="d-flex justify-content-end">
+                    <Col className="d-flex justify-content-end gap-2">
                       <Button
                         onClick={() => {
                           setShowEdit(true);
                           setProjectToEdit(project);
-                        }}
-                        style={{
-                          marginRight: '8px',
                         }}
                       >
                         <img

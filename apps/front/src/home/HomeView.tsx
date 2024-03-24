@@ -87,7 +87,7 @@ function HomeView({
     <>
       {allNews.length ? (
         allNews.map((news) => (
-          <Row style={{ paddingBottom: '8px' }} key={news._id}>
+          <Row className="my-3" key={news._id}>
             <Col>
               <Card>
                 <Card.Header>
@@ -112,14 +112,11 @@ function HomeView({
                       )}
                     </Col>
                     {!!token && userRole === 'superAdmin' && (
-                      <Col className="d-flex justify-content-end">
+                      <Col className="d-flex justify-content-end gap-2">
                         <Button
                           onClick={() => {
                             setShowEdit(true);
                             setNewsToEdit(news);
-                          }}
-                          style={{
-                            marginRight: '8px',
                           }}
                         >
                           <img

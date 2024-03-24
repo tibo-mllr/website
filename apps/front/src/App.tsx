@@ -33,13 +33,7 @@ function App({ token }: ConnectedProps<typeof connector>): ReactElement {
   return (
     <Router>
       <Header />
-      <main
-        style={{
-          paddingTop: '8px',
-          maxHeight: '93vh',
-          overflowY: 'auto',
-        }}
-      >
+      <main>
         <Container>
           <Routes>
             <Route path="/home" element={<HomeView />} />
