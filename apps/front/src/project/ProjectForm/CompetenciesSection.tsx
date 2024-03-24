@@ -54,13 +54,7 @@ function CompetenciesSection<
           ) : (
             <Row>
               <Col
-                style={{
-                  textAlign: 'center',
-                  color:
-                    touched.competencies && !!errors.competencies
-                      ? 'red'
-                      : undefined,
-                }}
+                className={`text-center ${touched.competencies && !!errors.competencies ? 'text-invalid' : ''}`}
               >
                 No competencies linked to this project
               </Col>
@@ -73,14 +67,9 @@ function CompetenciesSection<
           onClick={() =>
             setFieldValue('competencies', [...values.competencies, ''])
           }
+          className="btn-add"
         >
-          <img
-            alt="Plus icon"
-            src={plusIcon}
-            height="16"
-            className="d-inline-block align-center"
-            style={{ paddingRight: '8px' }}
-          />
+          <img alt="Plus icon" src={plusIcon} height="16" />
           Add competency
         </Button>
       </Card.Footer>

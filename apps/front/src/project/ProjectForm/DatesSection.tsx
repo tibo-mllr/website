@@ -41,13 +41,7 @@ export default function DatesSection<
                       setFieldValue('endDate', new Date());
                     }}
                   >
-                    <img
-                      alt="Bin icon"
-                      src={binIcon}
-                      height="16"
-                      className="d-inline-block align-center"
-                      style={{ paddingRight: '8px' }}
-                    />
+                    <img alt="Bin icon" src={binIcon} height="16" />
                   </Button>
                 </InputGroup>
               ) : (
@@ -57,15 +51,9 @@ export default function DatesSection<
                       setSelectEndDate(!selectEndDate);
                       setFieldValue('endDate', new Date());
                     }}
-                    style={{ marginLeft: '8px' }}
+                    className="btn-add"
                   >
-                    <img
-                      alt="Plus icon"
-                      src={plusIcon}
-                      height="16"
-                      className="d-inline-block align-center"
-                      style={{ paddingRight: '8px' }}
-                    />
+                    <img alt="Plus icon" src={plusIcon} height="16" />
                     Add end date
                   </Button>
                 </Col>

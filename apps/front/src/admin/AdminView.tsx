@@ -76,7 +76,7 @@ export function AdminView({
   return (
     <>
       {users.map((user) => (
-        <Row style={{ marginBottom: '8px' }} key={user._id}>
+        <Row className="my-3" key={user._id}>
           <Col>
             <Card>
               <Card.Header>

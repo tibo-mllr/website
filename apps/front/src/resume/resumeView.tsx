@@ -54,13 +54,13 @@ export function ResumeView({
 
   return (
     <Row>
-      <Col xs={3}>
+      <Col xs={3} className="my-3">
         <Card>
           <Card.Header>
             <Card.Title>MULLER Thibault</Card.Title>
           </Card.Header>
           <Card.Body>
-            <b style={{ fontSize: '1.2em' }}>About me</b>
+            <b className="fs-4">About me</b>
             <br />
             <span>
               Interested in DIY & sciences since young, my passions took me to
@@ -70,7 +70,7 @@ export function ResumeView({
             </span>
             <br />
             <br />
-            <b style={{ fontSize: '1.2em' }}>Skills</b>
+            <b className="fs-4">Skills</b>
             <br />
             <span>
               {resume.competencies.length ? (
@@ -81,7 +81,7 @@ export function ResumeView({
             </span>
             <br />
             <br />
-            <b style={{ fontSize: '1.2em' }}>Languages</b>
+            <b className="fs-4">Languages</b>
             <br />
             <span>
               French: Native
@@ -90,16 +90,16 @@ export function ResumeView({
             </span>
             <br />
             <br />
-            <b style={{ fontSize: '1.2em' }}>Interests</b>
+            <b className="fs-4">Interests</b>
             <br />
             <span>Photography • Sports • DIY</span>
           </Card.Body>
         </Card>
       </Col>
-      <Col style={{ maxHeight: '92vh', overflowY: 'auto' }}>
+      <Col className="overflow-auto" style={{ maxHeight: '92vh' }}>
         {resume.projects.length ? (
           resume.projects.map((type) => (
-            <Row style={{ marginBottom: '8px' }} key={type._id}>
+            <Row className="my-3" key={type._id}>
               <Col>
                 <Card>
                   <Card.Header>
@@ -111,28 +111,16 @@ export function ResumeView({
                         <Row>
                           <Col>
                             <b>
-                              <span
-                                style={{
-                                  fontSize: '1.3em',
-                                }}
-                              >
+                              <span className="fs-4">
                                 {project.role}
                                 {' | '}
                               </span>
                             </b>
-                            <span
-                              style={{
-                                fontSize: '1em',
-                              }}
-                            >
+                            <span className="fs-5">
                               <u>{project.organization?.name}</u>
                               {' | '}
                             </span>
-                            <span
-                              style={{
-                                fontSize: '0.75em',
-                              }}
-                            >
+                            <span className="fs-7">
                               {new Date(project.startDate).toLocaleDateString()}{' '}
                               -{' '}
                               {project.endDate

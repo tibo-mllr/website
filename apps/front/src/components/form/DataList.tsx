@@ -1,3 +1,4 @@
+import { binIcon } from 'assets';
 import { type ReactElement } from 'react';
 import {
   Button,
@@ -30,7 +31,9 @@ export function DataList({
         <FloatingLabel label={label}>
           <TextField name={name} {...props} list={listId} tooltipError />
         </FloatingLabel>
-        <Button onClick={onDeleteOption}>Delete</Button>
+        <Button onClick={onDeleteOption}>
+          <img alt="Bin icon" src={binIcon} height="16" />
+        </Button>
       </InputGroup>
     </Form.Group>
   );
