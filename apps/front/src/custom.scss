@@ -111,10 +111,21 @@ code {
   }
 }
 
-.confirm-modal .modal-dialog {
+.center-modal .modal-dialog {
   display: flex;
   align-items: center;
   min-height: calc(100% - var(--bs-modal-margin) * 2);
+}
+
+.modal {
+  @media (max-width: 768px) {
+    // If we are on a mobile device, center the modal
+    .modal-dialog {
+      display: flex;
+      align-items: center;
+      min-height: calc(100% - var(--bs-modal-margin) * 2);
+    }
+  }
 }
 
 .no-border {

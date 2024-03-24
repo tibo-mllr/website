@@ -17,7 +17,7 @@ export function ConfirmModal({
   onConfirm,
 }: ConfirmModalProps): ReactElement {
   return (
-    <Modal show={show} onHide={onClose} className="confirm-modal">
+    <Modal show={show} onHide={onClose} className="center-modal">
       <Modal.Header closeButton className="no-border">
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>

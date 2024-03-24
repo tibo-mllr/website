@@ -1,5 +1,5 @@
 import { AdminView } from 'admin';
-import { Header } from 'components';
+import { Header, MobileHeader } from 'components';
 import { HomeView } from 'home';
 import { LoginView } from 'login';
 import { OrganizationView } from 'organization';
@@ -29,10 +29,11 @@ function App({ token }: ConnectedProps<typeof connector>): ReactElement {
   useEffect(() => {
     if (token) client.defaults.headers.common.Authorization = `Bearer ${token}`;
   }, [token]);
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
   return (
     <Router>
-      <Header />
+      {isMobile ? <MobileHeader /> : <Header />}
       <main>
         <Container>
           <Routes>

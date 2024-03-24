@@ -54,7 +54,7 @@ export function ResumeView({
 
   return (
     <Row>
-      <Col xs={3} className="my-3">
+      <Col md={3} xs={12} className="my-3">
         <Card>
           <Card.Header>
             <Card.Title>MULLER Thibault</Card.Title>
