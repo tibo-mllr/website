@@ -116,10 +116,12 @@ export function ResumeView({
                                 {' | '}
                               </span>
                             </b>
-                            <span className="fs-5">
-                              <u>{project.organization?.name}</u>
-                              {' | '}
-                            </span>
+                            {project.organization && (
+                              <span className="fs-5">
+                                <u>{project.organization?.name}</u>
+                                {' | '}
+                              </span>
+                            )}
                             <span className="fs-7">
                               {new Date(project.startDate).toLocaleDateString()}{' '}
                               -{' '}
