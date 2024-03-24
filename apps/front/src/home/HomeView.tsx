@@ -1,4 +1,5 @@
 import { binIcon, editIcon } from 'assets';
+import { ConfirmModal } from 'components';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
@@ -42,6 +43,7 @@ function HomeView({
   editNews,
   fetchNews,
 }: ConnectedProps<typeof connector>): ReactElement {
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({
     _id: '',
@@ -54,18 +56,13 @@ function HomeView({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    const confirm = window.confirm(
-      'Are you sure you want to delete this news ?',
-    );
-    if (confirm) {
-      client
-        .delete(`/news/${id}`)
-        .then(() => enqueueSnackbar('News deleted', { variant: 'success' }))
-        .catch((error) => {
-          enqueueSnackbar('Error deleting news', { variant: 'error' });
-          console.error(error);
-        });
-    }
+    client
+      .delete(`/news/${id}`)
+      .then(() => enqueueSnackbar('News deleted', { variant: 'success' }))
+      .catch((error) => {
+        enqueueSnackbar('Error deleting news', { variant: 'error' });
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -94,6 +91,13 @@ function HomeView({
 
   return (
     <>
+      <ConfirmModal
+        title="Delete news"
+        message="Are you sure you want to delete this news?"
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={() => handleDelete(newsToEdit._id)}
+      />
       {allNews.length ? (
         allNews.map((news) => (
           <Row className="my-3" key={news._id}>
@@ -135,7 +139,12 @@ function HomeView({
                             className="d-inline-block align-center"
                           />
                         </Button>
-                        <Button onClick={() => handleDelete(news._id)}>
+                        <Button
+                          onClick={() => {
+                            setShowConfirm(true);
+                            setNewsToEdit(news);
+                          }}
+                        >
                           <img
                             alt="Delete"
                             src={binIcon}

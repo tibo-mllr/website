@@ -1,4 +1,5 @@
 import { binIcon, editIcon } from 'assets';
+import { ConfirmModal } from 'components';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
@@ -46,6 +47,7 @@ export function OrganizationView({
   editOrganization,
   fetchOrganizations,
 }: ConnectedProps<typeof connector>): ReactElement {
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [organizationToEdit, setOrganizationToEdit] =
     useState<OrganizationDocument>({
@@ -59,20 +61,15 @@ export function OrganizationView({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    const confirm = window.confirm(
-      'Are you sure you want to delete this organization and its linked projects ?',
-    );
-    if (confirm) {
-      client
-        .delete(`/organization/${id}`)
-        .then(() =>
-          enqueueSnackbar('Organization deleted', { variant: 'success' }),
-        )
-        .catch((error) => {
-          enqueueSnackbar('Error deleting organization', { variant: 'error' });
-          console.error(error);
-        });
-    }
+    client
+      .delete(`/organization/${id}`)
+      .then(() =>
+        enqueueSnackbar('Organization deleted', { variant: 'success' }),
+      )
+      .catch((error) => {
+        enqueueSnackbar('Error deleting organization', { variant: 'error' });
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -104,6 +101,13 @@ export function OrganizationView({
 
   return (
     <>
+      <ConfirmModal
+        title="Delete organization"
+        message="Are you sure you want to delete this organization?"
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={() => handleDelete(organizationToEdit._id)}
+      />
       <Row>
         <h1 className="text-center">
           These are the organizations I worked for
@@ -145,7 +149,12 @@ export function OrganizationView({
                             className="d-inline-block align-center"
                           />
                         </Button>
-                        <Button onClick={() => handleDelete(organization._id)}>
+                        <Button
+                          onClick={() => {
+                            setShowConfirm(true);
+                            setOrganizationToEdit(organization);
+                          }}
+                        >
                           <img
                             alt="Delete"
                             src={binIcon}

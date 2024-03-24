@@ -1,5 +1,6 @@
 import { ProjectType } from '@website/shared-types';
 import { binIcon, editIcon } from 'assets';
+import { ConfirmModal } from 'components';
 import { useSnackbar } from 'notistack';
 import { type OrganizationDocument } from 'organization';
 import { type ReactElement, useEffect, useState } from 'react';
@@ -65,6 +66,7 @@ export function ProjectView({
   fetchCompetencies,
   fetchOrganizations,
 }: ConnectedProps<typeof connector>): ReactElement {
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showOrganization, setShowOrganization] = useState<boolean>(false);
   const [organization, setOrganization] = useState<OrganizationDocument>({
     _id: '',
@@ -94,18 +96,13 @@ export function ProjectView({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    const confirm = window.confirm(
-      'Are you sure you want to delete this project ?',
-    );
-    if (confirm) {
-      client
-        .delete(`/project/${id}`)
-        .then(() => enqueueSnackbar('Project deleted', { variant: 'success' }))
-        .catch((error) => {
-          enqueueSnackbar('Error deleting project', { variant: 'error' });
-          console.error(error);
-        });
-    }
+    client
+      .delete(`/project/${id}`)
+      .then(() => enqueueSnackbar('Project deleted', { variant: 'success' }))
+      .catch((error) => {
+        enqueueSnackbar('Error deleting project', { variant: 'error' });
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -168,6 +165,13 @@ export function ProjectView({
 
   return (
     <>
+      <ConfirmModal
+        title="Delete project"
+        message="Are you sure you want to delete this project?"
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={() => handleDelete(projectToEdit._id)}
+      />
       <Row>
         <h1 className="text-center">These are the projects I worked on</h1>
       </Row>
@@ -236,7 +240,12 @@ export function ProjectView({
                           className="d-inline-block align-center"
                         />
                       </Button>
-                      <Button onClick={() => handleDelete(project._id)}>
+                      <Button
+                        onClick={() => {
+                          setShowConfirm(true);
+                          setProjectToEdit(project);
+                        }}
+                      >
                         <img
                           alt="Delete"
                           src={binIcon}

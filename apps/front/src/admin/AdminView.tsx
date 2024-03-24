@@ -1,5 +1,6 @@
 import { UserRole } from '@website/shared-types';
 import { binIcon, editIcon } from 'assets';
+import { ConfirmModal } from 'components';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
@@ -36,6 +37,7 @@ export function AdminView({
   editUser,
   fetchUsers,
 }: ConnectedProps<typeof connector>): ReactElement {
+  const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [userToEdit, setUserToEdit] = useState<FrontUserDocument>({
     _id: '',
@@ -47,18 +49,13 @@ export function AdminView({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    const confirm = window.confirm(
-      'Are you sure you want to delete this user?',
-    );
-    if (confirm) {
-      client
-        .delete(`/user/${id}`)
-        .then(() => enqueueSnackbar('User deleted', { variant: 'success' }))
-        .catch((error) => {
-          enqueueSnackbar('Error deleting user', { variant: 'error' });
-          console.error(error);
-        });
-    }
+    client
+      .delete(`/user/${id}`)
+      .then(() => enqueueSnackbar('User deleted', { variant: 'success' }))
+      .catch((error) => {
+        enqueueSnackbar('Error deleting user', { variant: 'error' });
+        console.error(error);
+      });
   };
 
   useEffect(() => {
@@ -84,6 +81,13 @@ export function AdminView({
 
   return (
     <>
+      <ConfirmModal
+        title="Delete user"
+        message="Are you sure you want to delete this user?"
+        show={showConfirm}
+        onClose={() => setShowConfirm(false)}
+        onConfirm={() => handleDelete(userToEdit._id)}
+      />
       {users.map((user) => (
         <Row className="my-3" key={user._id}>
           <Col>
@@ -114,7 +118,8 @@ export function AdminView({
                   <Col className="d-flex justify-content-end">
                     <Button
                       onClick={() => {
-                        handleDelete(user._id);
+                        setShowConfirm(true);
+                        setUserToEdit(user);
                       }}
                     >
                       <img
