@@ -1,7 +1,42 @@
 # Personal website project
 
-This is my personal website project. Might always be useful to have one. <br />
-Familiarising more with ReactjS, NestJS, and learning to use MongoDB and Docker.
+This is a small website project. <br />
+I work alone on this project, and I use it to learn new technologies and to experiment with new ideas. <br >
+
+## Technologies
+
+For the front:
+
+- [React](https://reactjs.org/)
+- [Formik](https://formik.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- websockets
+- notistack notifications
+- redux
+
+For the back:
+
+- [Nest.js](https://nestjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- JWT authentication and roles
+
+For the deployment:
+
+- [Docker](https://www.docker.com/)
+
+The project uses:
+
+- [TypeScript](https://www.typescriptlang.org/)
+- [Yarn](https://yarnpkg.com/)
+- [Turbo](https://turbo.build/)
+
+## Features
+
+- [A blog](apps/front/src/home#readme)
+- [An organization view](apps/front/src/organization#readme)
+- [A project view](apps/front/src/project#readme)
+- [A resume view](apps/front/src/resume#readme)
+- [An admin view](apps/front/src/admin#readme)
 
 ## Run with Docker
 
