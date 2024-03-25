@@ -51,7 +51,7 @@ function Header({
                 alt="Anarchist logo"
                 src={logo}
                 height="30"
-                className="d-inline-block align-top"
+                className="d-inline-block align-top me-2"
               />{' '}
               <b>Mini website project</b>
             </Link>

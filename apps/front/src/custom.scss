@@ -2,7 +2,7 @@
 @import '~bootstrap/scss/functions';
 
 // ** 2. Include any default variable overrides here **
-$primary: #712cf9;
+$primary: #854afc;
 $light: #bebebe;
 
 // ** 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets) **
@@ -76,7 +76,7 @@ body {
 }
 
 header {
-  background: linear-gradient(to right, $primary, lighten($dark, 2%) 30%);
+  background: linear-gradient(to right, $primary 5%, lighten($dark, 2%) 30%);
   @extend .sticky-top;
   z-index: 1000;
 }
