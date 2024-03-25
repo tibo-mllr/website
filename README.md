@@ -10,9 +10,9 @@ For the front:
 - [React](https://reactjs.org/)
 - [Formik](https://formik.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
-- websockets
-- notistack notifications
-- redux
+- Websockets
+- [Notistack](https://notistack.com/) notifications
+- [Redux](https://redux.js.org/)
 
 For the back:
 
@@ -23,8 +23,10 @@ For the back:
 For the deployment:
 
 - [Docker](https://www.docker.com/)
+- [GitHub Actions](https://docs.github.com/en/actions)
+- [GitHub Container Registry](https://docs.github.com/en/packages/guides/about-github-container-registry)
 
-The project uses:
+The project on its whole uses:
 
 - [TypeScript](https://www.typescriptlang.org/)
 - [Yarn](https://yarnpkg.com/)
@@ -37,6 +39,14 @@ The project uses:
 - [A project view](apps/front/src/project#readme)
 - [A resume view](apps/front/src/resume#readme)
 - [An admin view](apps/front/src/admin#readme)
+
+## In progress...
+
+- A contact form
+- A light/dark mode
+- Factorize more the edit/create modals
+- Handle token expiration in the front (it can already expire in the back, so for the moment the user just gets errors and has to log out and in again)
+- Any idea you may have!
 
 ## Run with Docker
 
