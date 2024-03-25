@@ -218,43 +218,45 @@ export function ProjectView({
                   </Card.Text>
                 </Card.Body>
                 <Card.Footer>
-                  {project.link && (
-                    <Col>
-                      <a href={project.link} target="_blank">
-                        See more
-                      </a>
-                    </Col>
-                  )}
-                  {!!token && userRole === 'superAdmin' && (
-                    <Col className="d-flex justify-content-end gap-2">
-                      <Button
-                        onClick={() => {
-                          setShowEdit(true);
-                          setProjectToEdit(project);
-                        }}
-                      >
-                        <img
-                          alt="Edit"
-                          src={editIcon}
-                          height="24"
-                          className="d-inline-block align-center"
-                        />
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setShowConfirm(true);
-                          setProjectToEdit(project);
-                        }}
-                      >
-                        <img
-                          alt="Delete"
-                          src={binIcon}
-                          height="24"
-                          className="d-inline-block align-center"
-                        />
-                      </Button>
-                    </Col>
-                  )}
+                  <Row>
+                    {project.link && (
+                      <Col>
+                        <a href={project.link} target="_blank">
+                          See more
+                        </a>
+                      </Col>
+                    )}
+                    {!!token && userRole === 'superAdmin' && (
+                      <Col className="d-flex justify-content-end gap-2">
+                        <Button
+                          onClick={() => {
+                            setShowEdit(true);
+                            setProjectToEdit(project);
+                          }}
+                        >
+                          <img
+                            alt="Edit"
+                            src={editIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                        <Button
+                          onClick={() => {
+                            setShowConfirm(true);
+                            setProjectToEdit(project);
+                          }}
+                        >
+                          <img
+                            alt="Delete"
+                            src={binIcon}
+                            height="24"
+                            className="d-inline-block align-center"
+                          />
+                        </Button>
+                      </Col>
+                    )}
+                  </Row>
                 </Card.Footer>
               </Card>
             </Col>
