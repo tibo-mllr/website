@@ -17,6 +17,8 @@
     "build": "turbo run build",
     "front": "turbo run dev --filter front...",
     "front-build": "turbo run build --filter front...",
+    "front2": "turbo run dev --filter frontv2...",
+    "front2-build": "turbo run build --filter frontv2...",
     "install:ci": "yarn install --frozen-lockfile",
     "start": "turbo dev --parallel",
     "types-build": "turbo run build --filter shared-types"
