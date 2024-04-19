@@ -11,8 +11,7 @@ import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { connect, type ConnectedProps } from 'react-redux';
-import CreateNewsModal from './CreateNewsModal';
-import EditNewsModal from './EditNewsModal';
+import { CreateNewsModal, EditNewsModal } from './ui';
 
 const stateProps = (
   state: AppState,

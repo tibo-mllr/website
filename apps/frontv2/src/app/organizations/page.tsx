@@ -20,8 +20,7 @@ import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
-import CreateOrganizationModal from './CreateOrganizationModal';
-import EditOrganizationModal from './EditOrganizationModal';
+import { CreateOrganizationModal, EditOrganizationModal } from './ui';
 
 const stateProps = (
   state: AppState,

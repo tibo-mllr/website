@@ -11,7 +11,7 @@ import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
-import ProjectForm from './ProjectForm';
+import { ProjectForm } from './ProjectForm';
 
 type EditProjectProps = {
   projectToEdit: ProjectDocument;

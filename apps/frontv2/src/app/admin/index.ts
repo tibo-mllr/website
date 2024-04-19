@@ -1,1 +1,1 @@
-export { default as CreateUserModal } from './CreateUserModal';
+export { CreateUserModal } from './ui';

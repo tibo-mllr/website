@@ -30,8 +30,7 @@ import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';
-import CreateProjectModal from './CreateProjectModal';
-import EditProjectModal from './EditProjectModal';
+import { CreateProjectModal, EditProjectModal } from './ui';
 
 const stateProps = (
   state: AppState,
