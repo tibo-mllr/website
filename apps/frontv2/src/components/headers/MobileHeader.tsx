@@ -69,6 +69,7 @@ function MobileHeader({
                       src={logo}
                       height="30"
                       className="d-inline-block align-top"
+                      priority
                     />{' '}
                     <b>Mini website</b>
                   </Link>

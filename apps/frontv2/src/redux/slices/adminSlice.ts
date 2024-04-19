@@ -13,9 +13,8 @@ type AdminState = {
 };
 
 const initialState: AdminState = {
-  userRole:
-    (sessionStorage.getItem('userRole') as UserRole | null) ?? undefined,
-  token: sessionStorage.getItem('token') ?? undefined,
+  userRole: undefined,
+  token: undefined,
   isLoading: false,
   users: [],
   showNew: false,
@@ -25,6 +24,12 @@ const adminSlice = createSlice({
   name: 'admin',
   initialState,
   reducers: {
+    initAdmin(state) {
+      state.userRole =
+        (sessionStorage.getItem('userRole') as UserRole | null) ?? undefined;
+      state.token = sessionStorage.getItem('token') ?? undefined;
+      if (state.token && state.userRole) setAuth(state.token, state.userRole);
+    },
     login(state, action: PayloadAction<{ userRole: UserRole; token: string }>) {
       state.userRole = action.payload.userRole;
       state.token = action.payload.token;
@@ -61,6 +66,7 @@ const adminSlice = createSlice({
 });
 
 export const {
+  initAdmin,
   login,
   logout,
   requestUsers,

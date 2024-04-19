@@ -23,15 +23,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>): ReactElement {
   return (
-    <Providers>
-      <html lang="en" data-bs-theme="dark">
+    <html lang="en" data-bs-theme="dark">
+      <Providers>
         <body className={inter.className}>
           <Header />
           <main>
             <Container>{children}</Container>
           </main>
         </body>
-      </html>
-    </Providers>
+      </Providers>
+    </html>
   );
 }
