@@ -3,7 +3,7 @@
 import { CustomSnackbar } from '@/components';
 import { initAdmin } from '@/redux/slices';
 import { SnackbarProvider } from 'notistack';
-import { ReactElement, ReactNode, useEffect, useRef } from 'react';
+import { type ReactElement, type ReactNode, useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
 import { AppStore, makeStore } from '../redux/types';
 

@@ -56,6 +56,7 @@ function Header({
                 src={logo}
                 height="30"
                 className="d-inline-block align-top me-2"
+                priority
               />{' '}
               <b>Mini website project</b>
             </Link>

@@ -3,7 +3,7 @@ import { type Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/globals.css';
 import '@/custom.scss';
-import { type ReactElement } from 'react';
+import { type ReactNode, type ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
 import Providers from './Providers';
 
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>): ReactElement {
   return (
     <html lang="en" data-bs-theme="dark">
