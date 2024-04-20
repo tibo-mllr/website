@@ -1,37 +1,28 @@
 'use client';
 
-import { switchShowNewOrganization } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import {
+  selectShowNewOrganization,
+  switchShowNewOrganization,
+} from '@/lib/redux/slices';
 import { client, type OrganizationDocument } from '@/lib/utils';
 import { type Organization } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import OrganizationForm from './OrganizationForm';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['organizationReducer'], 'showNew'> => ({
-  showNew: state.organizationReducer.showNew,
-});
-
-const dispatchProps = {
-  setShow: switchShowNewOrganization,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-export function CreateOrganizationModal({
-  showNew,
-  setShow,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function CreateOrganizationModal(): ReactElement {
   const emptyOrganization: Organization = {
     name: '',
     description: '',
     location: '',
     website: '',
   };
+
+  const dispatch = useAppDispatch();
+  const showNew = useSelector(selectShowNewOrganization);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -40,7 +31,7 @@ export function CreateOrganizationModal({
       .post<OrganizationDocument>('/organization', newOrganization)
       .then(() => {
         enqueueSnackbar('Organization added', { variant: 'success' });
-        setShow(false);
+        dispatch(switchShowNewOrganization(false));
       })
       .catch((error) => {
         enqueueSnackbar(error, { variant: 'error' });
@@ -49,7 +40,10 @@ export function CreateOrganizationModal({
   };
 
   return (
-    <Modal show={showNew} onHide={() => setShow(false)}>
+    <Modal
+      show={showNew}
+      onHide={() => dispatch(switchShowNewOrganization(false))}
+    >
       <Modal.Header closeButton>
         <Modal.Title>New Organization</Modal.Title>
       </Modal.Header>
@@ -61,5 +55,3 @@ export function CreateOrganizationModal({
     </Modal>
   );
 }
-
-export default connector(CreateOrganizationModal);

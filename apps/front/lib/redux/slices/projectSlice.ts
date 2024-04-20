@@ -22,7 +22,7 @@ const initialState: ProjectState = {
   competencies: [],
 };
 
-const projectSlice = createSlice({
+export const projectSlice = createSlice({
   name: 'projects',
   initialState,
   reducers: {
@@ -65,6 +65,14 @@ const projectSlice = createSlice({
       );
     },
   },
+  selectors: {
+    selectCompetencies: (state) => state.competencies,
+    selectShowNewProject: (state) => state.showNew,
+    selectProjectsLoading: (state) => state.isLoading,
+    selectProjects: (state) => state.projects,
+    selectResumeLoading: (state) => state.resumeLoading,
+    selectResume: (state) => state.resume,
+  },
 });
 
 export const {
@@ -80,4 +88,11 @@ export const {
   addCompetencies,
 } = projectSlice.actions;
 
-export default projectSlice.reducer;
+export const {
+  selectCompetencies,
+  selectShowNewProject,
+  selectProjectsLoading,
+  selectProjects,
+  selectResumeLoading,
+  selectResume,
+} = projectSlice.selectors;

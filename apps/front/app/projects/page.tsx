@@ -7,6 +7,7 @@ import {
   fetchOrganizations,
   fetchProjects,
 } from '@/lib/redux/actions';
+import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   addCompetencies,
   addOrganization,
@@ -15,8 +16,11 @@ import {
   deleteProject,
   editOrganization,
   editProject,
+  selectProjects,
+  selectProjectsLoading,
+  selectToken,
+  selectUserRole,
 } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
 import {
   type OrganizationDocument,
   DOCUMENT_TITLE,
@@ -29,49 +33,10 @@ import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { CreateProjectModal, EditProjectModal } from './ui';
 
-const stateProps = (
-  state: AppState,
-): Pick<
-  AppState['projectReducer'] & AppState['adminReducer'],
-  'projects' | 'isLoading' | 'token' | 'userRole'
-> => ({
-  projects: state.projectReducer.projects,
-  isLoading: state.projectReducer.isLoading,
-  token: state.adminReducer.token,
-  userRole: state.adminReducer.userRole,
-});
-
-const dispatchProps = {
-  addProject,
-  deleteProject,
-  editProject,
-  addCompetencies,
-  addOrganization,
-  deleteOrganization,
-  editOrganization,
-  fetchProjects,
-  fetchCompetencies,
-  fetchOrganizations,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-export function ProjectView({
-  projects,
-  isLoading,
-  token,
-  userRole,
-  addProject,
-  addCompetencies,
-  deleteProject,
-  editProject,
-  fetchProjects,
-  fetchCompetencies,
-  fetchOrganizations,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function ProjectView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showOrganization, setShowOrganization] = useState<boolean>(false);
   const [organization, setOrganization] = useState<OrganizationDocument>({
@@ -99,6 +64,12 @@ export function ProjectView({
   });
   const [showEdit, setShowEdit] = useState<boolean>(false);
 
+  const dispatch = useAppDispatch();
+  const token = useSelector(selectToken);
+  const userRole = useSelector(selectUserRole);
+  const projects = useSelector(selectProjects);
+  const isLoading = useSelector(selectProjectsLoading);
+
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
@@ -116,39 +87,41 @@ export function ProjectView({
   }, []);
 
   useEffect(() => {
-    fetchProjects();
-    fetchCompetencies();
-    fetchOrganizations();
-  }, [fetchProjects, fetchCompetencies, fetchOrganizations]);
+    dispatch(fetchProjects());
+    dispatch(fetchCompetencies());
+    dispatch(fetchOrganizations());
+  }, [dispatch]);
 
   useEffect(() => {
     socket.on('projectAdded', (newProject: ProjectDocument) => {
-      addProject(newProject);
-      addCompetencies(newProject.competencies);
+      dispatch(addProject(newProject));
+      dispatch(addCompetencies(newProject.competencies));
     });
     socket.on('projectEdited', (editedProject: ProjectDocument) => {
-      editProject(editedProject);
-      fetchCompetencies();
+      dispatch(editProject(editedProject));
+      dispatch(fetchCompetencies());
     });
     socket.on('projectDeleted', (id: string) => {
-      deleteProject(id);
-      fetchCompetencies();
+      dispatch(deleteProject(id));
+      dispatch(fetchCompetencies());
     });
     // Several projects deleted by cascade with an organization
     socket.on('projectsDeleted', () => {
-      fetchProjects();
-      fetchCompetencies();
+      dispatch(fetchProjects());
+      dispatch(fetchCompetencies());
     });
     // Calls that can be made for the creation/edition of a project
     socket.on('organizationAdded', (newOrganization: OrganizationDocument) =>
-      addOrganization(newOrganization),
+      dispatch(addOrganization(newOrganization)),
     );
     socket.on(
       'organizationEdited',
       (editedOrganization: OrganizationDocument) =>
-        editOrganization(editedOrganization),
+        dispatch(editOrganization(editedOrganization)),
     );
-    socket.on('organizationDeleted', (id: string) => deleteOrganization(id));
+    socket.on('organizationDeleted', (id: string) =>
+      dispatch(deleteOrganization(id)),
+    );
     return () => {
       socket.off('projectAdded');
       socket.off('projectEdited');
@@ -158,14 +131,7 @@ export function ProjectView({
       socket.off('organizationEdited');
       socket.off('organizationDeleted');
     };
-  }, [
-    addCompetencies,
-    addProject,
-    deleteProject,
-    editProject,
-    fetchCompetencies,
-    fetchProjects,
-  ]);
+  }, [dispatch]);
 
   if (isLoading) return <i>Loading...</i>;
 
@@ -299,5 +265,3 @@ export function ProjectView({
     </>
   );
 }
-
-export default connector(ProjectView);

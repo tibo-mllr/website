@@ -1,7 +1,7 @@
 'use client';
 
 import { TextFieldWithLabel, TypeaheadField } from '@/components';
-import { AppState } from '@/lib/redux/types';
+import { selectOrganizations } from '@/lib/redux/slices';
 import {
   type OrganizationDocument,
   type Project,
@@ -11,22 +11,16 @@ import { type Organization } from '@website/shared-types';
 import { useFormikContext } from 'formik';
 import { type ReactElement } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['organizationReducer'], 'organizations'> => ({
-  organizations: state.organizationReducer.organizations,
-});
-
-const connector = connect(stateProps);
-
-function OrganizationSection<
+export default function OrganizationSection<
   T extends
     | (ProjectDocument & { organization: OrganizationDocument })
     | Project,
->({ organizations }: ConnectedProps<typeof connector>): ReactElement {
+>(): ReactElement {
   const { setFieldValue } = useFormikContext<T>();
+
+  const organizations = useSelector(selectOrganizations);
 
   return (
     <Card className="mb-3 p-2">
@@ -85,5 +79,3 @@ function OrganizationSection<
     </Card>
   );
 }
-
-export default connector(OrganizationSection);

@@ -20,7 +20,7 @@ const initialState: AdminState = {
   showNew: false,
 };
 
-const adminSlice = createSlice({
+export const adminSlice = createSlice({
   name: 'admin',
   initialState,
   reducers: {
@@ -63,6 +63,12 @@ const adminSlice = createSlice({
       state.showNew = action.payload;
     },
   },
+  selectors: {
+    selectUserRole: (state) => state.userRole,
+    selectToken: (state) => state.token,
+    selectShowNewUser: (state) => state.showNew,
+    selectUsers: (state) => state.users,
+  },
 });
 
 export const {
@@ -77,4 +83,5 @@ export const {
   switchShowNewUser,
 } = adminSlice.actions;
 
-export default adminSlice.reducer;
+export const { selectUserRole, selectToken, selectShowNewUser, selectUsers } =
+  adminSlice.selectors;

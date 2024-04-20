@@ -1,37 +1,25 @@
 'use client';
 
-import { switchShowNewNews } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { selectShowNewNews, switchShowNewNews } from '@/lib/redux/slices';
 import { client } from '@/lib/utils';
 import { newsSchema, type News } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import NewsForm from './NewsForm';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['newsReducer'], 'showNew'> => ({
-  showNew: state.newsReducer.showNew,
-});
-
-const dispatchProps = {
-  setShow: switchShowNewNews,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-export function CreateNewsModal({
-  showNew,
-  setShow,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function CreateNewsModal(): ReactElement {
   const emptyNews: Omit<News, 'author'> = {
     title: '',
     content: '',
     date: new Date(),
   };
+
+  const dispatch = useAppDispatch();
+  const showNew = useSelector(selectShowNewNews);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -40,7 +28,7 @@ export function CreateNewsModal({
       .post('/news', values)
       .then(() => {
         enqueueSnackbar('News added', { variant: 'success' });
-        setShow(false);
+        dispatch(switchShowNewNews(false));
       })
       .catch((error) => {
         enqueueSnackbar(error, { variant: 'error' });
@@ -49,7 +37,7 @@ export function CreateNewsModal({
   };
 
   return (
-    <Modal show={showNew} onHide={() => setShow(false)}>
+    <Modal show={showNew} onHide={() => dispatch(switchShowNewNews(false))}>
       <Modal.Header closeButton>
         <Modal.Title>Create a news</Modal.Title>
       </Modal.Header>
@@ -64,5 +52,3 @@ export function CreateNewsModal({
     </Modal>
   );
 }
-
-export default connector(CreateNewsModal);

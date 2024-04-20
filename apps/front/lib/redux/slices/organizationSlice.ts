@@ -13,7 +13,7 @@ const initialState: OrganizationState = {
   showNew: false,
 };
 
-const organizationSlice = createSlice({
+export const organizationSlice = createSlice({
   name: 'organizations',
   initialState,
   reducers: {
@@ -41,6 +41,11 @@ const organizationSlice = createSlice({
       state.showNew = action.payload;
     },
   },
+  selectors: {
+    selectShowNewOrganization: (state) => state.showNew,
+    selectOrganizationsLoading: (state) => state.isLoading,
+    selectOrganizations: (state) => state.organizations,
+  },
 });
 
 export const {
@@ -52,4 +57,8 @@ export const {
   switchShowNewOrganization,
 } = organizationSlice.actions;
 
-export default organizationSlice.reducer;
+export const {
+  selectShowNewOrganization,
+  selectOrganizationsLoading,
+  selectOrganizations,
+} = organizationSlice.selectors;

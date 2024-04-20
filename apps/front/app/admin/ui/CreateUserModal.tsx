@@ -1,7 +1,12 @@
 'use client';
 
-import { switchShowNewUser } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import {
+  selectShowNewUser,
+  selectToken,
+  selectUserRole,
+  switchShowNewUser,
+} from '@/lib/redux/slices';
 import { client, type FrontUserDocument } from '@/lib/utils';
 import {
   type FrontUser,
@@ -11,7 +16,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Card, Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import UserForm from './UserForm';
 
@@ -19,25 +24,9 @@ type CreateUserProps = {
   newSelf?: boolean;
 };
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['adminReducer'], 'showNew' | 'token' | 'userRole'> => ({
-  showNew: state.adminReducer.showNew,
-  token: state.adminReducer.token,
-  userRole: state.adminReducer.userRole,
-});
-
-const dispatchProps = { setShow: switchShowNewUser };
-
-const connector = connect(stateProps, dispatchProps);
-
-export function CreateUserModal({
-  showNew,
-  setShow,
-  token,
-  userRole,
+export default function CreateUserModal({
   newSelf = false,
-}: CreateUserProps & ConnectedProps<typeof connector>): ReactElement {
+}: CreateUserProps): ReactElement {
   const emptyUser: FrontUser = {
     username: '',
     password: '',
@@ -46,6 +35,11 @@ export function CreateUserModal({
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const dispatch = useAppDispatch();
+  const userRole = useSelector(selectUserRole);
+  const token = useSelector(selectToken);
+  const showNew = useSelector(selectShowNewUser);
+
   const handleCreate = (newUser: FrontUser): void => {
     client
       .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser)
@@ -53,7 +47,7 @@ export function CreateUserModal({
         enqueueSnackbar(newSelf ? 'Account created' : 'User added', {
           variant: 'success',
         });
-        setShow(false);
+        dispatch(switchShowNewUser(false));
       })
       .catch((error) => {
         if (error.response?.status === 409)
@@ -66,7 +60,7 @@ export function CreateUserModal({
   };
 
   return (
-    <Modal show={showNew} onHide={() => setShow(false)}>
+    <Modal show={showNew} onHide={() => dispatch(switchShowNewUser(false))}>
       <Modal.Header closeButton>
         <Card.Title>New user</Card.Title>
       </Modal.Header>
@@ -83,5 +77,3 @@ export function CreateUserModal({
     </Modal>
   );
 }
-
-export default connector(CreateUserModal);

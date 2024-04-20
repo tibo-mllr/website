@@ -13,7 +13,7 @@ const initialState: NewsState = {
   showNew: false,
 };
 
-const newsSlice = createSlice({
+export const newsSlice = createSlice({
   name: 'news',
   initialState,
   reducers: {
@@ -41,6 +41,11 @@ const newsSlice = createSlice({
       state.showNew = action.payload;
     },
   },
+  selectors: {
+    selectShowNewNews: (state) => state.showNew,
+    selectNewsLoading: (state) => state.isLoading,
+    selectNews: (state) => state.allNews,
+  },
 });
 
 export const {
@@ -52,4 +57,5 @@ export const {
   switchShowNewNews,
 } = newsSlice.actions;
 
-export default newsSlice.reducer;
+export const { selectShowNewNews, selectNewsLoading, selectNews } =
+  newsSlice.selectors;

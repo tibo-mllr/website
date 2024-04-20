@@ -2,7 +2,7 @@
 
 import { plusIcon } from '@/app/ui/assets';
 import { DataList } from '@/components';
-import { AppState } from '@/lib/redux/types';
+import { selectCompetencies } from '@/lib/redux/slices';
 import {
   type OrganizationDocument,
   Project,
@@ -12,22 +12,16 @@ import { useFormikContext } from 'formik';
 import Image from 'next/image';
 import { type ReactElement } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { connect, ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['projectReducer'], 'competencies'> => ({
-  competencies: state.projectReducer.competencies,
-});
-
-const connector = connect(stateProps);
-
-function CompetenciesSection<
+export default function CompetenciesSection<
   T extends
     | (ProjectDocument & { organization: OrganizationDocument })
     | Project,
->({ competencies }: ConnectedProps<typeof connector>): ReactElement {
+>(): ReactElement {
   const { values, touched, errors, setFieldValue } = useFormikContext<T>();
+
+  const competencies = useSelector(selectCompetencies);
 
   return (
     <Card>
@@ -82,5 +76,3 @@ function CompetenciesSection<
     </Card>
   );
 }
-
-export default connector(CompetenciesSection);

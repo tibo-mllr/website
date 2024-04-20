@@ -4,9 +4,7 @@ import { type AppThunk } from '../types';
 
 export function fetchUsers(): AppThunk {
   return async (dispatch, getState) => {
-    const {
-      adminReducer: { userRole },
-    } = getState();
+    const { userRole } = getState().admin;
 
     try {
       dispatch(requestUsers());

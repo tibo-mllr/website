@@ -3,47 +3,25 @@
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
 import { fetchNews } from '@/lib/redux/actions';
-import { addNews, deleteNews, editNews } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import {
+  addNews,
+  deleteNews,
+  editNews,
+  selectNews,
+  selectNewsLoading,
+  selectToken,
+  selectUserRole,
+} from '@/lib/redux/slices';
 import { DOCUMENT_TITLE, client, type NewsDocument, socket } from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { connect, type ConnectedProps } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { CreateNewsModal, EditNewsModal } from './ui';
 
-const stateProps = (
-  state: AppState,
-): Pick<
-  AppState['newsReducer'] & AppState['adminReducer'],
-  'allNews' | 'isLoading' | 'token' | 'userRole'
-> => ({
-  allNews: state.newsReducer.allNews,
-  isLoading: state.newsReducer.isLoading,
-  token: state.adminReducer.token,
-  userRole: state.adminReducer.userRole,
-});
-
-const dispatchProps = {
-  addNews,
-  deleteNews,
-  editNews,
-  fetchNews,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-function HomeView({
-  allNews,
-  isLoading,
-  token,
-  userRole,
-  addNews,
-  deleteNews,
-  editNews,
-  fetchNews,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function HomeView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({
@@ -53,6 +31,12 @@ function HomeView({
     date: new Date(),
     author: { username: '' },
   });
+
+  const dispatch = useAppDispatch();
+  const token = useSelector(selectToken);
+  const userRole = useSelector(selectUserRole);
+  const allNews = useSelector(selectNews);
+  const isLoading = useSelector(selectNewsLoading);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -71,14 +55,18 @@ function HomeView({
   }, []);
 
   useEffect(() => {
-    fetchNews();
-  }, [fetchNews]);
+    dispatch(fetchNews());
+  }, [dispatch]);
 
   useEffect(() => {
-    socket.on('newsAdded', (newNews: NewsDocument) => addNews(newNews));
-    socket.on('newsEdited', (editedNews: NewsDocument) => editNews(editedNews));
-    socket.on('newsDeleted', (id: string) => deleteNews(id));
-    socket.on('severalNewsDeleted', fetchNews);
+    socket.on('newsAdded', (newNews: NewsDocument) =>
+      dispatch(addNews(newNews)),
+    );
+    socket.on('newsEdited', (editedNews: NewsDocument) =>
+      dispatch(editNews(editedNews)),
+    );
+    socket.on('newsDeleted', (id: string) => dispatch(deleteNews(id)));
+    socket.on('severalNewsDeleted', () => dispatch(fetchNews()));
 
     return () => {
       socket.off('newsAdded');
@@ -86,7 +74,7 @@ function HomeView({
       socket.off('newsDeleted');
       socket.off('severalNewsDeleted');
     };
-  }, [addNews, deleteNews, editNews, fetchNews]);
+  }, [dispatch]);
 
   if (isLoading) return <i>Loading...</i>;
 
@@ -175,5 +163,3 @@ function HomeView({
     </>
   );
 }
-
-export default connector(HomeView);

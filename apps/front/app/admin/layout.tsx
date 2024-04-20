@@ -1,20 +1,18 @@
 'use client';
 
+import { selectToken } from '@/lib/redux/slices';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, type ReactElement, type ReactNode } from 'react';
+import { type ReactElement, type ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function AdminLayout({
   children,
 }: {
   children: ReactNode;
 }): ReactElement | null {
-  const [token, setToken] = useState<string | null>(null);
+  const token = useSelector(selectToken);
 
   const router = useRouter();
-
-  useEffect(() => {
-    setToken(sessionStorage.getItem('token') || '');
-  }, []);
 
   // If the token is set, authorize to render the children
   if (token) return <>{children}</>;

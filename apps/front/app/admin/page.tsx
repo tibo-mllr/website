@@ -3,8 +3,14 @@
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
 import { fetchUsers } from '@/lib/redux/actions';
-import { addUser, deleteUser, editUser } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import {
+  addUser,
+  deleteUser,
+  editUser,
+  selectUserRole,
+  selectUsers,
+} from '@/lib/redux/slices';
 import {
   DOCUMENT_TITLE,
   client,
@@ -16,33 +22,10 @@ import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { CreateUserModal, EditUserModal } from './ui';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['adminReducer'], 'users' | 'userRole'> => ({
-  users: state.adminReducer.users,
-  userRole: state.adminReducer.userRole,
-});
-
-const dispatchProps = {
-  addUser,
-  deleteUser,
-  editUser,
-  fetchUsers,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-export function AdminView({
-  users,
-  userRole,
-  addUser,
-  deleteUser,
-  editUser,
-  fetchUsers,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function AdminView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [userToEdit, setUserToEdit] = useState<FrontUserDocument>({
@@ -51,6 +34,10 @@ export function AdminView({
     password: '',
     role: UserRole.Admin,
   });
+
+  const dispatch = useAppDispatch();
+  const userRole = useSelector(selectUserRole);
+  const users = useSelector(selectUsers);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -69,21 +56,23 @@ export function AdminView({
   }, []);
 
   useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   useEffect(() => {
-    socket.on('userAdded', (newUser: FrontUserDocument) => addUser(newUser));
-    socket.on('userEdited', (editedUser: FrontUserDocument) =>
-      editUser(editedUser),
+    socket.on('userAdded', (newUser: FrontUserDocument) =>
+      dispatch(addUser(newUser)),
     );
-    socket.on('userDeleted', (id: string) => deleteUser(id));
+    socket.on('userEdited', (editedUser: FrontUserDocument) =>
+      dispatch(editUser(editedUser)),
+    );
+    socket.on('userDeleted', (id: string) => dispatch(deleteUser(id)));
     return () => {
       socket.off('userAdded');
       socket.off('userEdited');
       socket.off('userDeleted');
     };
-  }, [addUser, deleteUser, editUser]);
+  }, [dispatch]);
 
   return (
     <>
@@ -151,5 +140,3 @@ export function AdminView({
     </>
   );
 }
-
-export default connector(AdminView);

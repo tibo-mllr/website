@@ -1,6 +1,6 @@
 'use client';
 
-import { type AppState } from '@/lib/redux/types';
+import { selectOrganizations } from '@/lib/redux/slices';
 import {
   client,
   Project,
@@ -10,7 +10,7 @@ import {
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ProjectForm } from './ProjectForm';
 
 type EditProjectProps = {
@@ -19,25 +19,18 @@ type EditProjectProps = {
   setShow: (show: boolean) => void;
 };
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['organizationReducer'], 'organizations'> => ({
-  organizations: state.organizationReducer.organizations,
-});
-
-const connector = connect(stateProps);
-
-export function EditProjectModal({
+export default function EditProjectModal({
   projectToEdit,
   show,
   setShow,
-  organizations,
-}: EditProjectProps & ConnectedProps<typeof connector>): ReactElement {
+}: EditProjectProps): ReactElement {
   const [selectEndDate, setSelectEndDate] = useState<boolean>(
     !!projectToEdit.endDate,
   );
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const organizations = useSelector(selectOrganizations);
 
   const handleEdit = async (values: Project): Promise<void> => {
     const organizationId = await handleOrganization(
@@ -92,5 +85,3 @@ export function EditProjectModal({
     </Modal>
   );
 }
-
-export default connector(EditProjectModal);

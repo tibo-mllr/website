@@ -1,7 +1,11 @@
 'use client';
 
-import { switchShowNewProject } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import {
+  selectOrganizations,
+  selectShowNewProject,
+  switchShowNewProject,
+} from '@/lib/redux/slices';
 import {
   client,
   handleOrganization,
@@ -12,28 +16,10 @@ import { PartialBy, ProjectType } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ProjectForm } from './ProjectForm';
 
-const stateProps = (
-  state: AppState,
-): Pick<
-  AppState['projectReducer'] & AppState['organizationReducer'],
-  'showNew' | 'organizations'
-> => ({
-  showNew: state.projectReducer.showNew,
-  organizations: state.organizationReducer.organizations,
-});
-
-const dispatchProps = { setShow: switchShowNewProject };
-
-const connector = connect(stateProps, dispatchProps);
-
-export function CreateProjectModal({
-  showNew,
-  organizations,
-  setShow,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function CreateProjectModal(): ReactElement {
   const emptyProject: Project = {
     role: '',
     title: '',
@@ -52,6 +38,10 @@ export function CreateProjectModal({
     endDate: undefined,
   };
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
+
+  const dispatch = useAppDispatch();
+  const organizations = useSelector(selectOrganizations);
+  const showNew = useSelector(selectShowNewProject);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -72,7 +62,7 @@ export function CreateProjectModal({
       })
       .then(() => {
         enqueueSnackbar('Project added', { variant: 'success' });
-        setShow(false);
+        dispatch(switchShowNewProject(false));
       })
       .catch((error) => {
         enqueueSnackbar(error, { variant: 'error' });
@@ -81,7 +71,11 @@ export function CreateProjectModal({
   };
 
   return (
-    <Modal show={showNew} onHide={() => setShow(false)} size="lg">
+    <Modal
+      show={showNew}
+      onHide={() => dispatch(switchShowNewProject(false))}
+      size="lg"
+    >
       <Modal.Header closeButton>
         <Modal.Title>New project</Modal.Title>
       </Modal.Header>
@@ -95,5 +89,3 @@ export function CreateProjectModal({
     </Modal>
   );
 }
-
-export default connector(CreateProjectModal);

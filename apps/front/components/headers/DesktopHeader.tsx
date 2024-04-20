@@ -1,49 +1,30 @@
 'use client';
 
 import { logo, plusIcon } from '@/app/ui/assets';
+import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
+  selectToken,
+  selectUserRole,
   switchShowNewNews,
   switchShowNewOrganization,
   switchShowNewProject,
   switchShowNewUser,
 } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 import { Button, Container, Nav, Navbar } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['adminReducer'], 'token' | 'userRole'> => ({
-  token: state.adminReducer.token,
-  userRole: state.adminReducer.userRole,
-});
-
-const dispatchProps = {
-  setShowNewData: switchShowNewNews,
-  setShowNewOrganization: switchShowNewOrganization,
-  setShowNewProject: switchShowNewProject,
-  setShowNewUser: switchShowNewUser,
-  logout,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-function Header({
-  token,
-  userRole,
-  setShowNewData,
-  setShowNewUser,
-  setShowNewProject,
-  setShowNewOrganization,
-  logout,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function Header(): ReactElement {
   const pathname = usePathname();
   const router = useRouter();
+
+  const dispatch = useAppDispatch();
+  const token = useSelector(selectToken);
+  const userRole = useSelector(selectUserRole);
 
   return (
     <header>
@@ -102,7 +83,7 @@ function Header({
               (userRole === 'admin' || userRole === 'superAdmin') &&
               pathname === '/home' && (
                 <Button
-                  onClick={() => setShowNewData(true)}
+                  onClick={() => dispatch(switchShowNewNews(true))}
                   className="btn-add"
                 >
                   <Image alt="Plus icon" src={plusIcon} height="16" />
@@ -113,7 +94,7 @@ function Header({
               (userRole === 'admin' || userRole === 'superAdmin') &&
               pathname === '/projects' && (
                 <Button
-                  onClick={() => setShowNewProject(true)}
+                  onClick={() => dispatch(switchShowNewProject(true))}
                   className="btn-add"
                 >
                   <Image alt="Plus icon" src={plusIcon} height="16" />
@@ -124,7 +105,7 @@ function Header({
               (userRole === 'admin' || userRole === 'superAdmin') &&
               pathname === '/organizations' && (
                 <Button
-                  onClick={() => setShowNewOrganization(true)}
+                  onClick={() => dispatch(switchShowNewOrganization(true))}
                   className="btn-add"
                 >
                   <Image alt="Plus icon" src={plusIcon} height="16" />
@@ -132,7 +113,10 @@ function Header({
                 </Button>
               )}
             {!!token && userRole === 'superAdmin' && pathname === '/admin' && (
-              <Button onClick={() => setShowNewUser(true)} className="btn-add">
+              <Button
+                onClick={() => dispatch(switchShowNewUser(true))}
+                className="btn-add"
+              >
                 <Image alt="Plus icon" src={plusIcon} height="16" />
                 <b>Add user</b>
               </Button>
@@ -145,7 +129,7 @@ function Header({
               <Button
                 className="btn-logout"
                 onClick={() => {
-                  logout();
+                  dispatch(logout());
                   router.push('/');
                 }}
               >
@@ -158,5 +142,3 @@ function Header({
     </header>
   );
 }
-
-export default connector(Header);

@@ -3,12 +3,16 @@
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
 import { fetchOrganizations } from '@/lib/redux/actions';
+import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   addOrganization,
   deleteOrganization,
   editOrganization,
+  selectOrganizations,
+  selectOrganizationsLoading,
+  selectToken,
+  selectUserRole,
 } from '@/lib/redux/slices';
-import { type AppState } from '@/lib/redux/types';
 import {
   DOCUMENT_TITLE,
   client,
@@ -19,40 +23,10 @@ import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { CreateOrganizationModal, EditOrganizationModal } from './ui';
 
-const stateProps = (
-  state: AppState,
-): Pick<
-  AppState['organizationReducer'] & AppState['adminReducer'],
-  'organizations' | 'isLoading' | 'token' | 'userRole'
-> => ({
-  organizations: state.organizationReducer.organizations,
-  isLoading: state.organizationReducer.isLoading,
-  token: state.adminReducer.token,
-  userRole: state.adminReducer.userRole,
-});
-
-const dispatchProps = {
-  addOrganization,
-  deleteOrganization,
-  editOrganization,
-  fetchOrganizations,
-};
-
-const connector = connect(stateProps, dispatchProps);
-
-export function OrganizationView({
-  organizations,
-  isLoading,
-  token,
-  userRole,
-  addOrganization,
-  deleteOrganization,
-  editOrganization,
-  fetchOrganizations,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function OrganizationView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
   const [organizationToEdit, setOrganizationToEdit] =
@@ -63,6 +37,12 @@ export function OrganizationView({
       description: '',
       website: '',
     });
+
+  const dispatch = useAppDispatch();
+  const token = useSelector(selectToken);
+  const userRole = useSelector(selectUserRole);
+  const isLoading = useSelector(selectOrganizationsLoading);
+  const organizations = useSelector(selectOrganizations);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -83,25 +63,27 @@ export function OrganizationView({
   }, []);
 
   useEffect(() => {
-    fetchOrganizations();
-  }, [fetchOrganizations]);
+    dispatch(fetchOrganizations());
+  }, [dispatch]);
 
   useEffect(() => {
     socket.on('organizationAdded', (newOrganization: OrganizationDocument) =>
-      addOrganization(newOrganization),
+      dispatch(addOrganization(newOrganization)),
     );
     socket.on(
       'organizationEdited',
       (editedOrganization: OrganizationDocument) =>
-        editOrganization(editedOrganization),
+        dispatch(editOrganization(editedOrganization)),
     );
-    socket.on('organizationDeleted', (id: string) => deleteOrganization(id));
+    socket.on('organizationDeleted', (id: string) =>
+      dispatch(deleteOrganization(id)),
+    );
     return () => {
       socket.off('organizationAdded');
       socket.off('organizationEdited');
       socket.off('organizationDeleted');
     };
-  }, [organizations, addOrganization, deleteOrganization, editOrganization]);
+  }, [dispatch]);
 
   if (isLoading) return <i>Loading...</i>;
 
@@ -190,5 +172,3 @@ export function OrganizationView({
     </>
   );
 }
-
-export default connector(OrganizationView);

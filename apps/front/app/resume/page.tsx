@@ -1,48 +1,38 @@
 'use client';
 
 import { fetchResume } from '@/lib/redux/actions';
-import { type AppState } from '@/lib/redux/types';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { selectResume, selectResumeLoading } from '@/lib/redux/slices';
 import { DOCUMENT_TITLE, socket } from '@/lib/utils';
 import { type ReactElement, useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-const stateProps = (
-  state: AppState,
-): Pick<AppState['projectReducer'], 'resume' | 'resumeLoading'> => ({
-  resume: state.projectReducer.resume,
-  resumeLoading: state.projectReducer.resumeLoading,
-});
+export default function ResumeView(): ReactElement {
+  const dispatch = useAppDispatch();
+  const isLoading = useSelector(selectResumeLoading);
+  const resume = useSelector(selectResume);
 
-const dispatchProps = { fetchResume };
-
-const connector = connect(stateProps, dispatchProps);
-
-export function ResumeView({
-  resume,
-  resumeLoading,
-  fetchResume,
-}: ConnectedProps<typeof connector>): ReactElement {
   useEffect(() => {
     document.title = `Resume | ${DOCUMENT_TITLE}`;
   }, []);
 
   useEffect(() => {
-    fetchResume();
-  }, [fetchResume]);
+    dispatch(fetchResume());
+  }, [dispatch]);
 
   useEffect(() => {
     socket.on('projectAdded', () => {
-      fetchResume();
+      dispatch(fetchResume());
     });
     socket.on('projectEdited', () => {
-      fetchResume();
+      dispatch(fetchResume());
     });
     socket.on('projectDeleted', () => {
-      fetchResume();
+      dispatch(fetchResume());
     });
     socket.on('projectsDeleted', () => {
-      fetchResume();
+      dispatch(fetchResume());
     });
     return () => {
       socket.off('projectAdded');
@@ -50,9 +40,9 @@ export function ResumeView({
       socket.off('projectDeleted');
       socket.off('projectsDeleted');
     };
-  }, [fetchResume]);
+  }, [dispatch]);
 
-  if (resumeLoading) return <i>Loading...</i>;
+  if (isLoading) return <i>Loading...</i>;
 
   return (
     <Row>
@@ -156,5 +146,3 @@ export function ResumeView({
     </Row>
   );
 }
-
-export default connector(ResumeView);

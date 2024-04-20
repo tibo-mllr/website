@@ -1,6 +1,7 @@
 'use client';
 
 import { PasswordField, TextFieldWithLabel } from '@/components';
+import { useAppDispatch } from '@/lib/redux/hooks';
 import { login, switchShowNewUser } from '@/lib/redux/slices';
 import { DOCUMENT_TITLE, client } from '@/lib/utils';
 import { type UserRole } from '@website/shared-types';
@@ -9,18 +10,12 @@ import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
-import { type ConnectedProps, connect } from 'react-redux';
 import { CreateUserModal } from '../admin';
 
-const dispatchProps = { login, setShowNew: switchShowNewUser };
-
-const connector = connect(null, dispatchProps);
-
-export function LoginView({
-  login,
-  setShowNew,
-}: ConnectedProps<typeof connector>): ReactElement {
+export default function LoginView(): ReactElement {
   const router = useRouter();
+
+  const dispatch = useAppDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -34,7 +29,7 @@ export function LoginView({
         password: values.password,
       })
       .then(({ data: { access_token, role } }) => {
-        login({ token: access_token, userRole: role });
+        dispatch(login({ token: access_token, userRole: role }));
         router.push('/admin');
       })
       .catch((error) => {
@@ -92,7 +87,9 @@ export function LoginView({
                         <Button type="submit">Connect</Button>
                       </Col>
                       <Col className="d-flex justify-content-end">
-                        <Button onClick={() => setShowNew(true)}>
+                        <Button
+                          onClick={() => dispatch(switchShowNewUser(true))}
+                        >
                           Create account
                         </Button>
                       </Col>
@@ -108,5 +105,3 @@ export function LoginView({
     </>
   );
 }
-
-export default connector(LoginView);
