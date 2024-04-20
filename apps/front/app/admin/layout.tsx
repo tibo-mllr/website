@@ -1,18 +1,24 @@
 'use client';
 
-import { selectToken } from '@/lib/redux/slices';
 import { useRouter } from 'next/navigation';
-import { type ReactElement, type ReactNode } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState, type ReactElement, type ReactNode } from 'react';
 
 export default function AdminLayout({
   children,
 }: {
   children: ReactNode;
 }): ReactElement | null {
-  const token = useSelector(selectToken);
+  // We use session storage instead of redux because at the beginning of each refresh,
+  // even if we are connected, the store doesn't have the token yet
+  // so when we refresh the page, we are always redirected to the home page.
+  // With session storage, we can check if the token is set before rendering the children.
+  const [token, setToken] = useState<string | null>(null);
 
   const router = useRouter();
+
+  useEffect(() => {
+    setToken(sessionStorage.getItem('token') || '');
+  }, []);
 
   // If the token is set, authorize to render the children
   if (token) return <>{children}</>;
