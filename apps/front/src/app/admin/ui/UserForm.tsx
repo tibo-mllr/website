@@ -3,7 +3,7 @@ import {
   SelectFieldWithLabel,
   TextFieldWithLabel,
 } from '@/components';
-import { type FrontUserDocument } from '@/utils';
+import { type FrontUserDocument } from '@/lib/utils';
 import { type FrontUser, UserRole } from '@website/shared-types';
 import { type FormikValues, type FormikConfig, Formik } from 'formik';
 import { type ReactElement } from 'react';

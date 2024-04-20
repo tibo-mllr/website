@@ -1,11 +1,11 @@
 import { Header } from '@/components';
+import Providers from '@/lib/Providers';
 import { type Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import '@/globals.css';
-import '@/custom.scss';
+import './ui/globals.css';
+import './ui/custom.scss';
 import { type ReactNode, type ReactElement } from 'react';
 import { Container } from 'react-bootstrap';
-import Providers from './Providers';
 
 const inter = Inter({ subsets: ['latin'] });
 

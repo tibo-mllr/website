@@ -1,16 +1,16 @@
 'use client';
 
-import { binIcon, editIcon } from '@/assets';
+import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
-import { fetchUsers } from '@/redux/actions';
-import { addUser, deleteUser, editUser } from '@/redux/slices';
-import { type AppState } from '@/redux/types';
+import { fetchUsers } from '@/lib/redux/actions';
+import { addUser, deleteUser, editUser } from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
 import {
   DOCUMENT_TITLE,
   client,
   socket,
   type FrontUserDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { UserRole } from '@website/shared-types';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';

@@ -1,8 +1,8 @@
 'use client';
 
-import { switchShowNewUser } from '@/redux/slices';
-import { type AppState } from '@/redux/types';
-import { client, type FrontUserDocument } from '@/utils';
+import { switchShowNewUser } from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
+import { client, type FrontUserDocument } from '@/lib/utils';
 import {
   type FrontUser,
   UserRole,

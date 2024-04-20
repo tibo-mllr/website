@@ -1,4 +1,4 @@
-import { binIcon } from '@/assets';
+import { binIcon } from '@/app/ui/assets';
 import Image from 'next/image';
 import { type ReactElement } from 'react';
 import {

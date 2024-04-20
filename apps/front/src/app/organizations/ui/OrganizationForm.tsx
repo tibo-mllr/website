@@ -1,5 +1,5 @@
 import { TextFieldWithLabel } from '@/components';
-import { type OrganizationDocument } from '@/utils';
+import { type OrganizationDocument } from '@/lib/utils';
 import { Organization, organizationSchema } from '@website/shared-types';
 import { Formik, type FormikValues, type FormikConfig } from 'formik';
 import { type ReactElement } from 'react';

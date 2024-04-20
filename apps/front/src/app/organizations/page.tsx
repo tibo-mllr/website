@@ -1,20 +1,20 @@
 'use client';
 
-import { binIcon, editIcon } from '@/assets';
+import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
-import { fetchOrganizations } from '@/redux/actions';
+import { fetchOrganizations } from '@/lib/redux/actions';
 import {
   addOrganization,
   deleteOrganization,
   editOrganization,
-} from '@/redux/slices';
-import { type AppState } from '@/redux/types';
+} from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
 import {
   DOCUMENT_TITLE,
   client,
   socket,
   type OrganizationDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';

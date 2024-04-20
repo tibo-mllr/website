@@ -3,7 +3,7 @@ import {
   type OrganizationDocument,
   type ProjectDocument,
   type Project,
-} from '@/utils';
+} from '@/lib/utils';
 import { projectSchema, ProjectType } from '@website/shared-types';
 import { Formik, type FormikValues, type FormikConfig } from 'formik';
 import { type ReactElement } from 'react';

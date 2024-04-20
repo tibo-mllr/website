@@ -1,8 +1,8 @@
 'use client';
 
-import { switchShowNewOrganization } from '@/redux/slices';
-import { type AppState } from '@/redux/types';
-import { client, type OrganizationDocument } from '@/utils';
+import { switchShowNewOrganization } from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
+import { client, type OrganizationDocument } from '@/lib/utils';
 import { type Organization } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';

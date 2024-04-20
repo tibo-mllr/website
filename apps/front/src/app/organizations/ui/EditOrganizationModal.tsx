@@ -1,6 +1,6 @@
 'use client';
 
-import { client, type OrganizationDocument } from '@/utils';
+import { client, type OrganizationDocument } from '@/lib/utils';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';

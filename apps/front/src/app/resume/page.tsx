@@ -1,8 +1,8 @@
 'use client';
 
-import { fetchResume } from '@/redux/actions';
-import { type AppState } from '@/redux/types';
-import { DOCUMENT_TITLE, socket } from '@/utils';
+import { fetchResume } from '@/lib/redux/actions';
+import { type AppState } from '@/lib/redux/types';
+import { DOCUMENT_TITLE, socket } from '@/lib/utils';
 import { type ReactElement, useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { type ConnectedProps, connect } from 'react-redux';

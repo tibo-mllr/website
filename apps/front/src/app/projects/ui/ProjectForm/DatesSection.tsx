@@ -1,12 +1,12 @@
 'use client';
 
-import { binIcon, plusIcon } from '@/assets';
+import { binIcon, plusIcon } from '@/app/ui/assets';
 import { DatePicker, DatePickerWithLabel } from '@/components';
 import {
   type OrganizationDocument,
   type Project,
   type ProjectDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { useFormikContext } from 'formik';
 import Image from 'next/image';
 import { ReactElement } from 'react';

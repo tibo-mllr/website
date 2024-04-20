@@ -1,13 +1,13 @@
 'use client';
 
-import { switchShowNewProject } from '@/redux/slices';
-import { type AppState } from '@/redux/types';
+import { switchShowNewProject } from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
 import {
   client,
   handleOrganization,
   type Project,
   type ProjectDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { PartialBy, ProjectType } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';

@@ -1,4 +1,4 @@
-import { client, type FrontUserDocument } from '@/utils';
+import { client, type FrontUserDocument } from '@/lib/utils';
 import { receiveUsers, requestUsers } from '../slices';
 import { type AppThunk } from '../types';
 

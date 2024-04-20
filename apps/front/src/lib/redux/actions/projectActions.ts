@@ -1,4 +1,4 @@
-import { type ProjectDocument, type Resume, client } from '@/utils';
+import { type ProjectDocument, type Resume, client } from '@/lib/utils';
 import {
   receiveCompetencies,
   receiveProjects,

@@ -1,14 +1,14 @@
 'use client';
 
-import { logo, plusIcon } from '@/assets';
+import { logo, plusIcon } from '@/app/ui/assets';
 import {
   logout,
   switchShowNewNews,
   switchShowNewOrganization,
   switchShowNewProject,
   switchShowNewUser,
-} from '@/redux/slices';
-import { type AppState } from '@/redux/types';
+} from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';

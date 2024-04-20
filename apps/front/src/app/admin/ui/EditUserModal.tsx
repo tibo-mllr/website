@@ -1,7 +1,7 @@
 'use client';
 
-import { type AppState } from '@/redux/types';
-import { client, type FrontUserDocument } from '@/utils';
+import { type AppState } from '@/lib/redux/types';
+import { client, type FrontUserDocument } from '@/lib/utils';
 import { frontUserSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';

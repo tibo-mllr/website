@@ -1,11 +1,11 @@
 'use client';
 
-import { binIcon, editIcon } from '@/assets';
+import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
-import { fetchNews } from '@/redux/actions';
-import { addNews, deleteNews, editNews } from '@/redux/slices';
-import { type AppState } from '@/redux/types';
-import { DOCUMENT_TITLE, client, type NewsDocument, socket } from '@/utils';
+import { fetchNews } from '@/lib/redux/actions';
+import { addNews, deleteNews, editNews } from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
+import { DOCUMENT_TITLE, client, type NewsDocument, socket } from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';

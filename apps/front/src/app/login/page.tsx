@@ -1,8 +1,8 @@
 'use client';
 
 import { PasswordField, TextFieldWithLabel } from '@/components';
-import { login, switchShowNewUser } from '@/redux/slices';
-import { DOCUMENT_TITLE, client } from '@/utils';
+import { login, switchShowNewUser } from '@/lib/redux/slices';
+import { DOCUMENT_TITLE, client } from '@/lib/utils';
 import { type UserRole } from '@website/shared-types';
 import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';

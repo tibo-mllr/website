@@ -1,13 +1,13 @@
 'use client';
 
-import { plusIcon } from '@/assets';
+import { plusIcon } from '@/app/ui/assets';
 import { DataList } from '@/components';
-import { AppState } from '@/redux/types';
+import { AppState } from '@/lib/redux/types';
 import {
   type OrganizationDocument,
   Project,
   type ProjectDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { useFormikContext } from 'formik';
 import Image from 'next/image';
 import { type ReactElement } from 'react';

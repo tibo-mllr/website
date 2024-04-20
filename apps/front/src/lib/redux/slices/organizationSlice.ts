@@ -1,4 +1,4 @@
-import { type OrganizationDocument } from '@/utils';
+import { type OrganizationDocument } from '@/lib/utils';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type OrganizationState = {

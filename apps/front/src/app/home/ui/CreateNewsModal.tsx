@@ -1,8 +1,8 @@
 'use client';
 
-import { switchShowNewNews } from '@/redux/slices';
-import { type AppState } from '@/redux/types';
-import { client } from '@/utils';
+import { switchShowNewNews } from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
+import { client } from '@/lib/utils';
 import { newsSchema, type News } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';

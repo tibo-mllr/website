@@ -1,12 +1,12 @@
 'use client';
 
-import { binIcon, editIcon } from '@/assets';
+import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
 import {
   fetchCompetencies,
   fetchOrganizations,
   fetchProjects,
-} from '@/redux/actions';
+} from '@/lib/redux/actions';
 import {
   addCompetencies,
   addOrganization,
@@ -15,15 +15,15 @@ import {
   deleteProject,
   editOrganization,
   editProject,
-} from '@/redux/slices';
-import { type AppState } from '@/redux/types';
+} from '@/lib/redux/slices';
+import { type AppState } from '@/lib/redux/types';
 import {
   type OrganizationDocument,
   DOCUMENT_TITLE,
   client,
   socket,
   type ProjectDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { ProjectType } from '@website/shared-types';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';

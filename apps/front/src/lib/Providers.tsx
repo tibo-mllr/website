@@ -1,11 +1,11 @@
 'use client';
 
 import { CustomSnackbar } from '@/components';
-import { initAdmin } from '@/redux/slices';
+import { initAdmin } from '@/lib/redux/slices';
 import { SnackbarProvider } from 'notistack';
 import { type ReactElement, type ReactNode, useEffect, useRef } from 'react';
 import { Provider } from 'react-redux';
-import { AppStore, makeStore } from '../redux/types';
+import { AppStore, makeStore } from './redux/types';
 
 export default function Providers({
   children,

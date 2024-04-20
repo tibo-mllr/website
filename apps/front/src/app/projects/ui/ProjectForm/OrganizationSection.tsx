@@ -1,12 +1,12 @@
 'use client';
 
 import { TextFieldWithLabel, TypeaheadField } from '@/components';
-import { AppState } from '@/redux/types';
+import { AppState } from '@/lib/redux/types';
 import {
   type OrganizationDocument,
   type Project,
   type ProjectDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { type Organization } from '@website/shared-types';
 import { useFormikContext } from 'formik';
 import { type ReactElement } from 'react';

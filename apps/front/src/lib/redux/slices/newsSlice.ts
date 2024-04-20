@@ -1,4 +1,4 @@
-import { type NewsDocument } from '@/utils';
+import { type NewsDocument } from '@/lib/utils';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type NewsState = {

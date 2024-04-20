@@ -1,12 +1,12 @@
 'use client';
 
-import { type AppState } from '@/redux/types';
+import { type AppState } from '@/lib/redux/types';
 import {
   client,
   Project,
   handleOrganization,
   type ProjectDocument,
-} from '@/utils';
+} from '@/lib/utils';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';

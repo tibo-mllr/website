@@ -1,5 +1,5 @@
 import { TextFieldWithLabel } from '@/components';
-import { type NewsDocument } from '@/utils';
+import { type NewsDocument } from '@/lib/utils';
 import { type News } from '@website/shared-types';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';

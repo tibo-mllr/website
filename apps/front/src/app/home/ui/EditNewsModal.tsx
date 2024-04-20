@@ -1,6 +1,6 @@
 'use client';
 
-import { client, type NewsDocument } from '@/utils';
+import { client, type NewsDocument } from '@/lib/utils';
 import { newsSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';

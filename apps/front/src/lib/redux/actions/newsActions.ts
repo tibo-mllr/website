@@ -1,4 +1,4 @@
-import { client, type NewsDocument } from '@/utils';
+import { client, type NewsDocument } from '@/lib/utils';
 import { receiveNews, requestNews } from '../slices';
 import { type AppThunk } from '../types';
 

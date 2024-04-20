@@ -1,6 +1,6 @@
 'use client';
 
-import { type FrontUserDocument, removeAuth, setAuth } from '@/utils';
+import { type FrontUserDocument, removeAuth, setAuth } from '@/lib/utils';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { type UserRole } from '@website/shared-types';
 

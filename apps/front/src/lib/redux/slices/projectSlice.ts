@@ -1,4 +1,4 @@
-import { type ProjectDocument, type Resume } from '@/utils';
+import { type ProjectDocument, type Resume } from '@/lib/utils';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type ProjectState = {

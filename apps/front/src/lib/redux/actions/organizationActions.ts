@@ -1,4 +1,4 @@
-import { client, type OrganizationDocument } from '@/utils';
+import { client, type OrganizationDocument } from '@/lib/utils';
 import { receiveOrganizations, requestOrganizations } from '../slices';
 import { type AppThunk } from '../types';
 
