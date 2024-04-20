@@ -1,11 +1,11 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   selectShowNewOrganization,
   switchShowNewOrganization,
 } from '@/lib/redux/slices';
-import { client, type OrganizationDocument } from '@/lib/utils';
 import { type Organization } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
@@ -27,8 +27,7 @@ export default function CreateOrganizationModal(): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleCreate = (newOrganization: Organization): void => {
-    client
-      .post<OrganizationDocument>('/organization', newOrganization)
+    API.createOrganization(newOrganization)
       .then(() => {
         enqueueSnackbar('Organization added', { variant: 'success' });
         dispatch(switchShowNewOrganization(false));

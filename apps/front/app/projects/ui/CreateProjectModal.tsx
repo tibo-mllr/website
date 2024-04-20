@@ -1,17 +1,13 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   selectOrganizations,
   selectShowNewProject,
   switchShowNewProject,
 } from '@/lib/redux/slices';
-import {
-  client,
-  handleOrganization,
-  type Project,
-  type ProjectDocument,
-} from '@/lib/utils';
+import { handleOrganization, type Project } from '@/lib/utils';
 import { PartialBy, ProjectType } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
@@ -54,12 +50,11 @@ export default function CreateProjectModal(): ReactElement {
       newProject.organization,
     );
 
-    client
-      .post<ProjectDocument>('/project', {
-        ...newProject,
-        organization: organizationId,
-        endDate: selectEndDate ? newProject.endDate : undefined,
-      })
+    API.createProject({
+      ...newProject,
+      organization: organizationId,
+      endDate: selectEndDate ? newProject.endDate : undefined,
+    })
       .then(() => {
         enqueueSnackbar('Project added', { variant: 'success' });
         dispatch(switchShowNewProject(false));

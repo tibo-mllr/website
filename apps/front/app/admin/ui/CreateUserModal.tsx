@@ -1,5 +1,6 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   selectShowNewUser,
@@ -7,7 +8,6 @@ import {
   selectUserRole,
   switchShowNewUser,
 } from '@/lib/redux/slices';
-import { client, type FrontUserDocument } from '@/lib/utils';
 import {
   type FrontUser,
   UserRole,
@@ -41,8 +41,7 @@ export default function CreateUserModal({
   const showNew = useSelector(selectShowNewUser);
 
   const handleCreate = (newUser: FrontUser): void => {
-    client
-      .post<FrontUserDocument>(`/user${newSelf ? '/new' : ''}`, newUser)
+    API.createUser(newUser, newSelf)
       .then(() => {
         enqueueSnackbar(newSelf ? 'Account created' : 'User added', {
           variant: 'success',

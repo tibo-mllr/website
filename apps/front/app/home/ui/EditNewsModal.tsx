@@ -1,6 +1,7 @@
 'use client';
 
-import { client, type NewsDocument } from '@/lib/utils';
+import { API } from '@/lib/api';
+import { type NewsDocument } from '@/lib/utils';
 import { newsSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
@@ -21,8 +22,7 @@ export default function EditNewsModal({
 }: EditNewsProps): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
   const handleEdit = async (values: NewsDocument): Promise<void> => {
-    client
-      .put<NewsDocument>(`/news/${newsToEdit._id}`, values)
+    API.editNews(newsToEdit._id, values)
       .then(() => {
         enqueueSnackbar('News edited', { variant: 'success' });
         setShow(false);

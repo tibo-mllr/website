@@ -1,6 +1,5 @@
-'use client';
-
-import { type FrontUserDocument, removeAuth, setAuth } from '@/lib/utils';
+import { API } from '@/lib/api';
+import { type FrontUserDocument } from '@/lib/utils';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { type UserRole } from '@website/shared-types';
 
@@ -28,18 +27,19 @@ export const adminSlice = createSlice({
       state.userRole =
         (sessionStorage.getItem('userRole') as UserRole | null) ?? undefined;
       state.token = sessionStorage.getItem('token') ?? undefined;
-      if (state.token && state.userRole) setAuth(state.token, state.userRole);
+      if (state.token && state.userRole)
+        API.setAuth(state.token, state.userRole);
     },
     login(state, action: PayloadAction<{ userRole: UserRole; token: string }>) {
       state.userRole = action.payload.userRole;
       state.token = action.payload.token;
-      setAuth(action.payload.token, action.payload.userRole);
+      API.setAuth(action.payload.token, action.payload.userRole);
     },
     logout(state) {
       state.userRole = undefined;
       state.token = undefined;
       state.users = [];
-      removeAuth();
+      API.removeAuth();
     },
     requestUsers(state) {
       state.isLoading = true;

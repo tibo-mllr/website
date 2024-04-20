@@ -2,6 +2,7 @@
 
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
+import { API } from '@/lib/api';
 import { fetchUsers } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -11,12 +12,7 @@ import {
   selectUserRole,
   selectUsers,
 } from '@/lib/redux/slices';
-import {
-  DOCUMENT_TITLE,
-  client,
-  socket,
-  type FrontUserDocument,
-} from '@/lib/utils';
+import { DOCUMENT_TITLE, type FrontUserDocument } from '@/lib/utils';
 import { UserRole } from '@website/shared-types';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
@@ -42,8 +38,7 @@ export default function AdminView(): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/user/${id}`)
+    API.deleteUser(id)
       .then(() => enqueueSnackbar('User deleted', { variant: 'success' }))
       .catch((error) => {
         enqueueSnackbar('Error deleting user', { variant: 'error' });
@@ -60,17 +55,17 @@ export default function AdminView(): ReactElement {
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('userAdded', (newUser: FrontUserDocument) =>
+    API.listenTo('userAdded', (newUser: FrontUserDocument) =>
       dispatch(addUser(newUser)),
     );
-    socket.on('userEdited', (editedUser: FrontUserDocument) =>
+    API.listenTo('userEdited', (editedUser: FrontUserDocument) =>
       dispatch(editUser(editedUser)),
     );
-    socket.on('userDeleted', (id: string) => dispatch(deleteUser(id)));
+    API.listenTo('userDeleted', (id: string) => dispatch(deleteUser(id)));
     return () => {
-      socket.off('userAdded');
-      socket.off('userEdited');
-      socket.off('userDeleted');
+      API.stopListening('userAdded');
+      API.stopListening('userEdited');
+      API.stopListening('userDeleted');
     };
   }, [dispatch]);
 

@@ -1,4 +1,4 @@
-import { client, type FrontUserDocument } from '@/lib/utils';
+import { API } from '@/lib/api';
 import { receiveUsers, requestUsers } from '../slices';
 import { type AppThunk } from '../types';
 
@@ -9,11 +9,9 @@ export function fetchUsers(): AppThunk {
     try {
       dispatch(requestUsers());
 
-      const { data } = await client.get<FrontUserDocument[]>(
-        `/user/${userRole}`,
-      );
+      const users = await API.getUsers(userRole);
 
-      dispatch(receiveUsers(data));
+      dispatch(receiveUsers(users));
     } catch (error) {
       console.error(error);
       dispatch(receiveUsers([]));

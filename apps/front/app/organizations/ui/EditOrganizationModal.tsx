@@ -1,6 +1,7 @@
 'use client';
 
-import { client, type OrganizationDocument } from '@/lib/utils';
+import { API } from '@/lib/api';
+import { type OrganizationDocument } from '@/lib/utils';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
@@ -20,11 +21,7 @@ export default function EditOrganizationModal({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleEdit = (values: OrganizationDocument): void => {
-    client
-      .put<OrganizationDocument>(
-        `/organization/${organizationToEdit._id}`,
-        values,
-      )
+    API.editOrganization(organizationToEdit._id, values)
       .then(() => {
         enqueueSnackbar('Organization edited', { variant: 'success' });
         setShow(false);

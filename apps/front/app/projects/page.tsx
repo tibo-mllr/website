@@ -2,6 +2,7 @@
 
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
+import { API } from '@/lib/api';
 import {
   fetchCompetencies,
   fetchOrganizations,
@@ -24,8 +25,6 @@ import {
 import {
   type OrganizationDocument,
   DOCUMENT_TITLE,
-  client,
-  socket,
   type ProjectDocument,
 } from '@/lib/utils';
 import { ProjectType } from '@website/shared-types';
@@ -73,8 +72,7 @@ export default function ProjectView(): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/project/${id}`)
+    API.deleteProject(id)
       .then(() => enqueueSnackbar('Project deleted', { variant: 'success' }))
       .catch((error) => {
         enqueueSnackbar('Error deleting project', { variant: 'error' });
@@ -93,43 +91,43 @@ export default function ProjectView(): ReactElement {
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('projectAdded', (newProject: ProjectDocument) => {
+    API.listenTo('projectAdded', (newProject: ProjectDocument) => {
       dispatch(addProject(newProject));
       dispatch(addCompetencies(newProject.competencies));
     });
-    socket.on('projectEdited', (editedProject: ProjectDocument) => {
+    API.listenTo('projectEdited', (editedProject: ProjectDocument) => {
       dispatch(editProject(editedProject));
       dispatch(fetchCompetencies());
     });
-    socket.on('projectDeleted', (id: string) => {
+    API.listenTo('projectDeleted', (id: string) => {
       dispatch(deleteProject(id));
       dispatch(fetchCompetencies());
     });
     // Several projects deleted by cascade with an organization
-    socket.on('projectsDeleted', () => {
+    API.listenTo('projectsDeleted', () => {
       dispatch(fetchProjects());
       dispatch(fetchCompetencies());
     });
     // Calls that can be made for the creation/edition of a project
-    socket.on('organizationAdded', (newOrganization: OrganizationDocument) =>
+    API.listenTo('organizationAdded', (newOrganization: OrganizationDocument) =>
       dispatch(addOrganization(newOrganization)),
     );
-    socket.on(
+    API.listenTo(
       'organizationEdited',
       (editedOrganization: OrganizationDocument) =>
         dispatch(editOrganization(editedOrganization)),
     );
-    socket.on('organizationDeleted', (id: string) =>
+    API.listenTo('organizationDeleted', (id: string) =>
       dispatch(deleteOrganization(id)),
     );
     return () => {
-      socket.off('projectAdded');
-      socket.off('projectEdited');
-      socket.off('projectDeleted');
-      socket.off('projectsDeleted');
-      socket.off('organizationAdded');
-      socket.off('organizationEdited');
-      socket.off('organizationDeleted');
+      API.stopListening('projectAdded');
+      API.stopListening('projectEdited');
+      API.stopListening('projectDeleted');
+      API.stopListening('projectsDeleted');
+      API.stopListening('organizationAdded');
+      API.stopListening('organizationEdited');
+      API.stopListening('organizationDeleted');
     };
   }, [dispatch]);
 

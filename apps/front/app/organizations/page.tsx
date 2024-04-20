@@ -2,6 +2,7 @@
 
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
+import { API } from '@/lib/api';
 import { fetchOrganizations } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -13,12 +14,7 @@ import {
   selectToken,
   selectUserRole,
 } from '@/lib/redux/slices';
-import {
-  DOCUMENT_TITLE,
-  client,
-  socket,
-  type OrganizationDocument,
-} from '@/lib/utils';
+import { DOCUMENT_TITLE, type OrganizationDocument } from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
@@ -47,8 +43,7 @@ export default function OrganizationView(): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/organization/${id}`)
+    API.deleteOrganization(id)
       .then(() =>
         enqueueSnackbar('Organization deleted', { variant: 'success' }),
       )
@@ -67,21 +62,21 @@ export default function OrganizationView(): ReactElement {
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('organizationAdded', (newOrganization: OrganizationDocument) =>
+    API.listenTo('organizationAdded', (newOrganization: OrganizationDocument) =>
       dispatch(addOrganization(newOrganization)),
     );
-    socket.on(
+    API.listenTo(
       'organizationEdited',
       (editedOrganization: OrganizationDocument) =>
         dispatch(editOrganization(editedOrganization)),
     );
-    socket.on('organizationDeleted', (id: string) =>
+    API.listenTo('organizationDeleted', (id: string) =>
       dispatch(deleteOrganization(id)),
     );
     return () => {
-      socket.off('organizationAdded');
-      socket.off('organizationEdited');
-      socket.off('organizationDeleted');
+      API.stopListening('organizationAdded');
+      API.stopListening('organizationEdited');
+      API.stopListening('organizationDeleted');
     };
   }, [dispatch]);
 

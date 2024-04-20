@@ -1,7 +1,8 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { selectToken, selectUserRole } from '@/lib/redux/slices';
-import { client, type FrontUserDocument } from '@/lib/utils';
+import { type FrontUserDocument } from '@/lib/utils';
 import { frontUserSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
@@ -27,8 +28,7 @@ export default function EditUserModal({
   const { enqueueSnackbar } = useSnackbar();
 
   const handleEdit = (values: FrontUserDocument): void => {
-    client
-      .put(`/user/${userToEdit._id}`, values)
+    API.editUser(userToEdit._id, values)
       .then(() => {
         enqueueSnackbar('User edited', { variant: 'success' });
         setShow(false);

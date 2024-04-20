@@ -1,6 +1,9 @@
-import { type Project as NormalProject } from '@website/shared-types';
+import {
+  PartialBy,
+  type Project as NormalProject,
+} from '@website/shared-types';
 import { EnqueueSnackbar } from 'notistack';
-import { client } from './utils';
+import { API } from '../api';
 import { type OrganizationDocument } from './utilsOrganization';
 
 export type Project = Omit<NormalProject, 'organization'> & {
@@ -20,12 +23,12 @@ export const handleOrganization = async (
   if (!organization) return undefined;
 
   if (!organization._id) {
-    const organizationToPost: Partial<OrganizationDocument> = organization;
+    const organizationToPost: PartialBy<OrganizationDocument, '_id'> =
+      organization;
     delete organizationToPost._id;
 
-    return client
-      .post<OrganizationDocument>('/organization', organizationToPost)
-      .then(({ data: { _id } }) => _id)
+    return API.createOrganization(organizationToPost)
+      .then(({ _id }) => _id)
       .catch((error) => {
         enqueueSnackbar(error, { variant: 'error' });
         console.error(error);
@@ -42,12 +45,8 @@ export const handleOrganization = async (
     organizationToCheck?.location !== organization.location ||
     organizationToCheck?.website !== organization.website
   ) {
-    return client
-      .put<OrganizationDocument>(
-        '/organization/' + organization._id,
-        organization,
-      )
-      .then(({ data: { _id } }) => _id)
+    return API.editOrganization(organization._id, organization)
+      .then(({ _id }) => _id)
       .catch((error) => {
         enqueueSnackbar(error, { variant: 'error' });
         console.error(error);

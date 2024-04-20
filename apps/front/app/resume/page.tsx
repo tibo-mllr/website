@@ -1,9 +1,10 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { fetchResume } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { selectResume, selectResumeLoading } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE, socket } from '@/lib/utils';
+import { DOCUMENT_TITLE } from '@/lib/utils';
 import { type ReactElement, useEffect } from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
@@ -22,23 +23,23 @@ export default function ResumeView(): ReactElement {
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('projectAdded', () => {
+    API.listenTo('projectAdded', () => {
       dispatch(fetchResume());
     });
-    socket.on('projectEdited', () => {
+    API.listenTo('projectEdited', () => {
       dispatch(fetchResume());
     });
-    socket.on('projectDeleted', () => {
+    API.listenTo('projectDeleted', () => {
       dispatch(fetchResume());
     });
-    socket.on('projectsDeleted', () => {
+    API.listenTo('projectsDeleted', () => {
       dispatch(fetchResume());
     });
     return () => {
-      socket.off('projectAdded');
-      socket.off('projectEdited');
-      socket.off('projectDeleted');
-      socket.off('projectsDeleted');
+      API.stopListening('projectAdded');
+      API.stopListening('projectEdited');
+      API.stopListening('projectDeleted');
+      API.stopListening('projectsDeleted');
     };
   }, [dispatch]);
 

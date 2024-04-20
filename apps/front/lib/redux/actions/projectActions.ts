@@ -1,4 +1,4 @@
-import { type ProjectDocument, type Resume, client } from '@/lib/utils';
+import { API } from '@/lib/api';
 import {
   receiveCompetencies,
   receiveProjects,
@@ -13,9 +13,9 @@ export function fetchProjects(): AppThunk {
     try {
       dispatch(requestProjects());
 
-      const { data } = await client.get<ProjectDocument[]>('/project');
+      const projects = await API.getProjects();
 
-      dispatch(receiveProjects(data));
+      dispatch(receiveProjects(projects));
     } catch (error) {
       console.error(error);
       dispatch(receiveProjects([]));
@@ -26,9 +26,9 @@ export function fetchProjects(): AppThunk {
 export function fetchCompetencies(): AppThunk {
   return async (dispatch) => {
     try {
-      const { data } = await client.get<string[]>('/project/competencies');
+      const competencies = await API.getCompetencies();
 
-      dispatch(receiveCompetencies(data));
+      dispatch(receiveCompetencies(competencies));
     } catch (error) {
       console.error(error);
       dispatch(receiveCompetencies([]));
@@ -41,9 +41,9 @@ export function fetchResume(): AppThunk {
     try {
       dispatch(requestResume());
 
-      const { data } = await client.get<Resume>('/resume');
+      const resume = await API.getResume();
 
-      dispatch(receiveResume(data));
+      dispatch(receiveResume(resume));
     } catch (error) {
       console.error(error);
       dispatch(receiveResume({ projects: [], competencies: [] }));

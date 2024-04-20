@@ -1,8 +1,8 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { selectShowNewNews, switchShowNewNews } from '@/lib/redux/slices';
-import { client } from '@/lib/utils';
 import { newsSchema, type News } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
@@ -24,8 +24,7 @@ export default function CreateNewsModal(): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleCreate = (values: Omit<News, 'author'>): void => {
-    client
-      .post('/news', values)
+    API.createNews(values)
       .then(() => {
         enqueueSnackbar('News added', { variant: 'success' });
         dispatch(switchShowNewNews(false));

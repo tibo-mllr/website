@@ -2,6 +2,7 @@
 
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal } from '@/components';
+import { API } from '@/lib/api';
 import { fetchNews } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -13,7 +14,7 @@ import {
   selectToken,
   selectUserRole,
 } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE, client, type NewsDocument, socket } from '@/lib/utils';
+import { DOCUMENT_TITLE, type NewsDocument } from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
@@ -41,8 +42,7 @@ export default function HomeView(): ReactElement {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleDelete = (id: string): void => {
-    client
-      .delete(`/news/${id}`)
+    API.deleteNews(id)
       .then(() => enqueueSnackbar('News deleted', { variant: 'success' }))
       .catch((error) => {
         enqueueSnackbar('Error deleting news', { variant: 'error' });
@@ -59,20 +59,20 @@ export default function HomeView(): ReactElement {
   }, [dispatch]);
 
   useEffect(() => {
-    socket.on('newsAdded', (newNews: NewsDocument) =>
+    API.listenTo('newsAdded', (newNews: NewsDocument) =>
       dispatch(addNews(newNews)),
     );
-    socket.on('newsEdited', (editedNews: NewsDocument) =>
+    API.listenTo('newsEdited', (editedNews: NewsDocument) =>
       dispatch(editNews(editedNews)),
     );
-    socket.on('newsDeleted', (id: string) => dispatch(deleteNews(id)));
-    socket.on('severalNewsDeleted', () => dispatch(fetchNews()));
+    API.listenTo('newsDeleted', (id: string) => dispatch(deleteNews(id)));
+    API.listenTo('severalNewsDeleted', () => dispatch(fetchNews()));
 
     return () => {
-      socket.off('newsAdded');
-      socket.off('newsEdited');
-      socket.off('newsDeleted');
-      socket.off('severalNewsDeleted');
+      API.stopListening('newsAdded');
+      API.stopListening('newsEdited');
+      API.stopListening('newsDeleted');
+      API.stopListening('severalNewsDeleted');
     };
   }, [dispatch]);
 

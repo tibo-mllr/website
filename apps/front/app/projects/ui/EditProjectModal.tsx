@@ -1,12 +1,8 @@
 'use client';
 
+import { API } from '@/lib/api';
 import { selectOrganizations } from '@/lib/redux/slices';
-import {
-  client,
-  Project,
-  handleOrganization,
-  type ProjectDocument,
-} from '@/lib/utils';
+import { Project, handleOrganization, type ProjectDocument } from '@/lib/utils';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useState } from 'react';
 import { Modal } from 'react-bootstrap';
@@ -39,12 +35,11 @@ export default function EditProjectModal({
       values.organization,
     );
 
-    client
-      .put<ProjectDocument>('/project/' + projectToEdit._id, {
-        ...values,
-        organization: organizationId,
-        endDate: selectEndDate ? values.endDate : undefined,
-      })
+    API.editProject(projectToEdit._id, {
+      ...values,
+      organization: organizationId,
+      endDate: selectEndDate ? values.endDate : undefined,
+    })
       .then(() => {
         enqueueSnackbar('Project edited', { variant: 'success' });
         setShow(false);

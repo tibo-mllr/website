@@ -1,4 +1,4 @@
-import { client, type NewsDocument } from '@/lib/utils';
+import { API } from '@/lib/api';
 import { receiveNews, requestNews } from '../slices';
 import { type AppThunk } from '../types';
 
@@ -7,9 +7,9 @@ export function fetchNews(): AppThunk {
     try {
       dispatch(requestNews());
 
-      const { data } = await client.get<NewsDocument[]>('/news');
+      const allNews = await API.getNews();
 
-      dispatch(receiveNews(data));
+      dispatch(receiveNews(allNews));
     } catch (error) {
       console.error(error);
       dispatch(receiveNews([]));

@@ -1,10 +1,10 @@
 'use client';
 
 import { PasswordField, TextFieldWithLabel } from '@/components';
+import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { login, switchShowNewUser } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE, client } from '@/lib/utils';
-import { type UserRole } from '@website/shared-types';
+import { DOCUMENT_TITLE } from '@/lib/utils';
 import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
@@ -23,12 +23,8 @@ export default function LoginView(): ReactElement {
     username: string;
     password: string;
   }): void => {
-    client
-      .post<{ access_token: string; role: UserRole }>('/auth/login/', {
-        username: values.username,
-        password: values.password,
-      })
-      .then(({ data: { access_token, role } }) => {
+    API.login(values.username, values.password)
+      .then(({ access_token, role }) => {
         dispatch(login({ token: access_token, userRole: role }));
         router.push('/admin');
       })
