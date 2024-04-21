@@ -1,5 +1,6 @@
 'use client';
 
+import { ProjectCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchResume } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -38,7 +39,13 @@ export default function ProjectsSestion(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading) return <i>Loading...</i>;
+  if (isLoading)
+    return (
+      <>
+        <ProjectCardSkeleton />
+        <ProjectCardSkeleton />
+      </>
+    );
 
   return (
     <>

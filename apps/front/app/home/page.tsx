@@ -1,7 +1,7 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal } from '@/components';
+import { ConfirmModal, NewsCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchNews } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -72,7 +72,14 @@ export default function HomeView(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading) return <i>Loading...</i>;
+  if (isLoading)
+    return (
+      <>
+        <NewsCardSkeleton />
+        <NewsCardSkeleton />
+        <NewsCardSkeleton />
+      </>
+    );
 
   return (
     <>

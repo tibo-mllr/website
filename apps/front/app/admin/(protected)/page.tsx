@@ -1,7 +1,7 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal } from '@/components';
+import { ConfirmModal, UserCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchUsers } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -11,6 +11,7 @@ import {
   editUser,
   selectUserRole,
   selectUsers,
+  selectUsersLoading,
 } from '@/lib/redux/slices';
 import { type FrontUserDocument } from '@/lib/utils';
 import { UserRole } from '@website/shared-types';
@@ -34,6 +35,7 @@ export default function AdminView(): ReactElement {
   const dispatch = useAppDispatch();
   const userRole = useSelector(selectUserRole);
   const users = useSelector(selectUsers);
+  const isLoading = useSelector(selectUsersLoading);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -64,6 +66,8 @@ export default function AdminView(): ReactElement {
       API.stopListening('userDeleted');
     };
   }, [dispatch]);
+
+  if (isLoading) return <UserCardSkeleton />;
 
   return (
     <>

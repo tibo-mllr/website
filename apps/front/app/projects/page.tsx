@@ -1,7 +1,7 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal } from '@/components';
+import { ConfirmModal, ProjectCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import {
   fetchCompetencies,
@@ -123,8 +123,6 @@ export default function ProjectView(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading) return <i>Loading...</i>;
-
   return (
     <>
       <ConfirmModal
@@ -137,7 +135,12 @@ export default function ProjectView(): ReactElement {
       <Row>
         <h1 className="text-center">These are the projects I worked on</h1>
       </Row>
-      {projects.length ? (
+      {isLoading ? (
+        <>
+          <ProjectCardSkeleton />
+          <ProjectCardSkeleton />
+        </>
+      ) : projects.length ? (
         projects.map((project) => (
           <Row className="my-3" key={project._id}>
             <Col>

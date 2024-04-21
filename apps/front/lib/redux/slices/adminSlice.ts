@@ -68,6 +68,7 @@ export const adminSlice = createSlice({
     selectToken: (state) => state.token,
     selectShowNewUser: (state) => state.showNew,
     selectUsers: (state) => state.users,
+    selectUsersLoading: (state) => state.isLoading,
   },
 });
 
@@ -83,5 +84,10 @@ export const {
   switchShowNewUser,
 } = adminSlice.actions;
 
-export const { selectUserRole, selectToken, selectShowNewUser, selectUsers } =
-  adminSlice.selectors;
+export const {
+  selectUserRole,
+  selectToken,
+  selectShowNewUser,
+  selectUsers,
+  selectUsersLoading,
+} = adminSlice.selectors;

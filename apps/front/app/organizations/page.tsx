@@ -1,7 +1,7 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal } from '@/components';
+import { ConfirmModal, OrganizationCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchOrganizations } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -76,8 +76,6 @@ export default function OrganizationView(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading) return <i>Loading...</i>;
-
   return (
     <>
       <ConfirmModal
@@ -92,7 +90,12 @@ export default function OrganizationView(): ReactElement {
           These are the organizations I worked for
         </h1>
       </Row>
-      {organizations.length ? (
+      {isLoading ? (
+        <>
+          <OrganizationCardSkeleton />
+          <OrganizationCardSkeleton />
+        </>
+      ) : organizations.length ? (
         organizations.map((organization) => (
           <Row className="my-3" key={organization._id}>
             <Col>
