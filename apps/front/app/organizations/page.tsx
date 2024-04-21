@@ -14,7 +14,7 @@ import {
   selectToken,
   selectUserRole,
 } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE, type OrganizationDocument } from '@/lib/utils';
+import { type OrganizationDocument } from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
@@ -52,10 +52,6 @@ export default function OrganizationView(): ReactElement {
         console.error(error);
       });
   };
-
-  useEffect(() => {
-    document.title = `Organizations | ${DOCUMENT_TITLE}`;
-  }, []);
 
   useEffect(() => {
     dispatch(fetchOrganizations());

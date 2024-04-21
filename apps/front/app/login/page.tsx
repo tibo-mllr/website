@@ -4,11 +4,10 @@ import { PasswordField, TextFieldWithLabel } from '@/components';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { login, switchShowNewUser } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE } from '@/lib/utils';
 import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
-import { type ReactElement, useEffect } from 'react';
+import { type ReactElement } from 'react';
 import { Button, Col, Row, Card, Form } from 'react-bootstrap';
 import { CreateUserModal } from '../admin';
 
@@ -33,10 +32,6 @@ export default function LoginView(): ReactElement {
         console.error(error);
       });
   };
-
-  useEffect(() => {
-    document.title = `Login | ${DOCUMENT_TITLE}`;
-  }, []);
 
   return (
     <>

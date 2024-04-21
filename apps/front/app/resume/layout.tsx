@@ -1,11 +1,11 @@
 import { Metadata } from 'next';
-import { ReactElement, ReactNode } from 'react';
+import { type ReactElement, type ReactNode } from 'react';
 
 export const metadata: Metadata = {
-  title: 'Admin',
+  title: 'Resume',
 };
 
-export default function Layout({
+export default function ResumeLayout({
   children,
 }: {
   children: ReactNode;

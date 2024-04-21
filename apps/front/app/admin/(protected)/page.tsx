@@ -12,14 +12,14 @@ import {
   selectUserRole,
   selectUsers,
 } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE, type FrontUserDocument } from '@/lib/utils';
+import { type FrontUserDocument } from '@/lib/utils';
 import { UserRole } from '@website/shared-types';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { CreateUserModal, EditUserModal } from './ui';
+import { CreateUserModal, EditUserModal } from '../ui';
 
 export default function AdminView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
@@ -45,10 +45,6 @@ export default function AdminView(): ReactElement {
         console.error(error);
       });
   };
-
-  useEffect(() => {
-    document.title = `Admin | ${DOCUMENT_TITLE}`;
-  }, []);
 
   useEffect(() => {
     dispatch(fetchUsers());

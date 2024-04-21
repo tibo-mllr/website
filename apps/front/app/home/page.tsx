@@ -14,7 +14,7 @@ import {
   selectToken,
   selectUserRole,
 } from '@/lib/redux/slices';
-import { DOCUMENT_TITLE, type NewsDocument } from '@/lib/utils';
+import { type NewsDocument } from '@/lib/utils';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
 import { type ReactElement, useEffect, useState } from 'react';
@@ -49,10 +49,6 @@ export default function HomeView(): ReactElement {
         console.error(error);
       });
   };
-
-  useEffect(() => {
-    document.title = `Home | ${DOCUMENT_TITLE}`;
-  }, []);
 
   useEffect(() => {
     dispatch(fetchNews());

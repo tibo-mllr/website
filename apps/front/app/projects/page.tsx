@@ -22,11 +22,7 @@ import {
   selectToken,
   selectUserRole,
 } from '@/lib/redux/slices';
-import {
-  type OrganizationDocument,
-  DOCUMENT_TITLE,
-  type ProjectDocument,
-} from '@/lib/utils';
+import { type OrganizationDocument, type ProjectDocument } from '@/lib/utils';
 import { ProjectType } from '@website/shared-types';
 import Image from 'next/image';
 import { useSnackbar } from 'notistack';
@@ -79,10 +75,6 @@ export default function ProjectView(): ReactElement {
         console.error(error);
       });
   };
-
-  useEffect(() => {
-    document.title = `Projects | ${DOCUMENT_TITLE}`;
-  }, []);
 
   useEffect(() => {
     dispatch(fetchProjects());
