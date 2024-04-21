@@ -55,15 +55,12 @@ export class API {
     sessionStorage.setItem('token', token);
     sessionStorage.setItem('userRole', userRole);
     this.client.defaults.headers.common.Authorization = `Bearer ${token}`;
-    console.log('token', token);
-    console.log(this.client.defaults.headers.common.Authorization);
   }
 
   static removeAuth(): void {
     sessionStorage.removeItem('token');
     sessionStorage.removeItem('userRole');
     delete this.client.defaults.headers.common.Authorization;
-    console.log('token removed');
   }
 
   // *** Admin ***
