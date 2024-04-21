@@ -130,7 +130,7 @@ export default function Header(): ReactElement {
                 className="btn-logout"
                 onClick={() => {
                   dispatch(logout());
-                  router.push('/');
+                  if (pathname === '/admin') router.push('/');
                 }}
               >
                 Logout

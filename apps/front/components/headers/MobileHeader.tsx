@@ -109,7 +109,7 @@ export default function MobileHeader(): ReactElement {
                       className="btn-logout"
                       onClick={() => {
                         dispatch(logout());
-                        router.push('/');
+                        if (pathname === '/admin') router.push('/');
                       }}
                     >
                       Logout
