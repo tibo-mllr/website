@@ -182,47 +182,50 @@ export default function ProjectView(): ReactElement {
                     <i>{project.competencies.join(' • ')}</i>
                   </Card.Text>
                 </Card.Body>
-                <Card.Footer>
-                  <Row>
-                    {project.link && (
-                      <Col>
-                        <a href={project.link} target="_blank">
-                          See more
-                        </a>
-                      </Col>
-                    )}
-                    {!!token && userRole === 'superAdmin' && (
-                      <Col className="d-flex justify-content-end gap-2">
-                        <Button
-                          onClick={() => {
-                            setShowEdit(true);
-                            setProjectToEdit(project);
-                          }}
-                        >
-                          <Image
-                            alt="Edit"
-                            src={editIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setShowConfirm(true);
-                            setProjectToEdit(project);
-                          }}
-                        >
-                          <Image
-                            alt="Delete"
-                            src={binIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                      </Col>
-                    )}
-                  </Row>
-                </Card.Footer>
+                {!!project.link ||
+                  (!!token && userRole === 'superAdmin' && (
+                    <Card.Footer>
+                      <Row>
+                        {project.link && (
+                          <Col>
+                            <a href={project.link} target="_blank">
+                              See more
+                            </a>
+                          </Col>
+                        )}
+                        {!!token && userRole === 'superAdmin' && (
+                          <Col className="d-flex justify-content-end gap-2">
+                            <Button
+                              onClick={() => {
+                                setShowEdit(true);
+                                setProjectToEdit(project);
+                              }}
+                            >
+                              <Image
+                                alt="Edit"
+                                src={editIcon}
+                                height="24"
+                                className="d-inline-block align-center"
+                              />
+                            </Button>
+                            <Button
+                              onClick={() => {
+                                setShowConfirm(true);
+                                setProjectToEdit(project);
+                              }}
+                            >
+                              <Image
+                                alt="Delete"
+                                src={binIcon}
+                                height="24"
+                                className="d-inline-block align-center"
+                              />
+                            </Button>
+                          </Col>
+                        )}
+                      </Row>
+                    </Card.Footer>
+                  ))}
               </Card>
             </Col>
           </Row>
