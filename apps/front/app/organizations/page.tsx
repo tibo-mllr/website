@@ -1,7 +1,11 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal, OrganizationCardSkeleton } from '@/components';
+import {
+  ConfirmModal,
+  CustomSuspense,
+  OrganizationCardSkeleton,
+} from '@/components';
 import { API } from '@/lib/api';
 import { fetchOrganizations } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -90,79 +94,80 @@ export default function OrganizationView(): ReactElement {
           These are the organizations I worked for
         </h1>
       </Row>
-      {isLoading ? (
-        <>
-          <OrganizationCardSkeleton />
-          <OrganizationCardSkeleton />
-        </>
-      ) : organizations.length ? (
-        organizations.map((organization) => (
-          <Row className="my-3" key={organization._id}>
-            <Col>
-              <Card>
-                <Card.Header>
-                  <Card.Title>
-                    <b>{organization.name}</b>, {organization.location}
-                  </Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  {organization.description ?? <i>No description provided</i>}
-                  <br />
-                  <br />
-                  <b>Website: </b>
-                  <a href={organization.website} target="_blank">
-                    {organization.website}
-                  </a>
-                </Card.Body>
-                {!!token && userRole === 'superAdmin' && (
-                  <Card.Footer>
-                    <Row>
-                      <Col className="d-flex justify-content-end gap-2">
-                        <Button
-                          onClick={() => {
-                            setShowEdit(true);
-                            setOrganizationToEdit(organization);
-                          }}
-                        >
-                          <Image
-                            alt="Edit"
-                            src={editIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setShowConfirm(true);
-                            setOrganizationToEdit(organization);
-                          }}
-                        >
-                          <Image
-                            alt="Delete"
-                            src={binIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Card.Footer>
-                )}
-              </Card>
-            </Col>
-          </Row>
-        ))
-      ) : (
-        <i>No organization to display</i>
-      )}
-      {!!token && <CreateOrganizationModal />}
-      {!!token && userRole === 'superAdmin' && (
-        <EditOrganizationModal
-          organizationToEdit={organizationToEdit}
-          show={showEdit}
-          setShow={setShowEdit}
-        />
-      )}
+      <CustomSuspense
+        fallback={<OrganizationCardSkeleton />}
+        count={2}
+        isLoading={isLoading}
+      >
+        {organizations.length ? (
+          organizations.map((organization) => (
+            <Row className="my-3" key={organization._id}>
+              <Col>
+                <Card>
+                  <Card.Header>
+                    <Card.Title>
+                      <b>{organization.name}</b>, {organization.location}
+                    </Card.Title>
+                  </Card.Header>
+                  <Card.Body>
+                    {organization.description ?? <i>No description provided</i>}
+                    <br />
+                    <br />
+                    <b>Website: </b>
+                    <a href={organization.website} target="_blank">
+                      {organization.website}
+                    </a>
+                  </Card.Body>
+                  {!!token && userRole === 'superAdmin' && (
+                    <Card.Footer>
+                      <Row>
+                        <Col className="d-flex justify-content-end gap-2">
+                          <Button
+                            onClick={() => {
+                              setShowEdit(true);
+                              setOrganizationToEdit(organization);
+                            }}
+                          >
+                            <Image
+                              alt="Edit"
+                              src={editIcon}
+                              height="24"
+                              className="d-inline-block align-center"
+                            />
+                          </Button>
+                          <Button
+                            onClick={() => {
+                              setShowConfirm(true);
+                              setOrganizationToEdit(organization);
+                            }}
+                          >
+                            <Image
+                              alt="Delete"
+                              src={binIcon}
+                              height="24"
+                              className="d-inline-block align-center"
+                            />
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Card.Footer>
+                  )}
+                </Card>
+              </Col>
+            </Row>
+          ))
+        ) : (
+          <i>No organization to display</i>
+        )}
+        {!!token && <CreateOrganizationModal />}
+        {!!token && userRole === 'superAdmin' && (
+          <EditOrganizationModal
+            organizationToEdit={organizationToEdit}
+            show={showEdit}
+            setShow={setShowEdit}
+          />
+        )}
+      </CustomSuspense>
     </>
   );
 }

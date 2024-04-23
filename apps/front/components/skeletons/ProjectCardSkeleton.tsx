@@ -1,16 +1,9 @@
 'use client';
 
-import { useEffect, useState, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { Card } from 'react-bootstrap';
 
 export function ProjectCardSkeleton(): ReactElement {
-  const [numLines, setNumLines] = useState(1);
-
-  useEffect(() => {
-    // Generate between 3 and 7 lines
-    setNumLines(Math.floor(Math.random() * 4) + 3);
-  }, []);
-
   return (
     <div className="my-3">
       <Card>
@@ -20,16 +13,34 @@ export function ProjectCardSkeleton(): ReactElement {
           </Card.Title>
         </Card.Header>
         <Card.Body>
-          {Array.from({ length: numLines }).map((_, index) => (
-            <div
-              key={index}
-              className="skeleton-text"
-              style={{
-                width: `${80 + Math.random() * 20}%`,
-                marginBottom: '10px',
-              }}
-            />
-          ))}
+          <div
+            className="skeleton-text"
+            style={{
+              width: '100%',
+              marginBottom: '10px',
+            }}
+          />
+          <div
+            className="skeleton-text"
+            style={{
+              width: '80%',
+              marginBottom: '10px',
+            }}
+          />
+          <div
+            className="skeleton-text"
+            style={{
+              width: '90%',
+              marginBottom: '10px',
+            }}
+          />
+          <div
+            className="skeleton-text"
+            style={{
+              width: '80%',
+              marginBottom: '10px',
+            }}
+          />
         </Card.Body>
         <Card.Footer>
           <div className="skeleton-text" style={{ width: '10%' }} />

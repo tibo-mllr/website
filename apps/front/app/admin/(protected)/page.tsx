@@ -1,7 +1,7 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal, UserCardSkeleton } from '@/components';
+import { ConfirmModal, CustomSuspense, UserCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchUsers } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -67,10 +67,8 @@ export default function AdminView(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading) return <UserCardSkeleton />;
-
   return (
-    <>
+    <CustomSuspense fallback={<UserCardSkeleton />} isLoading={isLoading}>
       <ConfirmModal
         title="Delete user"
         message="Are you sure you want to delete this user?"
@@ -132,6 +130,6 @@ export default function AdminView(): ReactElement {
         show={showEdit}
         setShow={setShowEdit}
       />
-    </>
+    </CustomSuspense>
   );
 }

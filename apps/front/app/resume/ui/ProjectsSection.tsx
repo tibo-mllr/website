@@ -1,6 +1,6 @@
 'use client';
 
-import { ProjectCardSkeleton } from '@/components';
+import { CustomSuspense, ProjectCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchResume } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -39,16 +39,12 @@ export default function ProjectsSestion(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading)
-    return (
-      <>
-        <ProjectCardSkeleton />
-        <ProjectCardSkeleton />
-      </>
-    );
-
   return (
-    <>
+    <CustomSuspense
+      fallback={<ProjectCardSkeleton />}
+      count={2}
+      isLoading={isLoading}
+    >
       {resume.projects.length ? (
         resume.projects.map((type) => (
           <Row className="my-3" key={type._id}>
@@ -101,6 +97,6 @@ export default function ProjectsSestion(): ReactElement {
       ) : (
         <i>No experience to display</i>
       )}
-    </>
+    </CustomSuspense>
   );
 }

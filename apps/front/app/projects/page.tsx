@@ -1,7 +1,11 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal, ProjectCardSkeleton } from '@/components';
+import {
+  ConfirmModal,
+  CustomSuspense,
+  ProjectCardSkeleton,
+} from '@/components';
 import { API } from '@/lib/api';
 import {
   fetchCompetencies,
@@ -135,104 +139,105 @@ export default function ProjectView(): ReactElement {
       <Row>
         <h1 className="text-center">These are the projects I worked on</h1>
       </Row>
-      {isLoading ? (
-        <>
-          <ProjectCardSkeleton />
-          <ProjectCardSkeleton />
-        </>
-      ) : projects.length ? (
-        projects.map((project) => (
-          <Row className="my-3" key={project._id}>
-            <Col>
-              <Card>
-                <Card.Header>
-                  <Card.Title>
-                    <span className="fs-2">
-                      {project.role}
-                      {' | '}
-                    </span>
-                    {project.organization && (
-                      <span
-                        className="fs-4 "
-                        role="button"
-                        onClick={() => {
-                          setShowOrganization(true);
-                          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                          setOrganization(project.organization!);
-                        }}
-                      >
-                        <u>{project.organization.name}</u>
+      <CustomSuspense
+        fallback={<ProjectCardSkeleton />}
+        count={2}
+        isLoading={isLoading}
+      >
+        {projects.length ? (
+          projects.map((project) => (
+            <Row className="my-3" key={project._id}>
+              <Col>
+                <Card>
+                  <Card.Header>
+                    <Card.Title>
+                      <span className="fs-2">
+                        {project.role}
                         {' | '}
                       </span>
-                    )}
-                    <i className="fs-6">
-                      {new Date(project.startDate).toLocaleDateString()} -{' '}
-                      {project.endDate
-                        ? new Date(project.endDate).toLocaleDateString()
-                        : 'Present'}
-                    </i>
-                  </Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Card.Text>
-                    <b>{project.title}</b>
-                    <br />
-                    {project.description}
-                    <br />
-                    <i>{project.competencies.join(' • ')}</i>
-                  </Card.Text>
-                </Card.Body>
-                {!!project.link ||
-                  (!!token && userRole === 'superAdmin' && (
-                    <Card.Footer>
-                      <Row>
-                        {project.link && (
-                          <Col>
-                            <a href={project.link} target="_blank">
-                              See more
-                            </a>
-                          </Col>
-                        )}
-                        {!!token && userRole === 'superAdmin' && (
-                          <Col className="d-flex justify-content-end gap-2">
-                            <Button
-                              onClick={() => {
-                                setShowEdit(true);
-                                setProjectToEdit(project);
-                              }}
-                            >
-                              <Image
-                                alt="Edit"
-                                src={editIcon}
-                                height="24"
-                                className="d-inline-block align-center"
-                              />
-                            </Button>
-                            <Button
-                              onClick={() => {
-                                setShowConfirm(true);
-                                setProjectToEdit(project);
-                              }}
-                            >
-                              <Image
-                                alt="Delete"
-                                src={binIcon}
-                                height="24"
-                                className="d-inline-block align-center"
-                              />
-                            </Button>
-                          </Col>
-                        )}
-                      </Row>
-                    </Card.Footer>
-                  ))}
-              </Card>
-            </Col>
-          </Row>
-        ))
-      ) : (
-        <i>No project to display</i>
-      )}
+                      {project.organization && (
+                        <span
+                          className="fs-4 "
+                          role="button"
+                          onClick={() => {
+                            setShowOrganization(true);
+                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+                            setOrganization(project.organization!);
+                          }}
+                        >
+                          <u>{project.organization.name}</u>
+                          {' | '}
+                        </span>
+                      )}
+                      <i className="fs-6">
+                        {new Date(project.startDate).toLocaleDateString()} -{' '}
+                        {project.endDate
+                          ? new Date(project.endDate).toLocaleDateString()
+                          : 'Present'}
+                      </i>
+                    </Card.Title>
+                  </Card.Header>
+                  <Card.Body>
+                    <Card.Text>
+                      <b>{project.title}</b>
+                      <br />
+                      {project.description}
+                      <br />
+                      <i>{project.competencies.join(' • ')}</i>
+                    </Card.Text>
+                  </Card.Body>
+                  {!!project.link ||
+                    (!!token && userRole === 'superAdmin' && (
+                      <Card.Footer>
+                        <Row>
+                          {project.link && (
+                            <Col>
+                              <a href={project.link} target="_blank">
+                                See more
+                              </a>
+                            </Col>
+                          )}
+                          {!!token && userRole === 'superAdmin' && (
+                            <Col className="d-flex justify-content-end gap-2">
+                              <Button
+                                onClick={() => {
+                                  setShowEdit(true);
+                                  setProjectToEdit(project);
+                                }}
+                              >
+                                <Image
+                                  alt="Edit"
+                                  src={editIcon}
+                                  height="24"
+                                  className="d-inline-block align-center"
+                                />
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  setShowConfirm(true);
+                                  setProjectToEdit(project);
+                                }}
+                              >
+                                <Image
+                                  alt="Delete"
+                                  src={binIcon}
+                                  height="24"
+                                  className="d-inline-block align-center"
+                                />
+                              </Button>
+                            </Col>
+                          )}
+                        </Row>
+                      </Card.Footer>
+                    ))}
+                </Card>
+              </Col>
+            </Row>
+          ))
+        ) : (
+          <i>No project to display</i>
+        )}
+      </CustomSuspense>
       <Modal show={showOrganization} onHide={() => setShowOrganization(false)}>
         <Modal.Header closeButton>
           <Modal.Title>{organization.name}</Modal.Title>

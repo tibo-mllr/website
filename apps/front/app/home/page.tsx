@@ -1,7 +1,7 @@
 'use client';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal, NewsCardSkeleton } from '@/components';
+import { ConfirmModal, CustomSuspense, NewsCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchNews } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -72,17 +72,12 @@ export default function HomeView(): ReactElement {
     };
   }, [dispatch]);
 
-  if (isLoading)
-    return (
-      <>
-        <NewsCardSkeleton />
-        <NewsCardSkeleton />
-        <NewsCardSkeleton />
-      </>
-    );
-
   return (
-    <>
+    <CustomSuspense
+      fallback={<NewsCardSkeleton />}
+      count={3}
+      isLoading={isLoading}
+    >
       <ConfirmModal
         title="Delete news"
         message="Are you sure you want to delete this news?"
@@ -163,6 +158,6 @@ export default function HomeView(): ReactElement {
           setShow={setShowEdit}
         />
       )}
-    </>
+    </CustomSuspense>
   );
 }
