@@ -22,6 +22,7 @@ RUN yarn front-build
 
 FROM base AS SERVE_STAGE
 WORKDIR /app
+# With turbo, apps/front/.next/standalone has apps/front/.next inside
 COPY --from=BUILD_STAGE /app/apps/front/.next/standalone ./
 COPY --from=BUILD_STAGE /app/apps/front/.next/static ./apps/front/.next/static
 COPY --from=BUILD_STAGE /app/apps/front/public ./apps/front/public
