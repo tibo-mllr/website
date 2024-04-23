@@ -24,14 +24,14 @@ export default function RootLayout({
 }>): ReactElement {
   return (
     <html lang="en" data-bs-theme="dark">
-      <Providers>
-        <body className={inter.className}>
+      <body className={inter.className}>
+        <Providers>
           <Header />
           <main>
             <Container>{children}</Container>
           </main>
-        </body>
-      </Providers>
+        </Providers>
+      </body>
     </html>
   );
 }
