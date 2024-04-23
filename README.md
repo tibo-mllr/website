@@ -7,7 +7,7 @@ I work alone on this project, and I use it to learn new technologies and to expe
 
 For the front:
 
-- [React](https://reactjs.org/)
+- [React](https://reactjs.org/) in [Next.js](https://nextjs.org/)
 - [Formik](https://formik.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 - Websockets
@@ -34,11 +34,11 @@ The project on its whole uses:
 
 ## Features
 
-- [A blog](apps/front/src/home#readme)
-- [An organization view](apps/front/src/organization#readme)
-- [A project view](apps/front/src/project#readme)
-- [A resume view](apps/front/src/resume#readme)
-- [An admin view](apps/front/src/admin#readme)
+- [A blog](apps/front/app/home#readme)
+- [An organization view](apps/front/app/organization#readme)
+- [A project view](apps/front/app/project#readme)
+- [A resume view](apps/front/app/resume#readme)
+- [An admin view](apps/front/app/admin#readme)
 
 ## In progress...
 

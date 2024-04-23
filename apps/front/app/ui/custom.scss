@@ -1,0 +1,195 @@
+// ** 1. Include functions first (so you can manipulate colors, SVGs, calc, etc) **
+@import '~bootstrap/scss/functions';
+
+// ** 2. Include any default variable overrides here **
+$primary: #854afc;
+$light: #bebebe;
+
+// ** 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets) **
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/variables-dark';
+
+// ** 4. Include any default map overrides here **
+$custom-colors: (
+  selected: darken($primary, 20%),
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors);
+
+// ** 5. Include remainder of required parts **
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/mixins';
+@import '~bootstrap/scss/root';
+
+// ** 6. Optionally include any other parts as needed **
+@import '~bootstrap/scss/utilities';
+@import '~bootstrap/scss/reboot';
+// @import '~bootstrap/scss/type';
+// @import '~bootstrap/scss/images';
+// @import '~bootstrap/scss/containers';
+// @import '~bootstrap/scss/grid';
+@import '~bootstrap/scss/helpers';
+
+// ** 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss` **
+// @import '~bootstrap/scss/utilities/api';
+
+// ** 8. Add additional custom code here **
+
+// Override of/additions to Bootstrap classes
+
+.btn-primary {
+  color: black;
+}
+
+.nav-link {
+  border-radius: 0.25rem;
+}
+
+.card {
+  opacity: 75%;
+}
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+
+.text-invalid {
+  color: var(--bs-form-invalid-color);
+}
+
+// Custom classes
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: radial-gradient(
+      circle at 15% 30%,
+      lighten($primary, 10%),
+      transparent 20%
+    ),
+    radial-gradient(circle at 60% 80%, $primary, transparent 10%),
+    radial-gradient(circle at 85% 50%, darken($primary, 10%), transparent 12%);
+  background-attachment: fixed;
+}
+
+header {
+  background: linear-gradient(to right, $primary 5%, lighten($dark, 2%) 30%);
+  @extend .sticky-top;
+  z-index: 1000;
+}
+
+main {
+  @extend .py-1;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.btn-logout {
+  background: linear-gradient(-30deg, $primary, $dark 50%);
+  color: $light !important;
+
+  &:hover {
+    color: lighten($light, 10%) !important;
+  }
+}
+
+.btn-add {
+  @extend .d-flex;
+  @extend .align-items-center;
+  @extend .mx-2;
+  color: black;
+  gap: 0.5rem;
+
+  &:hover {
+    color: black;
+  }
+}
+
+.center-modal .modal-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - var(--bs-modal-margin) * 2);
+}
+
+.modal {
+  @media (max-width: 768px) {
+    // If we are on a mobile device, center the modal
+    .modal-dialog {
+      display: flex;
+      align-items: center;
+      min-height: calc(100% - var(--bs-modal-margin) * 2);
+    }
+  }
+}
+
+.no-border {
+  border: None !important;
+}
+
+.skeleton-text {
+  overflow: hidden;
+  position: relative;
+  border-radius: var(--bs-border-radius);
+  height: 1em;
+
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      to right,
+      transparent 0%,
+      transparent 10%,
+      rgba(73, 73, 73, 0.5) 30%,
+      rgba(73, 73, 73, 0.5) 70%,
+      transparent 90%,
+      transparent 100%
+    );
+    animation: skeleton-loading 2s infinite linear;
+  }
+}
+
+@keyframes skeleton-loading {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.25s ease-in-out;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.25s ease-in-out forwards;
+}
