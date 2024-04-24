@@ -35,8 +35,8 @@ The project on its whole uses:
 ## Features
 
 - [A blog](apps/front/app/home#readme)
-- [An organization view](apps/front/app/organization#readme)
-- [A project view](apps/front/app/project#readme)
+- [An organization view](apps/front/app/organizations#readme)
+- [A project view](apps/front/app/projects#readme)
 - [A resume view](apps/front/app/resume#readme)
 - [An admin view](apps/front/app/admin#readme)
 
