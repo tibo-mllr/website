@@ -1,4 +1,4 @@
-FROM node:20.11 AS base
+FROM node:20-alpine AS base
 WORKDIR /app
 RUN yarn global add turbo serve
 
@@ -23,8 +23,8 @@ RUN yarn front-build
 FROM base AS SERVE_STAGE
 WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup -S nodejs
+RUN adduser -S nextjs
 
 # With turbo, apps/front/.next/standalone has apps/front/.next inside (nested)
 COPY --from=BUILD_STAGE --chown=nextjs:nodejs /app/apps/front/.next/standalone ./
