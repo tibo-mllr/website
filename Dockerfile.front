@@ -12,6 +12,7 @@ WORKDIR /app
 COPY --from=PRUNE_STAGE /app/out/json .
 COPY --from=PRUNE_STAGE /app/out/yarn.lock .
 RUN yarn install:ci
+RUN npm install --include=optional sharp@^0.33.3
 
 FROM base AS BUILD_STAGE
 WORKDIR /app
