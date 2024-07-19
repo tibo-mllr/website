@@ -1,6 +1,18 @@
 'use client';
 
-import { logo, plusIcon } from '@/app/ui/assets';
+import {
+  logo,
+  plusIcon,
+  darkIcon,
+  lightIcon,
+  darkSelectedIcon,
+} from '@/app/ui/assets';
+import {
+  setTheme,
+  showActiveTheme,
+  setStoredTheme,
+  getPreferredTheme,
+} from '@/app/ui/theme';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -14,8 +26,8 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { type ReactElement } from 'react';
-import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 export default function Header(): ReactElement {
@@ -25,6 +37,12 @@ export default function Header(): ReactElement {
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
   const userRole = useSelector(selectUserRole);
+
+  const [selectedTheme, setSelectedTheme] = useState('dark');
+
+  useEffect(() => {
+    setSelectedTheme(getPreferredTheme());
+  }, []);
 
   return (
     <header>
@@ -121,6 +139,57 @@ export default function Header(): ReactElement {
                 <b>Add user</b>
               </Button>
             )}
+            <Dropdown className="me-2">
+              <Dropdown.Toggle
+                id="bd-theme"
+                className="d-flex align-items-center justify-content-center"
+              >
+                <Image
+                  alt="Current mode icon"
+                  src={darkSelectedIcon}
+                  height="24"
+                  className="theme-icon-active"
+                />
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item
+                  className={`nav-link d-flex align-items-center ${selectedTheme === 'light' && 'bg-selected'}`}
+                  onClick={() => {
+                    const theme = 'light';
+                    setStoredTheme(theme);
+                    setTheme(theme);
+                    showActiveTheme(theme);
+                    setSelectedTheme(theme);
+                  }}
+                >
+                  <Image
+                    alt="Light mode icon"
+                    src={lightIcon}
+                    height="24"
+                    className="me-2"
+                  />
+                  Light
+                </Dropdown.Item>
+                <Dropdown.Item
+                  className={`nav-link d-flex align-items-center ${selectedTheme === 'dark' && 'bg-selected'}`}
+                  onClick={() => {
+                    const theme = 'dark';
+                    setStoredTheme(theme);
+                    setTheme(theme);
+                    showActiveTheme(theme);
+                    setSelectedTheme(theme);
+                  }}
+                >
+                  <Image
+                    alt="Dark mode icon"
+                    src={darkIcon}
+                    height="24"
+                    className="me-2"
+                  />
+                  Dark
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
             {!token ? (
               <Link href="/login" className="nav-link">
                 Account

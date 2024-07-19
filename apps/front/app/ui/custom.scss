@@ -65,6 +65,10 @@ $color-mode-type: data;
   color: var(--bs-form-invalid-color);
 }
 
+.dropdown-menu {
+  min-width: 7rem !important;
+}
+
 @include color-mode(dark) {
   .bg-selected {
     background-color: darken($primary, 20%);
@@ -166,7 +170,7 @@ code {
 .btn-add {
   @extend .d-flex;
   @extend .align-items-center;
-  @extend .mx-2;
+  @extend .me-2;
   color: black;
   gap: 0.5rem;
 

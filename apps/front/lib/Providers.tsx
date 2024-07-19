@@ -1,5 +1,11 @@
 'use client';
 
+import {
+  setTheme,
+  getPreferredTheme,
+  getStoredTheme,
+  showActiveTheme,
+} from '@/app/ui/theme';
 import { CustomSnackbar } from '@/components';
 import { initAdmin } from '@/lib/redux/slices';
 import { SnackbarProvider } from 'notistack';
@@ -18,24 +24,21 @@ export default function Providers({
     storeRef.current = makeStore();
   }
 
-  const getTheme = (): string =>
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light';
-
-  const setTheme = (theme: string): void =>
-    document.documentElement.setAttribute('data-bs-theme', theme);
-
   useEffect(() => {
     if (storeRef.current) storeRef.current.dispatch(initAdmin());
 
-    setTheme(getTheme());
+    setTheme(getPreferredTheme());
 
     window
       .matchMedia('(prefers-color-scheme: dark)')
       .addEventListener('change', () => {
-        setTheme(getTheme());
+        const storedTheme = getStoredTheme();
+        if (storedTheme !== 'light' && storedTheme !== 'dark') {
+          setTheme(getPreferredTheme());
+        }
       });
+
+    showActiveTheme(getPreferredTheme());
   }, [storeRef]);
 
   return (
