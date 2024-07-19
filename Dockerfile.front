@@ -2,35 +2,35 @@ FROM node:20-alpine AS base
 WORKDIR /app
 RUN yarn global add turbo serve
 
-FROM base AS PRUNE_STAGE
+FROM base AS prune_stage
 WORKDIR /app
 COPY . .
 RUN turbo prune --scope front --docker
 
-FROM base AS INSTALL_STAGE
+FROM base AS install_stage
 WORKDIR /app
-COPY --from=PRUNE_STAGE /app/out/json .
-COPY --from=PRUNE_STAGE /app/out/yarn.lock .
+COPY --from=prune_stage /app/out/json .
+COPY --from=prune_stage /app/out/yarn.lock .
 RUN yarn install:ci
 RUN npm install --include=optional sharp@^0.33.3
 
-FROM base AS BUILD_STAGE
+FROM base AS build_stage
 WORKDIR /app
-COPY --from=INSTALL_STAGE /app .
-COPY --from=PRUNE_STAGE /app/out/full/ .
+COPY --from=install_stage /app .
+COPY --from=prune_stage /app/out/full/ .
 COPY tsconfig.json turbo.json .eslintrc.json ./
 RUN yarn front-build
 
-FROM base AS SERVE_STAGE
+FROM base AS serve_stage
 WORKDIR /app
 
 RUN addgroup -S nodejs
 RUN adduser -S nextjs
 
 # With turbo, apps/front/.next/standalone has apps/front/.next inside (nested)
-COPY --from=BUILD_STAGE --chown=nextjs:nodejs /app/apps/front/.next/standalone ./
-COPY --from=BUILD_STAGE --chown=nextjs:nodejs /app/apps/front/.next/static ./apps/front/.next/static
-COPY --from=BUILD_STAGE --chown=nextjs:nodejs /app/apps/front/public ./apps/front/public
+COPY --from=build_stage --chown=nextjs:nodejs /app/apps/front/.next/standalone ./
+COPY --from=build_stage --chown=nextjs:nodejs /app/apps/front/.next/static ./apps/front/.next/static
+COPY --from=build_stage --chown=nextjs:nodejs /app/apps/front/public ./apps/front/public
 
 USER nextjs
 
