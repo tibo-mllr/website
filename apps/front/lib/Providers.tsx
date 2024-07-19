@@ -18,14 +18,24 @@ export default function Providers({
     storeRef.current = makeStore();
   }
 
-  useEffect(() => {
-    if (storeRef.current) storeRef.current.dispatch(initAdmin());
-
-    const theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+  const getTheme = (): string =>
+    window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
 
+  const setTheme = (theme: string): void =>
     document.documentElement.setAttribute('data-bs-theme', theme);
+
+  useEffect(() => {
+    if (storeRef.current) storeRef.current.dispatch(initAdmin());
+
+    setTheme(getTheme());
+
+    window
+      .matchMedia('(prefers-color-scheme: dark)')
+      .addEventListener('change', () => {
+        setTheme(getTheme());
+      });
   }, [storeRef]);
 
   return (
