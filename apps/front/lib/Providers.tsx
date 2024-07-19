@@ -20,6 +20,12 @@ export default function Providers({
 
   useEffect(() => {
     if (storeRef.current) storeRef.current.dispatch(initAdmin());
+
+    const theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+
+    document.documentElement.setAttribute('data-bs-theme', theme);
   }, [storeRef]);
 
   return (

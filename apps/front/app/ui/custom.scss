@@ -1,3 +1,5 @@
+// Template from https://getbootstrap.com/docs/5.3/customize/sass/
+
 // ** 1. Include functions first (so you can manipulate colors, SVGs, calc, etc) **
 @import '~bootstrap/scss/functions';
 
@@ -10,11 +12,6 @@ $light: #bebebe;
 @import '~bootstrap/scss/variables-dark';
 
 // ** 4. Include any default map overrides here **
-$custom-colors: (
-  selected: darken($primary, 20%),
-);
-
-$theme-colors: map-merge($theme-colors, $custom-colors);
 
 // ** 5. Include remainder of required parts **
 @import '~bootstrap/scss/bootstrap.scss';
@@ -35,10 +32,21 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
 
 // ** 8. Add additional custom code here **
 
+$color-mode-type: data;
+
 // Override of/additions to Bootstrap classes
 
-.btn-primary {
-  color: black;
+@include color-mode(dark) {
+  .btn-primary {
+    color: black;
+  }
+}
+@include color-mode(light) {
+  .btn-primary {
+    color: $dark;
+    background-color: lighten($primary, 10%);
+    border-color: lighten($primary, 10%);
+  }
 }
 
 .nav-link {
@@ -57,28 +65,73 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
   color: var(--bs-form-invalid-color);
 }
 
-// Custom classes
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  background: radial-gradient(
-      circle at 15% 30%,
-      lighten($primary, 10%),
-      transparent 20%
-    ),
-    radial-gradient(circle at 60% 80%, $primary, transparent 10%),
-    radial-gradient(circle at 85% 50%, darken($primary, 10%), transparent 12%);
-  background-attachment: fixed;
+@include color-mode(dark) {
+  .bg-selected {
+    background-color: darken($primary, 20%);
+  }
+}
+@include color-mode(light) {
+  .bg-selected {
+    background-color: lighten($primary, 20%);
+  }
 }
 
-header {
-  background: linear-gradient(to right, $primary 5%, lighten($dark, 2%) 30%);
-  @extend .sticky-top;
-  z-index: 1000;
+@include color-mode(light) {
+  .navbar-brand {
+    color: lighten($dark, 10%) !important;
+  }
+}
+
+// Custom classes
+
+@include color-mode(dark) {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: radial-gradient(
+        circle at 15% 30%,
+        lighten($primary, 10%),
+        transparent 20%
+      ),
+      radial-gradient(circle at 60% 80%, $primary, transparent 10%),
+      radial-gradient(circle at 85% 50%, darken($primary, 10%), transparent 12%);
+    background-attachment: fixed;
+  }
+}
+@include color-mode(light) {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
+      'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: radial-gradient(
+        circle at 15% 30%,
+        lighten($primary, 10%),
+        transparent 20%
+      ),
+      radial-gradient(circle at 60% 80%, $yellow, transparent 10%),
+      radial-gradient(circle at 85% 50%, darken($blue, 10%), transparent 12%);
+    background-attachment: fixed;
+  }
+}
+
+@include color-mode(dark) {
+  header {
+    background: linear-gradient(to right, $primary 5%, lighten($dark, 2%) 30%);
+    @extend .sticky-top;
+    z-index: 1000;
+  }
+}
+@include color-mode(light) {
+  header {
+    background: linear-gradient(to right, $primary 5%, darken($light, 2%) 30%);
+    @extend .sticky-top;
+    z-index: 1000;
+  }
 }
 
 main {
@@ -90,12 +143,23 @@ code {
     monospace;
 }
 
-.btn-logout {
-  background: linear-gradient(-30deg, $primary, $dark 50%);
-  color: $light !important;
+@include color-mode(dark) {
+  .btn-logout {
+    background: linear-gradient(-30deg, $primary, $dark 50%);
+    color: $light !important;
 
-  &:hover {
-    color: lighten($light, 10%) !important;
+    &:hover {
+      color: lighten($light, 10%) !important;
+    }
+  }
+}
+@include color-mode(light) {
+  .btn-logout {
+    background: linear-gradient(-30deg, $primary, $light 50%);
+
+    &:hover {
+      color: darken($light, 30%) !important;
+    }
   }
 }
 

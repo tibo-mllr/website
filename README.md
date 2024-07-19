@@ -43,7 +43,6 @@ The project on its whole uses:
 ## In progress...
 
 - A contact form
-- A light/dark mode
 - Factorize more the edit/create modals
 - Handle token expiration in the front (it can already expire in the back, so for the moment the user just gets errors and has to log out and in again)
 - Any idea you may have!
