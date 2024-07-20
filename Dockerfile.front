@@ -1,18 +1,18 @@
 FROM node:20-alpine AS base
 WORKDIR /app
-RUN yarn global add turbo serve
+RUN yarn global add turbo@^2.0.9 serve
 
 FROM base AS prune_stage
 WORKDIR /app
 COPY . .
-RUN turbo prune --scope front --docker
+RUN turbo prune front --docker
 
 FROM base AS install_stage
 WORKDIR /app
 COPY --from=prune_stage /app/out/json .
 COPY --from=prune_stage /app/out/yarn.lock .
 RUN yarn install:ci
-RUN npm install --include=optional sharp@^0.33.3
+RUN npm install --include=optional sharp@^0.33.4
 
 FROM base AS build_stage
 WORKDIR /app
