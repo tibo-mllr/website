@@ -21,7 +21,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/mongoose": "^10.0.10",
     "@nestjs/passport": "^10.0.3",
-    "@nestjs/platform-express": "^10.4.4",
+    "@nestjs/platform-express": "^10.4.5",
     "@nestjs/platform-socket.io": "^10.4.4",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/websockets": "^10.4.4",
