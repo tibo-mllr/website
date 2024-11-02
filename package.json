@@ -19,16 +19,16 @@
     "front-build": "turbo run build --filter front...",
     "install:ci": "yarn install --frozen-lockfile",
     "start": "turbo dev --parallel",
-    "types-build": "turbo run build --filter shared-types"
+    "types-build": "turbo run build --filter @website/shared-types"
   },
   "devDependencies": {
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-deprecation": "^3.0.0",
-    "eslint-plugin-import-helpers": "^1.3.1",
+    "eslint-plugin-import-helpers": "^2.0.1",
     "eslint-plugin-prettier": "^5.2.1",
     "prettier": "^3.3.3",
-    "turbo": "^2.1.2"
+    "turbo": "^2.2.3"
   },
   "packageManager": "yarn@1.22.19"
 }

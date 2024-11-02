@@ -1,6 +1,6 @@
 FROM node:20-alpine AS base
 WORKDIR /app
-RUN yarn global add turbo@^2.0.9 serve
+RUN yarn global add turbo@^2.2.3 serve
 
 FROM base AS prune_stage
 WORKDIR /app
