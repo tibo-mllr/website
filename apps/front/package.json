@@ -16,7 +16,7 @@
     "formik": "^2.4.6",
     "next": "^15.1.4",
     "notistack": "^3.0.1",
-    "react": "^18.3.1",
+    "react": "^19.0.0",
     "react-bootstrap": "^2.10.5",
     "react-bootstrap-typeahead": "^6.3.2",
     "react-dom": "^18.3.1",
@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.8.6",
-    "@types/react": "^18.3.12",
+    "@types/react": "^19.0.7",
     "@types/react-dom": "^18.3.1",
     "@website/shared-types": "1.0.0",
     "eslint": "^8.57.1",
