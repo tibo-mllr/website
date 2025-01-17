@@ -665,11 +665,6 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
-"@remix-run/router@1.21.1":
-  version "1.21.1"
-  resolved "https://registry.yarnpkg.com/@remix-run/router/-/router-1.21.1.tgz#bf15274d3856c395402719fa6b1dc8cc5245aaf7"
-  integrity sha512-KeBYSwohb8g4/wCcnksvKTYlg69O62sQeLynn2YE+5z7JWEj95if27kclW9QqbrlsQ2DINI8fjbV3zyuKfwjKg==
-
 "@restart/hooks@^0.4.0", "@restart/hooks@^0.4.7", "@restart/hooks@^0.4.9":
   version "0.4.16"
   resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.4.16.tgz#95ae8ac1cc7e2bd4fed5e39800ff85604c6d59fb"
@@ -757,6 +752,11 @@
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.4.1.tgz#bfd02c1f2224567676c1545199f87c3a861d878d"
   integrity sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==
+
+"@types/cookie@^0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.6.0.tgz#eac397f28bf1d6ae0ae081363eca2f425bedf0d5"
+  integrity sha512-4Kh9a6B2bQciAhf7FSuMRRkUWecJgJu9nPnx3yzpsfXX/c50REIqpHY4C82bXP90qrLtXtkDxTZosYO3UpOwlA==
 
 "@types/cors@^2.8.12":
   version "2.8.17"
@@ -1935,6 +1935,11 @@ cookie@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/cookie/-/cookie-0.7.1.tgz#2f73c42142d5d5cf71310a74fc4ae61670e5dbc9"
   integrity sha512-6DnInpx7SJ2AK3+CTUE/ZM0vWTUboZCegxhC2xiIydHR9jNuTAASBrfEpHhiGOZw/nX51bHt6YQl8jsGo4y/0w==
+
+cookie@^1.0.1:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/cookie/-/cookie-1.0.2.tgz#27360701532116bd3f1f9416929d176afe1e4610"
+  integrity sha512-9Kr/j4O16ISv8zBBhJoi4bXOYNTkFLOqSL3UDB0njXxCXNezjeyVrJyGOWtgfs/q2km1gwBcfH8q1yEGoMYunA==
 
 cookie@~0.7.2:
   version "0.7.2"
@@ -4764,20 +4769,22 @@ react-redux@^9.1.2:
     "@types/use-sync-external-store" "^0.0.6"
     use-sync-external-store "^1.4.0"
 
-react-router-dom@^6.27.0:
-  version "6.28.2"
-  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-6.28.2.tgz#9bc4f58b0cfe91d39d1a6be4beb0ef051ca9b06e"
-  integrity sha512-O81EWqNJWqvlN/a7eTudAdQm0TbI7hw+WIi7OwwMcTn5JMyZ0ibTFNGz+t+Lju0df4LcqowCegcrK22lB1q9Kw==
+react-router-dom@^7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-7.1.2.tgz#ff6ddeb6b119b1bbea69a7f3a309c414f69693ad"
+  integrity sha512-kE7JdrDfeWO/2d6RPucLmqp2UL8Isv1VWtI5MQyYNA99KtncqxWDL6550+0rH4fboJKJbXRcyjRnIRT/gkxTcA==
   dependencies:
-    "@remix-run/router" "1.21.1"
-    react-router "6.28.2"
+    react-router "7.1.2"
 
-react-router@6.28.2:
-  version "6.28.2"
-  resolved "https://registry.yarnpkg.com/react-router/-/react-router-6.28.2.tgz#1ddea57c2de0d99e12d00af14d1499703f1378a9"
-  integrity sha512-BgFY7+wEGVjHCiqaj2XiUBQ1kkzfg6UoKYwEe0wv+FF+HNPCxtS/MVPvLAPH++EsuCMReZl9RYVGqcHLk5ms3A==
+react-router@7.1.2:
+  version "7.1.2"
+  resolved "https://registry.yarnpkg.com/react-router/-/react-router-7.1.2.tgz#61bf043b7fc839f2cfc80e64ed7ca9072526bfd2"
+  integrity sha512-KeallSO30KLpIe/ZZqfk6pCJ1c+5JhMxl3SCS3Zx1LgaGuQbgLDmjuNi6KZ5LnAV9sWjbmBWGRw8Um/Pw6BExg==
   dependencies:
-    "@remix-run/router" "1.21.1"
+    "@types/cookie" "^0.6.0"
+    cookie "^1.0.1"
+    set-cookie-parser "^2.6.0"
+    turbo-stream "2.4.0"
 
 react-transition-group@^4.4.5:
   version "4.4.5"
@@ -5115,6 +5122,11 @@ set-blocking@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==
+
+set-cookie-parser@^2.6.0:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/set-cookie-parser/-/set-cookie-parser-2.7.1.tgz#3016f150072202dfbe90fadee053573cc89d2943"
+  integrity sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==
 
 set-function-length@^1.2.2:
   version "1.2.2"
@@ -5742,6 +5754,11 @@ turbo-linux-arm64@2.3.3:
   version "2.3.3"
   resolved "https://registry.yarnpkg.com/turbo-linux-arm64/-/turbo-linux-arm64-2.3.3.tgz#284e26825f5d692bffb5b126a9aeccaae6a4533b"
   integrity sha512-NmDE/NjZoDj1UWBhMtOPmqFLEBKhzGS61KObfrDEbXvU3lekwHeoPvAMfcovzswzch+kN2DrtbNIlz+/rp8OCg==
+
+turbo-stream@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/turbo-stream/-/turbo-stream-2.4.0.tgz#1e4fca6725e90fa14ac4adb782f2d3759a5695f0"
+  integrity sha512-FHncC10WpBd2eOmGwpmQsWLDoK4cqsA/UT/GqNoaKOQnT8uzhtCbg3EoUDMvqpOSAI0S26mr0rkjzbOO6S3v1g==
 
 turbo-windows-64@2.3.3:
   version "2.3.3"
