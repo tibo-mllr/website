@@ -22,6 +22,8 @@
     "types-build": "turbo run build --filter @website/shared-types"
   },
   "devDependencies": {
+    "@typescript-eslint/typescript-estree": "^8.23.0",
+    "@typescript-eslint/utils": "^8.23.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-deprecation": "^3.0.0",

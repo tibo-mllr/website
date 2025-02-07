@@ -106,7 +106,7 @@ export default function HomeView(): ReactElement {
                           {' - '}
                           <i>
                             Edited{' '}
-                            {!!news.editor ? 'by ' + news.editor.username : ''}
+                            {news.editor ? 'by ' + news.editor.username : ''}
                           </i>
                         </>
                       )}

@@ -161,7 +161,6 @@ export default function ProjectView(): ReactElement {
                           role="button"
                           onClick={() => {
                             setShowOrganization(true);
-                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             setOrganization(project.organization!);
                           }}
                         >
@@ -192,7 +191,11 @@ export default function ProjectView(): ReactElement {
                         <Row>
                           {project.link && (
                             <Col>
-                              <a href={project.link} target="_blank">
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
                                 See more
                               </a>
                             </Col>
@@ -249,7 +252,7 @@ export default function ProjectView(): ReactElement {
           </p>
           <p>
             <b>Website: </b>
-            <a href={organization.website} target="_blank">
+            <a href={organization.website} target="_blank" rel="noreferrer">
               {organization.website}
             </a>
           </p>

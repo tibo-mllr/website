@@ -38,7 +38,7 @@ export default function DatesSection<
           <Row>
             <Form.Group className="mb-3">
               <Form.Label>End date</Form.Label>
-              {!!selectEndDate ? (
+              {selectEndDate ? (
                 <InputGroup>
                   <DatePicker name="endDate" tooltipError />
                   <Button

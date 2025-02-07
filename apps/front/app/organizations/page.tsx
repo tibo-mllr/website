@@ -114,7 +114,11 @@ export default function OrganizationView(): ReactElement {
                     <br />
                     <br />
                     <b>Website: </b>
-                    <a href={organization.website} target="_blank">
+                    <a
+                      href={organization.website}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {organization.website}
                     </a>
                   </Card.Body>
