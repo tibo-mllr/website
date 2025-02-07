@@ -1,10 +1,11 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
 import tseslint from 'typescript-eslint';
+import rootConfig from '../../eslint.config.mjs';
 
-// TODO: extend root config
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  ...rootConfig,
   { files: ['**/*.{js,mjs,cjs,ts}'] },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
