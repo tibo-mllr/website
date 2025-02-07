@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { userRoleSchema } from './userRole';
 
 export const frontUserSchema = z.object({

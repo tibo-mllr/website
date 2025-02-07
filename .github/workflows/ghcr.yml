@@ -20,13 +20,13 @@ jobs:
         with:
           filters: |
             front:
-              - '.github/workflows/**'
+              - '.github/workflows/ghcr.yml'
               - 'apps/front/**'
               - 'packages/shared-types/**'
               - 'Dockerfile.front'
               - 'yarn.lock'
             back:
-              - '.github/workflows/**'
+              - '.github/workflows/ghcr.yml'
               - 'apps/back/**'
               - 'packages/shared-types/**'
               - 'Dockerfile.back'
