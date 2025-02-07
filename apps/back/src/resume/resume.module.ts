@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+
+import { ResumeController } from './resume.controller';
+import { ResumeService } from './resume.service';
 import {
   Organization,
   OrganizationSchema,
 } from 'organization/organization.schema';
 import { Project, ProjectSchema } from 'project/project.schema';
-import { ResumeController } from './resume.controller';
-import { ResumeService } from './resume.service';
 
 @Module({
   imports: [

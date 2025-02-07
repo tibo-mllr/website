@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Gateway } from 'app.gateway';
 import { type Model } from 'mongoose';
+
 import { type CreateProjectDto, type UpdateProjectDto } from './project.dto';
 import { Project, type ProjectDocument } from './project.schema';
+import { Gateway } from 'app.gateway';
 
 @Injectable()
 export class ProjectService {

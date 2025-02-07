@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Gateway } from 'app.gateway';
 import { type Model } from 'mongoose';
-import { Project, type ProjectDocument } from 'project/project.schema';
+
 import {
   type CreateOrganizationDto,
   type UpdateOrganizationDto,
 } from './organization.dto';
 import { Organization, type OrganizationDocument } from './organization.schema';
+import { Gateway } from 'app.gateway';
+import { Project, type ProjectDocument } from 'project/project.schema';
 
 @Injectable()
 export class OrganizationService {

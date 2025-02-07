@@ -1,7 +1,9 @@
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+
+import { type UserRole } from '@website/shared-types';
+
 import { API } from '@/lib/api';
 import { type FrontUserDocument } from '@/lib/utils';
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import { type UserRole } from '@website/shared-types';
 
 type AdminState = {
   userRole?: UserRole;

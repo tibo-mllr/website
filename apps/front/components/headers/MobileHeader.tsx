@@ -1,28 +1,5 @@
 'use client';
 
-import {
-  logo,
-  plusIcon,
-  darkIcon,
-  lightIcon,
-  darkSelectedIcon,
-} from '@/app/ui/assets';
-import {
-  setTheme,
-  showActiveTheme,
-  setStoredTheme,
-  getPreferredTheme,
-} from '@/app/ui/theme';
-import { useAppDispatch } from '@/lib/redux/hooks';
-import {
-  logout,
-  selectToken,
-  selectUserRole,
-  switchShowNewNews,
-  switchShowNewOrganization,
-  switchShowNewProject,
-  switchShowNewUser,
-} from '@/lib/redux/slices';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -37,6 +14,30 @@ import {
   Row,
 } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+
+import {
+  darkIcon,
+  darkSelectedIcon,
+  lightIcon,
+  logo,
+  plusIcon,
+} from '@/app/ui/assets';
+import {
+  getPreferredTheme,
+  setStoredTheme,
+  setTheme,
+  showActiveTheme,
+} from '@/app/ui/theme';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import {
+  logout,
+  selectToken,
+  selectUserRole,
+  switchShowNewNews,
+  switchShowNewOrganization,
+  switchShowNewProject,
+  switchShowNewUser,
+} from '@/lib/redux/slices';
 
 export default function MobileHeader(): ReactElement {
   const pathname = usePathname();

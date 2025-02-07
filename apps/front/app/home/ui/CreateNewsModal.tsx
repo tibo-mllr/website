@@ -1,14 +1,17 @@
 'use client';
 
-import { API } from '@/lib/api';
-import { useAppDispatch } from '@/lib/redux/hooks';
-import { selectShowNewNews, switchShowNewNews } from '@/lib/redux/slices';
-import { newsSchema, type News } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import { newsSchema, type News } from '@website/shared-types';
+
+import { API } from '@/lib/api';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { selectShowNewNews, switchShowNewNews } from '@/lib/redux/slices';
+
 import NewsForm from './NewsForm';
 
 export default function CreateNewsModal(): ReactElement {

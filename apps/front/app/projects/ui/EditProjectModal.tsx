@@ -1,12 +1,14 @@
 'use client';
 
-import { API } from '@/lib/api';
-import { selectOrganizations } from '@/lib/redux/slices';
-import { Project, handleOrganization, type ProjectDocument } from '@/lib/utils';
 import { useSnackbar } from 'notistack';
-import { type ReactElement, useState } from 'react';
+import { useState, type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+
+import { API } from '@/lib/api';
+import { selectOrganizations } from '@/lib/redux/slices';
+import { handleOrganization, Project, type ProjectDocument } from '@/lib/utils';
+
 import { ProjectForm } from './ProjectForm';
 
 type EditProjectProps = {

@@ -1,16 +1,19 @@
 'use client';
 
+import { useSnackbar } from 'notistack';
+import { type ReactElement } from 'react';
+import { Modal } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import { type Organization } from '@website/shared-types';
+
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   selectShowNewOrganization,
   switchShowNewOrganization,
 } from '@/lib/redux/slices';
-import { type Organization } from '@website/shared-types';
-import { useSnackbar } from 'notistack';
-import { type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import OrganizationForm from './OrganizationForm';
 
 export default function CreateOrganizationModal(): ReactElement {

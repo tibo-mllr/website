@@ -1,13 +1,15 @@
+import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import { type ReactElement } from 'react';
+import { Button, Form, Modal } from 'react-bootstrap';
+
+import { UserRole, type FrontUser } from '@website/shared-types';
+
 import {
   PasswordField,
   SelectFieldWithLabel,
   TextFieldWithLabel,
 } from '@/components';
 import { type FrontUserDocument } from '@/lib/utils';
-import { type FrontUser, UserRole } from '@website/shared-types';
-import { type FormikValues, type FormikConfig, Formik } from 'formik';
-import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 
 type EditProps = { edit: true; create?: never };
 type CreateProps = { create: true; edit?: never };

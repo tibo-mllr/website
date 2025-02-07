@@ -1,10 +1,12 @@
-import { TextFieldWithLabel } from '@/components';
-import { type OrganizationDocument } from '@/lib/utils';
-import { Organization, organizationSchema } from '@website/shared-types';
-import { Formik, type FormikValues, type FormikConfig } from 'formik';
+import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import { Organization, organizationSchema } from '@website/shared-types';
+
+import { TextFieldWithLabel } from '@/components';
+import { type OrganizationDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
 type CreateProps = { create: true; edit?: never };

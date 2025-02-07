@@ -1,9 +1,11 @@
-import { TextFieldWithLabel } from '@/components';
-import { type NewsDocument } from '@/lib/utils';
-import { type News } from '@website/shared-types';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
+
+import { type News } from '@website/shared-types';
+
+import { TextFieldWithLabel } from '@/components';
+import { type NewsDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
 type CreateProps = { create: true; edit?: never };

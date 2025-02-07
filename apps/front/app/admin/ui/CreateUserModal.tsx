@@ -1,5 +1,17 @@
 'use client';
 
+import { useSnackbar } from 'notistack';
+import { type ReactElement } from 'react';
+import { Card, Modal } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import {
+  frontUserSchema,
+  UserRole,
+  type FrontUser,
+} from '@website/shared-types';
+
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -8,16 +20,7 @@ import {
   selectUserRole,
   switchShowNewUser,
 } from '@/lib/redux/slices';
-import {
-  type FrontUser,
-  UserRole,
-  frontUserSchema,
-} from '@website/shared-types';
-import { useSnackbar } from 'notistack';
-import { type ReactElement } from 'react';
-import { Card, Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import { toFormikValidationSchema } from 'zod-formik-adapter';
+
 import UserForm from './UserForm';
 
 type CreateUserProps = {

@@ -1,14 +1,17 @@
 'use client';
 
-import { API } from '@/lib/api';
-import { selectToken, selectUserRole } from '@/lib/redux/slices';
-import { type FrontUserDocument } from '@/lib/utils';
-import { frontUserSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Card, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import { frontUserSchema } from '@website/shared-types';
+
+import { API } from '@/lib/api';
+import { selectToken, selectUserRole } from '@/lib/redux/slices';
+import { type FrontUserDocument } from '@/lib/utils';
+
 import UserForm from './UserForm';
 
 type EditUserProps = {

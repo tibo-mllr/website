@@ -1,12 +1,15 @@
 'use client';
 
-import { API } from '@/lib/api';
-import { type NewsDocument } from '@/lib/utils';
-import { newsSchema } from '@website/shared-types';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import { newsSchema } from '@website/shared-types';
+
+import { API } from '@/lib/api';
+import { type NewsDocument } from '@/lib/utils';
+
 import NewsForm from './NewsForm';
 
 type EditNewsProps = {

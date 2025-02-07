@@ -1,9 +1,12 @@
+import { EnqueueSnackbar } from 'notistack';
+
 import {
   PartialBy,
   type Project as NormalProject,
 } from '@website/shared-types';
-import { EnqueueSnackbar } from 'notistack';
+
 import { API } from '../api';
+
 import { type OrganizationDocument } from './utilsOrganization';
 
 export type Project = Omit<NormalProject, 'organization'> & {

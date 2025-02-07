@@ -1,4 +1,3 @@
-import { UserRole } from '@website/shared-types';
 import {
   IsEnum,
   IsIn,
@@ -6,6 +5,8 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
+
+import { UserRole } from '@website/shared-types';
 
 export class CreateUserDto {
   @IsEnum(UserRole)

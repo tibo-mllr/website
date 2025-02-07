@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { type Action } from 'redux';
 import { type ThunkAction } from 'redux-thunk';
+
 import reducer from './slices';
 
 export const makeStore = () =>

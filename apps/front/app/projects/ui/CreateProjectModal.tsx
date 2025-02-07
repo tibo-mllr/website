@@ -1,5 +1,12 @@
 'use client';
 
+import { useSnackbar } from 'notistack';
+import { useState, type ReactElement } from 'react';
+import { Modal } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import { PartialBy, ProjectType } from '@website/shared-types';
+
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -8,11 +15,7 @@ import {
   switchShowNewProject,
 } from '@/lib/redux/slices';
 import { handleOrganization, type Project } from '@/lib/utils';
-import { PartialBy, ProjectType } from '@website/shared-types';
-import { useSnackbar } from 'notistack';
-import { type ReactElement, useState } from 'react';
-import { Modal } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { ProjectForm } from './ProjectForm';
 
 export default function CreateProjectModal(): ReactElement {

@@ -1,4 +1,5 @@
 import { API } from '@/lib/api';
+
 import { receiveOrganizations, requestOrganizations } from '../slices';
 import { type AppThunk } from '../types';
 

@@ -1,4 +1,5 @@
 import { combineSlices } from '@reduxjs/toolkit';
+
 import { adminSlice } from './adminSlice';
 import { newsSlice } from './newsSlice';
 import { organizationSlice } from './organizationSlice';

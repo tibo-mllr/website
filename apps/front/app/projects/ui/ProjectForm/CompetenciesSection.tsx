@@ -1,18 +1,19 @@
 'use client';
 
-import { plusIcon } from '@/app/ui/assets';
-import { DataList } from '@/components';
-import { selectCompetencies } from '@/lib/redux/slices';
-import {
-  type OrganizationDocument,
-  Project,
-  type ProjectDocument,
-} from '@/lib/utils';
 import { useFormikContext } from 'formik';
 import Image from 'next/image';
 import { type ReactElement } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+
+import { plusIcon } from '@/app/ui/assets';
+import { DataList } from '@/components';
+import { selectCompetencies } from '@/lib/redux/slices';
+import {
+  Project,
+  type OrganizationDocument,
+  type ProjectDocument,
+} from '@/lib/utils';
 
 export default function CompetenciesSection<
   T extends

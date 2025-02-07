@@ -7,6 +7,7 @@ import {
   Col,
   Row,
 } from 'react-bootstrap';
+
 import { CompetenciesSection, ProjectsSection } from './ui';
 
 export default function ResumeView(): ReactElement {

@@ -1,5 +1,13 @@
 'use client';
 
+import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Card, Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import { UserRole } from '@website/shared-types';
+
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal, CustomSuspense, UserCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
@@ -14,12 +22,7 @@ import {
   selectUsersLoading,
 } from '@/lib/redux/slices';
 import { type FrontUserDocument } from '@/lib/utils';
-import { UserRole } from '@website/shared-types';
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
-import { type ReactElement, useEffect, useState } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { CreateUserModal, EditUserModal } from '../ui';
 
 export default function AdminView(): ReactElement {

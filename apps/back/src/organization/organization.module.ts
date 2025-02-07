@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Gateway } from 'app.gateway';
-import { Project, ProjectSchema } from 'project/project.schema';
+
 import { OrganizationController } from './organization.controller';
 import { Organization, OrganizationSchema } from './organization.schema';
 import { OrganizationService } from './organization.service';
+import { Gateway } from 'app.gateway';
+import { Project, ProjectSchema } from 'project/project.schema';
 
 @Module({
   imports: [

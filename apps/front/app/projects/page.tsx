@@ -1,5 +1,13 @@
 'use client';
 
+import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import { ProjectType } from '@website/shared-types';
+
 import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
@@ -27,12 +35,7 @@ import {
   selectUserRole,
 } from '@/lib/redux/slices';
 import { type OrganizationDocument, type ProjectDocument } from '@/lib/utils';
-import { ProjectType } from '@website/shared-types';
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
-import { type ReactElement, useEffect, useState } from 'react';
-import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { CreateProjectModal, EditProjectModal } from './ui';
 
 export default function ProjectView(): ReactElement {
