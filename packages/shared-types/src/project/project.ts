@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { organizationSchema } from '../organization';
 
 export enum ProjectType {

@@ -18,6 +18,7 @@
     "front": "turbo run dev --filter front...",
     "front-build": "turbo run build --filter front...",
     "install:ci": "yarn install --frozen-lockfile",
+    "lint": "turbo run lint",
     "start": "turbo dev --parallel",
     "types-build": "turbo run build --filter @website/shared-types"
   },

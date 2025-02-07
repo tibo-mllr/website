@@ -1,0 +1,53 @@
+name: Build and verify apps
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.filter.outputs.apps }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Path filtering
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            apps:
+              - '.github/workflows/CI.yml'
+              - 'apps/**'
+              - 'packages/**'
+              - '.prettierrc'
+              - 'eslint.config.mjs'
+              - 'package.json'
+              - 'tsconfig.json'
+              - 'yarn.lock'
+
+  build:
+    needs: check-changes
+    if: needs.check-changes.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install dependencies
+        run: yarn install:ci
+
+      - name: Vulnerability check
+        run: yarn audit
+
+      - name: Build
+        run: yarn build
+
+      - name: Lint
+        run: yarn lint

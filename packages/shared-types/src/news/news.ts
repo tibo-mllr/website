@@ -1,4 +1,5 @@
 import { z } from 'zod';
+
 import { frontUserSchema } from '../user';
 
 export const newsSchema = z.object({
