@@ -1,5 +1,11 @@
 'use client';
 
+import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Card, Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal, CustomSuspense, NewsCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
@@ -15,11 +21,7 @@ import {
   selectUserRole,
 } from '@/lib/redux/slices';
 import { type NewsDocument } from '@/lib/utils';
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
-import { type ReactElement, useEffect, useState } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { CreateNewsModal, EditNewsModal } from './ui';
 
 export default function HomeView(): ReactElement {
@@ -106,7 +108,7 @@ export default function HomeView(): ReactElement {
                           {' - '}
                           <i>
                             Edited{' '}
-                            {!!news.editor ? 'by ' + news.editor.username : ''}
+                            {news.editor ? 'by ' + news.editor.username : ''}
                           </i>
                         </>
                       )}

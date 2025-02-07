@@ -14,6 +14,6 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false
   },
-  "include": ["src", ".eslintrc.js"],
+  "include": ["src", "eslint.config.mjs"],
   "extends": "../../tsconfig.json"
 }

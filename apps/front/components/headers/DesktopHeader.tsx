@@ -1,17 +1,24 @@
 'use client';
 
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
 import {
+  darkIcon,
+  darkSelectedIcon,
+  lightIcon,
   logo,
   plusIcon,
-  darkIcon,
-  lightIcon,
-  darkSelectedIcon,
 } from '@/app/ui/assets';
 import {
+  getPreferredTheme,
+  setStoredTheme,
   setTheme,
   showActiveTheme,
-  setStoredTheme,
-  getPreferredTheme,
 } from '@/app/ui/theme';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -23,12 +30,6 @@ import {
   switchShowNewProject,
   switchShowNewUser,
 } from '@/lib/redux/slices';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Container, Dropdown, Nav, Navbar } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 export default function Header(): ReactElement {
   const pathname = usePathname();

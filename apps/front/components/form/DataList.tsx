@@ -1,13 +1,15 @@
-import { binIcon } from '@/app/ui/assets';
 import Image from 'next/image';
 import { type ReactElement } from 'react';
 import {
   Button,
   FloatingLabel,
   Form,
-  type FormControlProps,
   InputGroup,
+  type FormControlProps,
 } from 'react-bootstrap';
+
+import { binIcon } from '@/app/ui/assets';
+
 import { TextField } from './TextFields';
 
 type DataListProps = Omit<FormControlProps, 'isInvalid' | 'type'> & {

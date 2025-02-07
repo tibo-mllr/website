@@ -1,5 +1,6 @@
-import { type ProjectDocument, type Resume } from '@/lib/utils';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+
+import { type ProjectDocument, type Resume } from '@/lib/utils';
 
 type ProjectState = {
   projects: ProjectDocument[];

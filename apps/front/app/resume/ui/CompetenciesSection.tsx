@@ -1,8 +1,9 @@
 'use client';
 
-import { selectResume, selectResumeLoading } from '@/lib/redux/slices';
 import { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
+
+import { selectResume, selectResumeLoading } from '@/lib/redux/slices';
 
 export default function CompetenciesSection(): ReactElement {
   const resume = useSelector(selectResume);

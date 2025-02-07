@@ -17,7 +17,7 @@ FROM base AS build_stage
 WORKDIR /app
 COPY --from=install_stage /app .
 COPY --from=prune_stage /app/out/full/ .
-COPY ./tsconfig.json ./turbo.json ./.eslintrc.json ./
+COPY ./tsconfig.json ./turbo.json ./eslint.config.mjs ./.prettierrc ./
 RUN yarn back-build
 
 FROM base AS serve_stage

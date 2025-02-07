@@ -1,10 +1,12 @@
 'use client';
 
-import { API } from '@/lib/api';
-import { type OrganizationDocument } from '@/lib/utils';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
 import { Modal } from 'react-bootstrap';
+
+import { API } from '@/lib/api';
+import { type OrganizationDocument } from '@/lib/utils';
+
 import OrganizationForm from './OrganizationForm';
 
 type EditOrganizationProps = {

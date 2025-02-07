@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { type Organization as OrganizationType } from '@website/shared-types';
 import { type HydratedDocument } from 'mongoose';
+
+import { type Organization as OrganizationType } from '@website/shared-types';
 
 export type OrganizationDocument = HydratedDocument<OrganizationType>;
 

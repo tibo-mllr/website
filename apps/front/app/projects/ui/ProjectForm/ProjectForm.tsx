@@ -1,14 +1,17 @@
-import { SelectFieldWithLabel, TextFieldWithLabel } from '@/components';
-import {
-  type OrganizationDocument,
-  type ProjectDocument,
-  type Project,
-} from '@/lib/utils';
-import { projectSchema, ProjectType } from '@website/shared-types';
-import { Formik, type FormikValues, type FormikConfig } from 'formik';
+import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+
+import { projectSchema, ProjectType } from '@website/shared-types';
+
+import { SelectFieldWithLabel, TextFieldWithLabel } from '@/components';
+import {
+  type OrganizationDocument,
+  type Project,
+  type ProjectDocument,
+} from '@/lib/utils';
+
 import CompetenciesSection from './CompetenciesSection';
 import DatesSection from './DatesSection';
 import OrganizationSection from './OrganizationSection';

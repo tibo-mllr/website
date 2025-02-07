@@ -1,7 +1,8 @@
-import { binIcon, editIcon } from '@/app/ui/assets';
 import Image from 'next/image';
 import { type ReactElement } from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
+
+import { binIcon, editIcon } from '@/app/ui/assets';
 
 export function UserCardSkeleton(): ReactElement {
   return (

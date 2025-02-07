@@ -1,5 +1,10 @@
 'use client';
 
+import { useFormikContext } from 'formik';
+import Image from 'next/image';
+import { ReactElement } from 'react';
+import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
+
 import { binIcon, plusIcon } from '@/app/ui/assets';
 import { DatePicker, DatePickerWithLabel } from '@/components';
 import {
@@ -7,10 +12,6 @@ import {
   type Project,
   type ProjectDocument,
 } from '@/lib/utils';
-import { useFormikContext } from 'formik';
-import Image from 'next/image';
-import { ReactElement } from 'react';
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 
 type DatesSectionProps = {
   selectEndDate: boolean;
@@ -38,7 +39,7 @@ export default function DatesSection<
           <Row>
             <Form.Group className="mb-3">
               <Form.Label>End date</Form.Label>
-              {!!selectEndDate ? (
+              {selectEndDate ? (
                 <InputGroup>
                   <DatePicker name="endDate" tooltipError />
                   <Button

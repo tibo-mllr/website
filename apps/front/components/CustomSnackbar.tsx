@@ -1,6 +1,6 @@
 'use client';
 
-import { useSnackbar, CustomContentProps, SnackbarContent } from 'notistack';
+import { CustomContentProps, SnackbarContent, useSnackbar } from 'notistack';
 import { forwardRef } from 'react';
 import { Alert } from 'react-bootstrap';
 

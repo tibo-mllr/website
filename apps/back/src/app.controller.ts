@@ -2,11 +2,13 @@ import {
   Controller,
   Post,
   Request,
-  type RawBodyRequest,
   UseGuards,
+  type RawBodyRequest,
 } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { type UserRole } from '@website/shared-types';
+
 import { AuthService } from 'auth/auth.service';
 import { LocalAuthGuard } from 'auth/local-auth.guard';
 import { LoginUserDto } from 'user/user.dto';

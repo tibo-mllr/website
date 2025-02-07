@@ -1,5 +1,11 @@
 'use client';
 
+import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Card, Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
 import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
@@ -19,11 +25,7 @@ import {
   selectUserRole,
 } from '@/lib/redux/slices';
 import { type OrganizationDocument } from '@/lib/utils';
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
-import { type ReactElement, useEffect, useState } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { CreateOrganizationModal, EditOrganizationModal } from './ui';
 
 export default function OrganizationView(): ReactElement {
@@ -114,7 +116,11 @@ export default function OrganizationView(): ReactElement {
                     <br />
                     <br />
                     <b>Website: </b>
-                    <a href={organization.website} target="_blank">
+                    <a
+                      href={organization.website}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {organization.website}
                     </a>
                   </Card.Body>

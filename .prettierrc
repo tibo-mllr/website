@@ -3,5 +3,26 @@
   "bracketSameLine": false,
   "singleQuote": true,
   "printWidth": 80,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "plugins": ["@ianvs/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "",
+    "<BUILTIN_MODULES>",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "^@website(/.*)$",
+    "",
+    "^@(/.*)$",
+    "",
+    ".[.]",
+    "",
+    "^[.]"
+  ],
+  "importOrderTypeScriptVersion": "5.6.3",
+  "importOrderParserPlugins": [
+    "typescript",
+    "jsx",
+    "decorators",
+    "decoratorAutoAccessors"
+  ]
 }

@@ -1,5 +1,12 @@
 'use client';
 
+import { useFormikContext } from 'formik';
+import { type ReactElement } from 'react';
+import { Card, Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import { type Organization } from '@website/shared-types';
+
 import { TextFieldWithLabel, TypeaheadField } from '@/components';
 import { selectOrganizations } from '@/lib/redux/slices';
 import {
@@ -7,11 +14,6 @@ import {
   type Project,
   type ProjectDocument,
 } from '@/lib/utils';
-import { type Organization } from '@website/shared-types';
-import { useFormikContext } from 'formik';
-import { type ReactElement } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 export default function OrganizationSection<
   T extends

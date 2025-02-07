@@ -2,10 +2,11 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JWT_SECRET } from 'settings';
-import { UsersModule } from 'user/user.module';
+
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { LocalStrategy } from './local.strategy';
+import { UsersModule } from 'user/user.module';
 
 @Module({
   imports: [

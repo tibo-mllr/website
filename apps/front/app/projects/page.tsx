@@ -1,5 +1,13 @@
 'use client';
 
+import Image from 'next/image';
+import { useSnackbar } from 'notistack';
+import { useEffect, useState, type ReactElement } from 'react';
+import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
+import { ProjectType } from '@website/shared-types';
+
 import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
@@ -27,12 +35,7 @@ import {
   selectUserRole,
 } from '@/lib/redux/slices';
 import { type OrganizationDocument, type ProjectDocument } from '@/lib/utils';
-import { ProjectType } from '@website/shared-types';
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
-import { type ReactElement, useEffect, useState } from 'react';
-import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+
 import { CreateProjectModal, EditProjectModal } from './ui';
 
 export default function ProjectView(): ReactElement {
@@ -161,7 +164,6 @@ export default function ProjectView(): ReactElement {
                           role="button"
                           onClick={() => {
                             setShowOrganization(true);
-                            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                             setOrganization(project.organization!);
                           }}
                         >
@@ -192,7 +194,11 @@ export default function ProjectView(): ReactElement {
                         <Row>
                           {project.link && (
                             <Col>
-                              <a href={project.link} target="_blank">
+                              <a
+                                href={project.link}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
                                 See more
                               </a>
                             </Col>
@@ -249,7 +255,7 @@ export default function ProjectView(): ReactElement {
           </p>
           <p>
             <b>Website: </b>
-            <a href={organization.website} target="_blank">
+            <a href={organization.website} target="_blank" rel="noreferrer">
               {organization.website}
             </a>
           </p>

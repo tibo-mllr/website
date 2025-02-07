@@ -1,14 +1,16 @@
 'use client';
 
-import { PasswordField, TextFieldWithLabel } from '@/components';
-import { API } from '@/lib/api';
-import { useAppDispatch } from '@/lib/redux/hooks';
-import { login, switchShowNewUser } from '@/lib/redux/slices';
 import { Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useSnackbar } from 'notistack';
 import { type ReactElement } from 'react';
-import { Button, Col, Row, Card, Form } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+
+import { PasswordField, TextFieldWithLabel } from '@/components';
+import { API } from '@/lib/api';
+import { useAppDispatch } from '@/lib/redux/hooks';
+import { login, switchShowNewUser } from '@/lib/redux/slices';
+
 import { CreateUserModal } from '../admin';
 
 export default function LoginView(): ReactElement {

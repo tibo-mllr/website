@@ -9,15 +9,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { UserRole } from '@website/shared-types';
-import { JwtAuthGuard } from 'auth/jwt-auth.guard';
-import { RoleGuard, Roles } from 'auth/role.guard';
+
 import {
   CreateOrganizationDto,
   UpdateOrganizationDto,
 } from './organization.dto';
 import { type OrganizationDocument } from './organization.schema';
 import { OrganizationService } from './organization.service';
+import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { RoleGuard, Roles } from 'auth/role.guard';
 
 @ApiTags('Organizations')
 @Controller('organization')

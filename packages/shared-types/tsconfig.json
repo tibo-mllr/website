@@ -1,5 +1,5 @@
 {
-  "include": ["src", ".eslintrc.js"],
+  "include": ["src", "eslint.config.mjs"],
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "composite": true,

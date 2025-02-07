@@ -1,11 +1,12 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Gateway } from 'app.gateway';
 import { hash } from 'bcrypt';
 import { type Model } from 'mongoose';
-import { News, type NewsDocument } from 'news/news.schema';
+
 import { CreateSelfUserDto, CreateUserDto, UpdateUserDto } from './user.dto';
 import { User, type UserDocument } from './user.schema';
+import { Gateway } from 'app.gateway';
+import { News, type NewsDocument } from 'news/news.schema';
 
 @Injectable()
 export class UserService {

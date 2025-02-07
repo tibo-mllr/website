@@ -1,13 +1,14 @@
 'use client';
 
+import { useEffect, type ReactElement } from 'react';
+import { Card, Col, Row } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+
 import { CustomSuspense, ProjectCardSkeleton } from '@/components';
 import { API } from '@/lib/api';
 import { fetchResume } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { selectResume, selectResumeLoading } from '@/lib/redux/slices';
-import { type ReactElement, useEffect } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 
 export default function ProjectsSestion(): ReactElement {
   const dispatch = useAppDispatch();

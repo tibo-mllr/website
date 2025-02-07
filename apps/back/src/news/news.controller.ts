@@ -6,16 +6,18 @@ import {
   Param,
   Post,
   Put,
-  type RawBodyRequest,
   Request,
   UseGuards,
+  type RawBodyRequest,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { type News, UserRole } from '@website/shared-types';
-import { JwtAuthGuard } from 'auth/jwt-auth.guard';
-import { RoleGuard, Roles } from 'auth/role.guard';
+
+import { UserRole, type News } from '@website/shared-types';
+
 import { CreateNewsDto, UpdateNewsDto } from './news.dto';
 import { NewsService } from './news.service';
+import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { RoleGuard, Roles } from 'auth/role.guard';
 
 @ApiTags('News')
 @Controller('news')

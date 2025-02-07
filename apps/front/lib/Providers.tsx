@@ -1,16 +1,18 @@
 'use client';
 
+import { SnackbarProvider } from 'notistack';
+import { useEffect, useRef, type ReactElement, type ReactNode } from 'react';
+import { Provider } from 'react-redux';
+
 import {
-  setTheme,
   getPreferredTheme,
   getStoredTheme,
+  setTheme,
   showActiveTheme,
 } from '@/app/ui/theme';
 import { CustomSnackbar } from '@/components';
 import { initAdmin } from '@/lib/redux/slices';
-import { SnackbarProvider } from 'notistack';
-import { type ReactElement, type ReactNode, useEffect, useRef } from 'react';
-import { Provider } from 'react-redux';
+
 import { AppStore, makeStore } from './redux/types';
 
 export default function Providers({

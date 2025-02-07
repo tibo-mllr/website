@@ -1,4 +1,3 @@
-import { ProjectType } from '@website/shared-types';
 import {
   ArrayNotEmpty,
   IsArray,
@@ -10,6 +9,8 @@ import {
   IsUrl,
   ValidateIf,
 } from 'class-validator';
+
+import { ProjectType } from '@website/shared-types';
 
 export class CreateProjectDto {
   @IsString()

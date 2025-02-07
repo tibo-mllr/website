@@ -9,12 +9,14 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+
 import { UserRole } from '@website/shared-types';
-import { JwtAuthGuard } from 'auth/jwt-auth.guard';
-import { RoleGuard, Roles } from 'auth/role.guard';
+
 import { CreateProjectDto, UpdateProjectDto } from './project.dto';
 import { type ProjectDocument } from './project.schema';
 import { ProjectService } from './project.service';
+import { JwtAuthGuard } from 'auth/jwt-auth.guard';
+import { RoleGuard, Roles } from 'auth/role.guard';
 
 @ApiTags('Projects')
 @Controller('project')

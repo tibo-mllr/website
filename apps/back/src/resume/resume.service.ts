@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { type Model } from 'mongoose';
+
+import { AggregatedProject, type Resume } from './resume.entity';
 import {
   Organization,
   type OrganizationDocument,
 } from 'organization/organization.schema';
 import { Project, type ProjectDocument } from 'project/project.schema';
-import { AggregatedProject, type Resume } from './resume.entity';
 
 @Injectable()
 export class ResumeService {
