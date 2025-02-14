@@ -79,7 +79,7 @@
   dependencies:
     "@babel/types" "^7.26.9"
 
-"@babel/runtime@^7.14.6", "@babel/runtime@^7.24.7", "@babel/runtime@^7.26.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.3", "@babel/runtime@^7.8.7":
+"@babel/runtime@^7.24.7", "@babel/runtime@^7.26.0", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.3", "@babel/runtime@^7.8.7":
   version "7.26.9"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.26.9.tgz#aa4c6facc65b9cb3f87d75125ffd47781b475433"
   integrity sha512-aA63XwOkcl4xxQa3HjPMqOP6LiK0ZDv3mUPYEFXkpHbaFjtGggE1A61FjFzJnB+p7/oy2gA8E+rcBNl/zC1tMg==
@@ -796,7 +796,7 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
-"@restart/hooks@^0.4.0", "@restart/hooks@^0.4.9":
+"@restart/hooks@^0.4.9":
   version "0.4.16"
   resolved "https://registry.yarnpkg.com/@restart/hooks/-/hooks-0.4.16.tgz#95ae8ac1cc7e2bd4fed5e39800ff85604c6d59fb"
   integrity sha512-f7aCv7c+nU/3mF7NWLtVVr0Ra80RqsO89hO72r+Y/nvQr5+q0UFGkocElTH6MJApvReVh6JHUFYn2cw1WdHF3w==
@@ -1790,7 +1790,7 @@ class-validator@^0.14.1:
     libphonenumber-js "^1.10.53"
     validator "^13.9.0"
 
-classnames@^2.2.0, classnames@^2.3.2:
+classnames@^2.3.2, classnames@^2.5.1:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.5.1.tgz#ba774c614be0f016da105c858e7159eae8e7687b"
   integrity sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==
@@ -4432,7 +4432,7 @@ prop-types-extra@^1.1.0:
     react-is "^16.3.2"
     warning "^4.0.0"
 
-prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.8.1:
+prop-types@^15.6.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -4500,19 +4500,18 @@ raw-body@^3.0.0:
     iconv-lite "0.6.3"
     unpipe "1.0.0"
 
-react-bootstrap-typeahead@^6.4.0:
-  version "6.4.0"
-  resolved "https://registry.yarnpkg.com/react-bootstrap-typeahead/-/react-bootstrap-typeahead-6.4.0.tgz#a6785e49e36db7f2929ce22ecc327ba5f9ab9be5"
-  integrity sha512-utKkBhPt+/hRGqMJB1e55yzKk72smoP/ErRLvEMALlmAEEsxbu5ks8PlseIHgtWue2z4yzv9lazDncJFcJfKgQ==
+react-bootstrap-typeahead@^7.0.0-rc.4:
+  version "7.0.0-rc.4"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-typeahead/-/react-bootstrap-typeahead-7.0.0-rc.4.tgz#fe8f867d03fb78b47193eb1facc28b349c7eda82"
+  integrity sha512-A9L7uhViNJIiFdU5qxFQ9rw47JNMcSblEJgniC/uVl46n2ZxQWktQaMY82dV/0kQJfo7Tj9yLa6wgwhz2Xx4Wg==
   dependencies:
-    "@babel/runtime" "^7.14.6"
+    "@babel/runtime" "^7.26.0"
     "@floating-ui/react-dom" "^2.1.2"
-    "@restart/hooks" "^0.4.0"
-    classnames "^2.2.0"
+    "@restart/hooks" "^0.5.0"
+    classnames "^2.5.1"
     fast-deep-equal "^3.1.1"
     invariant "^2.2.1"
     lodash.debounce "^4.0.8"
-    prop-types "^15.5.8"
     scroll-into-view-if-needed "^3.1.0"
     warning "^4.0.1"
 

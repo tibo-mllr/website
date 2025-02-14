@@ -19,7 +19,7 @@
     "notistack": "^3.0.2",
     "react": "^19.0.0",
     "react-bootstrap": "^2.10.9",
-    "react-bootstrap-typeahead": "^6.4.0",
+    "react-bootstrap-typeahead": "^7.0.0-rc.4",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.5",
