@@ -47,7 +47,7 @@ export function TypeaheadField({
         isInvalid={meta.touched && !!meta.error}
         onInputChange={(text) => helpers.setValue(text)}
         onChange={handleChange}
-        selected={[field.value]}
+        defaultSelected={[field.value]}
       />
       <ErrorMessage name={name}>
         {(errorMessage) => (
