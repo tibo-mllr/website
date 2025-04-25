@@ -44,7 +44,7 @@
     "@types/passport-local": "^1.0.38",
     "@website/shared-types": "1.0.0",
     "eslint": "^9.25.1",
-    "globals": "^15.15.0",
+    "globals": "^16.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0"
   }
