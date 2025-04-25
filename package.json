@@ -23,17 +23,17 @@
     "types-build": "turbo run build --filter @website/shared-types"
   },
   "devDependencies": {
-    "@eslint/js": "^9.20.0",
+    "@eslint/js": "^9.25.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
-    "@typescript-eslint/typescript-estree": "^8.24.0",
-    "@typescript-eslint/utils": "^8.24.0",
-    "eslint": "^9.20.1",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.3",
+    "@typescript-eslint/typescript-estree": "^8.31.0",
+    "@typescript-eslint/utils": "^8.31.0",
+    "eslint": "^9.25.1",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "globals": "^15.15.0",
-    "prettier": "^3.5.1",
-    "turbo": "^2.4.2",
-    "typescript-eslint": "^8.24.0"
+    "prettier": "^3.5.3",
+    "turbo": "^2.5.2",
+    "typescript-eslint": "^8.31.0"
   },
   "packageManager": "yarn@1.22.19"
 }
