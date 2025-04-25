@@ -32,34 +32,94 @@ jobs:
               - 'Dockerfile.back'
               - 'yarn.lock'
 
-  build-front:
+  docker-front:
     needs: check-changes
     if: needs.check-changes.outputs.front-changed == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build image
-        run: docker build -t ghcr.io/tibo-mllr/website/front:latest -f Dockerfile.front .
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/front
+          tags: |
+            type=sha
+            type=raw,value=latest
 
-      - name: Push image to registry
-        run: |
-          docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
-          docker push ghcr.io/tibo-mllr/website/front:latest
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.front
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      
+      # - name: Generate artifact attestation
+      #   uses: actions/attest-build-provenance@v2
+      #   with:
+      #     subject-name: ghcr.io/${{ github.repository }}/front
+      #     subject-digest: ${{ steps.push.outputs.digest }}
+      #     push-to-registry: true
 
-  build-back:
+  docker-back:
     needs: check-changes
     if: needs.check-changes.outputs.back-changed == 'true'
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build image
-        run: docker build -t ghcr.io/tibo-mllr/website/back:latest -f Dockerfile.back .
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/back
+          tags: |
+            type=sha
+            type=raw,value=latest
 
-      - name: Push image to registry
-        run: |
-          docker login -u Tibo-Mllr -p ${{ secrets.GHCR_ACCESS_TOKEN }} ghcr.io
-          docker push ghcr.io/tibo-mllr/website/back:latest
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.back
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      
+      # - name: Generate artifact attestation
+      #   uses: actions/attest-build-provenance@v2
+      #   with:
+      #     subject-name: ghcr.io/${{ github.repository }}/back
+      #     subject-digest: ${{ steps.push.outputs.digest }}
+      #     push-to-registry: true
