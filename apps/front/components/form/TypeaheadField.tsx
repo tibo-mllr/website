@@ -45,7 +45,7 @@ export function TypeaheadField({
         {...props}
         id={name}
         isInvalid={meta.touched && !!meta.error}
-        onInputChange={(text) => helpers.setValue(text)}
+        onInputChange={(event) => helpers.setValue(event.target.value)}
         onChange={handleChange}
         defaultSelected={[field.value]}
       />
