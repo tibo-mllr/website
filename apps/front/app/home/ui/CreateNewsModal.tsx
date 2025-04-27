@@ -1,13 +1,13 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { newsSchema, type News } from '@website/shared-types';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { selectShowNewNews, switchShowNewNews } from '@/lib/redux/slices';
@@ -24,33 +24,33 @@ export default function CreateNewsModal(): ReactElement {
   const dispatch = useAppDispatch();
   const showNew = useSelector(selectShowNewNews);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleCreate = (values: Omit<News, 'author'>): void => {
     API.createNews(values)
       .then(() => {
-        enqueueSnackbar('News added', { variant: 'success' });
+        notify('News added', { severity: 'success' });
         dispatch(switchShowNewNews(false));
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
-    <Modal show={showNew} onHide={() => dispatch(switchShowNewNews(false))}>
-      <Modal.Header closeButton>
-        <Modal.Title>Create a news</Modal.Title>
-      </Modal.Header>
-      <NewsForm
-        create
-        initialValues={emptyNews}
-        validationSchema={toFormikValidationSchema(
-          newsSchema.omit({ author: true }),
-        )}
-        onSubmit={handleCreate}
-      />
+    <Modal open={showNew} onClose={() => dispatch(switchShowNewNews(false))}>
+      <Card>
+        <CardHeader title="Create a news" />
+        <NewsForm
+          create
+          initialValues={emptyNews}
+          validationSchema={toFormikValidationSchema(
+            newsSchema.omit({ author: true }),
+          )}
+          onSubmit={handleCreate}
+        />
+      </Card>
     </Modal>
   );
 }

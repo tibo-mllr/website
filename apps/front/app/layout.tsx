@@ -1,13 +1,12 @@
+import { Container } from '@mui/material';
 import { type Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { type ReactElement, type ReactNode } from 'react';
-import { Container } from 'react-bootstrap';
 
 import { Header } from '@/components';
 import Providers from '@/lib/Providers';
 
 import './ui/globals.css';
-import './ui/custom.scss';
 
 const inter = Inter({ subsets: ['latin'] });
 

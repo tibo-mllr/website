@@ -1,11 +1,17 @@
+import {
+  Button,
+  CardActions,
+  CardContent,
+  MenuItem,
+  Select,
+  TextField,
+} from '@mui/material';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { projectSchema, ProjectType } from '@website/shared-types';
 
-import { SelectFieldWithLabel, TextFieldWithLabel } from '@/components';
 import {
   type OrganizationDocument,
   type Project,
@@ -65,28 +71,24 @@ export default function ProjectForm<
       {...props}
     >
       {({ values, handleChange, handleSubmit, setFieldValue }) => (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
+        <form onSubmit={handleSubmit}>
+          <CardContent>
+            <TextField
               name="role"
               label="Role"
               placeholder="Role (e.g. Developer)"
-              groupClassName="mb-3"
             />
-            <TextFieldWithLabel
+            <TextField
               name="title"
               label="Title"
               placeholder="Title (e.g. Project name)"
-              groupClassName="mb-3"
             />
             {values.type === ProjectType.TechExperiences && (
               <OrganizationSection />
             )}
-            <SelectFieldWithLabel
+            <Select
               name="type"
               label="Type"
-              options={Object.values(ProjectType)}
-              helperOption="Select a type"
               onChange={(event) => {
                 if (event.target.value === 'Tech Experiences')
                   setFieldValue(
@@ -102,29 +104,27 @@ export default function ProjectForm<
                 else setFieldValue('organization', undefined);
                 handleChange(event);
               }}
-              groupClassName="mb-3"
-            />
+            >
+              {Object.values(ProjectType).map((type) => (
+                <MenuItem key={type} value={type} />
+              ))}
+            </Select>
             <DatesSection
               selectEndDate={selectEndDate}
               setSelectEndDate={setSelectEndDate}
             />
-            <TextFieldWithLabel
-              as="textarea"
+            <TextField
+              type="text"
+              multiline
               name="description"
               label="Description"
               placeholder="Description"
-              groupClassName="mb-3"
               style={{ height: '20vh' }}
             />
-            <TextFieldWithLabel
-              name="link"
-              label="Link"
-              placeholder="Link"
-              groupClassName="mb-3"
-            />
+            <TextField name="link" label="Link" placeholder="Link" />
             <CompetenciesSection />
-          </Modal.Body>
-          <Modal.Footer>
+          </CardContent>
+          <CardActions>
             <Button
               type="submit"
               onClick={() => {
@@ -142,8 +142,8 @@ export default function ProjectForm<
               {edit && 'Edit'}
               {create && 'Add'}
             </Button>
-          </Modal.Footer>
-        </Form>
+          </CardActions>
+        </form>
       )}
     </Formik>
   );

@@ -1,23 +1,23 @@
 'use client';
 
-import { CustomContentProps, SnackbarContent, useSnackbar } from 'notistack';
-import { forwardRef } from 'react';
-import { Alert } from 'react-bootstrap';
+import { Alert, AlertColor, Snackbar, SnackbarProps } from '@mui/material';
+import { type ReactElement } from 'react';
 
-export const CustomSnackbar = forwardRef<HTMLDivElement, CustomContentProps>(
-  ({ message, variant, id, ...props }, ref) => {
-    const { closeSnackbar } = useSnackbar();
+type CustomSnackbarProps = {
+  message: string;
+  severity: AlertColor;
+} & SnackbarProps;
 
-    const bootstrapVariant = variant === 'error' ? 'danger' : variant;
-
-    return (
-      <SnackbarContent ref={ref} id={id.toString()} {...props}>
-        <Alert variant={bootstrapVariant} onClose={closeSnackbar} dismissible>
-          {message}
-        </Alert>
-      </SnackbarContent>
-    );
-  },
-);
-
-CustomSnackbar.displayName = 'CustomSnackbar';
+export function CustomSnackbar({
+  message,
+  severity,
+  ...props
+}: CustomSnackbarProps): ReactElement {
+  return (
+    <Snackbar {...props}>
+      <Alert severity={severity} variant="filled">
+        {message}
+      </Alert>
+    </Snackbar>
+  );
+}

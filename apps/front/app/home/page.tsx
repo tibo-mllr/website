@@ -1,13 +1,21 @@
 'use client';
 
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+} from '@mui/material';
 import Image from 'next/image';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal, CustomSuspense, NewsCardSkeleton } from '@/components';
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { fetchNews } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -41,13 +49,13 @@ export default function HomeView(): ReactElement {
   const allNews = useSelector(selectNews);
   const isLoading = useSelector(selectNewsLoading);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleDelete = (id: string): void => {
     API.deleteNews(id)
-      .then(() => enqueueSnackbar('News deleted', { variant: 'success' }))
+      .then(() => notify('News deleted', { severity: 'success' }))
       .catch((error) => {
-        enqueueSnackbar('Error deleting news', { variant: 'error' });
+        notify('Error deleting news', { severity: 'error' });
         console.error(error);
       });
   };
@@ -89,18 +97,16 @@ export default function HomeView(): ReactElement {
       />
       {allNews.length ? (
         allNews.map((news) => (
-          <Row className="my-3" key={news._id}>
-            <Col>
+          <Grid container className="my-3" key={news._id}>
+            <Grid>
               <Card>
-                <Card.Header>
-                  <Card.Title>{news.title}</Card.Title>
-                </Card.Header>
-                <Card.Body>
-                  <Card.Text>{news.content}</Card.Text>
-                </Card.Body>
-                <Card.Footer>
-                  <Row>
-                    <Col>
+                <CardHeader title={news.title} />
+                <CardContent>
+                  <Typography>{news.content}</Typography>
+                </CardContent>
+                <CardActions>
+                  <Grid container>
+                    <Grid>
                       {new Date(news.date).toLocaleDateString()} by{' '}
                       {news.author.username}
                       {!!news.edited && (
@@ -112,9 +118,9 @@ export default function HomeView(): ReactElement {
                           </i>
                         </>
                       )}
-                    </Col>
+                    </Grid>
                     {!!token && userRole === 'superAdmin' && (
-                      <Col className="d-flex justify-content-end gap-2">
+                      <Grid className="d-flex justify-content-end gap-2">
                         <Button
                           onClick={() => {
                             setShowEdit(true);
@@ -141,13 +147,13 @@ export default function HomeView(): ReactElement {
                             className="d-inline-block align-center"
                           />
                         </Button>
-                      </Col>
+                      </Grid>
                     )}
-                  </Row>
-                </Card.Footer>
+                  </Grid>
+                </CardActions>
               </Card>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         ))
       ) : (
         <i>Nothing to display</i>

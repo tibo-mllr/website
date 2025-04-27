@@ -1,15 +1,27 @@
 'use client';
 
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+} from '@mui/material';
 import Image from 'next/image';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { UserRole } from '@website/shared-types';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal, CustomSuspense, UserCardSkeleton } from '@/components';
+import {
+  ConfirmModal,
+  CustomSuspense,
+  useNotification,
+  UserCardSkeleton,
+} from '@/components';
 import { API } from '@/lib/api';
 import { fetchUsers } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -40,13 +52,13 @@ export default function AdminView(): ReactElement {
   const users = useSelector(selectUsers);
   const isLoading = useSelector(selectUsersLoading);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleDelete = (id: string): void => {
     API.deleteUser(id)
-      .then(() => enqueueSnackbar('User deleted', { variant: 'success' }))
+      .then(() => notify('User deleted', { severity: 'success' }))
       .catch((error) => {
-        enqueueSnackbar('Error deleting user', { variant: 'error' });
+        notify('Error deleting user', { severity: 'error' });
         console.error(error);
       });
   };
@@ -80,18 +92,16 @@ export default function AdminView(): ReactElement {
         onConfirm={() => handleDelete(userToEdit._id)}
       />
       {users.map((user) => (
-        <Row className="my-3" key={user._id}>
-          <Col>
+        <Grid className="my-3" key={user._id} container>
+          <Grid container>
             <Card>
-              <Card.Header>
-                <Card.Title>User: {user.username}</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <Card.Text>Role: {user.role}</Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <Row>
-                  <Col>
+              <CardHeader title={`User: ${user.username}`} />
+              <CardContent>
+                <Typography>Role: {user.role}</Typography>
+              </CardContent>
+              <CardActions>
+                <Grid>
+                  <Grid>
                     <Button
                       onClick={() => {
                         setShowEdit(true);
@@ -105,8 +115,8 @@ export default function AdminView(): ReactElement {
                         className="d-inline-block align-center"
                       />
                     </Button>
-                  </Col>
-                  <Col className="d-flex justify-content-end">
+                  </Grid>
+                  <Grid className="d-flex justify-content-end">
                     <Button
                       onClick={() => {
                         setShowConfirm(true);
@@ -120,12 +130,12 @@ export default function AdminView(): ReactElement {
                         className="d-inline-block align-center"
                       />
                     </Button>
-                  </Col>
-                </Row>
-              </Card.Footer>
+                  </Grid>
+                </Grid>
+              </CardActions>
             </Card>
-          </Col>
-        </Row>
+          </Grid>
+        </Grid>
       ))}
       {userRole === 'superAdmin' && <CreateUserModal />}
       <EditUserModal

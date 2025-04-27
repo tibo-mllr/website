@@ -1,9 +1,9 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { type OrganizationDocument } from '@/lib/utils';
 
@@ -20,30 +20,30 @@ export default function EditOrganizationModal({
   show,
   setShow,
 }: EditOrganizationProps): ReactElement {
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleEdit = (values: OrganizationDocument): void => {
     API.editOrganization(organizationToEdit._id, values)
       .then(() => {
-        enqueueSnackbar('Organization edited', { variant: 'success' });
+        notify('Organization edited', { severity: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit Organization</Modal.Title>
-      </Modal.Header>
-      <OrganizationForm
-        edit
-        initialValues={organizationToEdit}
-        onSubmit={handleEdit}
-      />
+    <Modal open={show} onClose={() => setShow(false)}>
+      <Card>
+        <CardHeader title="Edit organizaton" closeButton />
+        <OrganizationForm
+          edit
+          initialValues={organizationToEdit}
+          onSubmit={handleEdit}
+        />
+      </Card>
     </Modal>
   );
 }

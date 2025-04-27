@@ -1,13 +1,20 @@
 'use client';
 
+import {
+  Autocomplete,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  TextField,
+} from '@mui/material';
 import { useFormikContext } from 'formik';
 import Image from 'next/image';
 import { type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { plusIcon } from '@/app/ui/assets';
-import { DataList } from '@/components';
 import { selectCompetencies } from '@/lib/redux/slices';
 import {
   Project,
@@ -24,6 +31,15 @@ export default function CompetenciesSection<
 
   const competencies = useSelector(selectCompetencies);
 
+  const handleCompetencyChange = (
+    index: number,
+    newValue: string | null,
+  ): void => {
+    const newCompetencies = [...values.competencies];
+    newCompetencies[index] = newValue ?? '';
+    setFieldValue('competencies', newCompetencies);
+  };
+
   return (
     <Card>
       <datalist id="competenciesList">
@@ -31,39 +47,69 @@ export default function CompetenciesSection<
           <option key={competency} value={competency} />
         ))}
       </datalist>
-      <Card.Body>
-        <Row>
+      <CardContent>
+        <Grid>
           {values.competencies.length ? (
-            values.competencies.map((_, index) => (
-              <Col key={index} md={4}>
-                <DataList
-                  name={`competencies[${index}]`}
-                  label={`Competency ${index + 1}`}
-                  groupClassName="mb-3"
-                  placeholder="Competency"
-                  listId="competenciesList"
-                  autoComplete="off"
-                  onDeleteOption={() =>
+            values.competencies.map((competency, index) => (
+              <Grid key={index}>
+                <Autocomplete
+                  freeSolo
+                  options={competencies}
+                  value={competency}
+                  onChange={(_, newValue) =>
+                    handleCompetencyChange(
+                      index,
+                      typeof newValue === 'string' ? newValue : '',
+                    )
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      label={`Competency ${index + 1}`}
+                      name={`competencies[${index}]`}
+                      error={Boolean(
+                        touched.competencies && errors.competencies,
+                      )}
+                      helperText={
+                        touched.competencies && errors.competencies
+                          ? 'Invalid competency'
+                          : ''
+                      }
+                    />
+                  )}
+                  onInputChange={(_, newInputValue) => {
+                    // Handle typing directly if needed
+                    handleCompetencyChange(index, newInputValue);
+                  }}
+                />
+                <Button
+                  color="error"
+                  variant="outlined"
+                  size="small"
+                  onClick={() =>
                     setFieldValue(
                       'competencies',
                       values.competencies.filter((_, i) => i !== index),
                     )
                   }
-                />
-              </Col>
+                  style={{ marginTop: '8px' }}
+                >
+                  Delete
+                </Button>
+              </Grid>
             ))
           ) : (
-            <Row>
-              <Col
+            <Grid>
+              <Grid
                 className={`text-center ${touched.competencies && !!errors.competencies ? 'text-invalid' : ''}`}
               >
                 No competencies linked to this project
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
           )}
-        </Row>
-      </Card.Body>
-      <Card.Footer>
+        </Grid>
+      </CardContent>
+      <CardActions>
         <Button
           onClick={() =>
             setFieldValue('competencies', [...values.competencies, ''])
@@ -73,7 +119,7 @@ export default function CompetenciesSection<
           <Image alt="Plus icon" src={plusIcon} height="16" />
           Add competency
         </Button>
-      </Card.Footer>
+      </CardActions>
     </Card>
   );
 }

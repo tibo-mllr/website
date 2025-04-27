@@ -1,10 +1,10 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Card, CardHeader, Modal } from '@mui/material';
 import { useState, type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
+import { useNotification } from '@/components';
 import { API } from '@/lib/api';
 import { selectOrganizations } from '@/lib/redux/slices';
 import { handleOrganization, Project, type ProjectDocument } from '@/lib/utils';
@@ -26,14 +26,14 @@ export default function EditProjectModal({
     !!projectToEdit.endDate,
   );
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const organizations = useSelector(selectOrganizations);
 
   const handleEdit = async (values: Project): Promise<void> => {
     const organizationId = await handleOrganization(
       organizations,
-      enqueueSnackbar,
+      notify,
       values.organization,
     );
 
@@ -43,42 +43,42 @@ export default function EditProjectModal({
       endDate: selectEndDate ? values.endDate : undefined,
     })
       .then(() => {
-        enqueueSnackbar('Project edited', { variant: 'success' });
+        notify('Project edited', { severity: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>Edit project</Modal.Title>
-      </Modal.Header>
+    <Modal open={show} onClose={() => setShow(false)}>
+      <Card>
+        <CardHeader title="Edit project" closeButton />
 
-      <ProjectForm
-        selectEndDate={selectEndDate}
-        setSelectEndDate={setSelectEndDate}
-        organization={projectToEdit.organization}
-        edit
-        initialValues={{
-          ...projectToEdit,
-          startDate: new Date(projectToEdit.startDate),
-          endDate: projectToEdit.endDate
-            ? new Date(projectToEdit.endDate)
-            : undefined,
-          organization: projectToEdit.organization ?? {
-            _id: '',
-            name: '',
-            description: '',
-            location: '',
-            website: '',
-          },
-        }}
-        onSubmit={handleEdit}
-      />
+        <ProjectForm
+          selectEndDate={selectEndDate}
+          setSelectEndDate={setSelectEndDate}
+          organization={projectToEdit.organization}
+          edit
+          initialValues={{
+            ...projectToEdit,
+            startDate: new Date(projectToEdit.startDate),
+            endDate: projectToEdit.endDate
+              ? new Date(projectToEdit.endDate)
+              : undefined,
+            organization: projectToEdit.organization ?? {
+              _id: '',
+              name: '',
+              description: '',
+              location: '',
+              website: '',
+            },
+          }}
+          onSubmit={handleEdit}
+        />
+      </Card>
     </Modal>
   );
 }

@@ -1,9 +1,15 @@
 'use client';
 
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+} from '@mui/material';
 import Image from 'next/image';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { binIcon, editIcon } from '@/app/ui/assets';
@@ -12,6 +18,7 @@ import {
   CustomSuspense,
   OrganizationCardSkeleton,
 } from '@/components';
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { fetchOrganizations } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -46,15 +53,13 @@ export default function OrganizationView(): ReactElement {
   const isLoading = useSelector(selectOrganizationsLoading);
   const organizations = useSelector(selectOrganizations);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleDelete = (id: string): void => {
     API.deleteOrganization(id)
-      .then(() =>
-        enqueueSnackbar('Organization deleted', { variant: 'success' }),
-      )
+      .then(() => notify('Organization deleted', { severity: 'success' }))
       .catch((error) => {
-        enqueueSnackbar('Error deleting organization', { variant: 'error' });
+        notify('Error deleting organization', { severity: 'error' });
         console.error(error);
       });
   };
@@ -91,11 +96,11 @@ export default function OrganizationView(): ReactElement {
         onClose={() => setShowConfirm(false)}
         onConfirm={() => handleDelete(organizationToEdit._id)}
       />
-      <Row>
+      <Grid>
         <h1 className="text-center">
           These are the organizations I worked for
         </h1>
-      </Row>
+      </Grid>
       <CustomSuspense
         fallback={<OrganizationCardSkeleton />}
         count={2}
@@ -103,15 +108,17 @@ export default function OrganizationView(): ReactElement {
       >
         {organizations.length ? (
           organizations.map((organization) => (
-            <Row className="my-3" key={organization._id}>
-              <Col>
+            <Grid className="my-3" key={organization._id}>
+              <Grid>
                 <Card>
-                  <Card.Header>
-                    <Card.Title>
-                      <b>{organization.name}</b>, {organization.location}
-                    </Card.Title>
-                  </Card.Header>
-                  <Card.Body>
+                  <CardHeader
+                    title={
+                      <>
+                        <b>{organization.name}</b>, {organization.location}
+                      </>
+                    }
+                  />
+                  <CardContent>
                     {organization.description ?? <i>No description provided</i>}
                     <br />
                     <br />
@@ -123,11 +130,11 @@ export default function OrganizationView(): ReactElement {
                     >
                       {organization.website}
                     </a>
-                  </Card.Body>
+                  </CardContent>
                   {!!token && userRole === 'superAdmin' && (
-                    <Card.Footer>
-                      <Row>
-                        <Col className="d-flex justify-content-end gap-2">
+                    <CardActions>
+                      <Grid>
+                        <Grid className="d-flex justify-content-end gap-2">
                           <Button
                             onClick={() => {
                               setShowEdit(true);
@@ -154,13 +161,13 @@ export default function OrganizationView(): ReactElement {
                               className="d-inline-block align-center"
                             />
                           </Button>
-                        </Col>
-                      </Row>
-                    </Card.Footer>
+                        </Grid>
+                      </Grid>
+                    </CardActions>
                   )}
                 </Card>
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
           ))
         ) : (
           <i>No organization to display</i>

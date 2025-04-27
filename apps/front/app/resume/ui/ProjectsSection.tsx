@@ -1,7 +1,7 @@
 'use client';
 
+import { Card, CardContent, CardHeader, Grid } from '@mui/material';
 import { useEffect, type ReactElement } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { CustomSuspense, ProjectCardSkeleton } from '@/components';
@@ -48,17 +48,15 @@ export default function ProjectsSestion(): ReactElement {
     >
       {resume.projects.length ? (
         resume.projects.map((type) => (
-          <Row className="my-3" key={type._id}>
-            <Col>
+          <Grid className="my-3" key={type._id}>
+            <Grid>
               <Card>
-                <Card.Header>
-                  <Card.Title>{type._id}</Card.Title>
-                </Card.Header>
-                <Card.Body>
+                <CardHeader title={type._id} />
+                <CardContent>
                   {type.projects.map((project) => (
-                    <Row key={project._id.toString()}>
-                      <Row>
-                        <Col>
+                    <Grid key={project._id.toString()}>
+                      <Grid>
+                        <Grid>
                           <b>
                             <span className="fs-4">
                               {project.role}
@@ -77,9 +75,9 @@ export default function ProjectsSestion(): ReactElement {
                               ? new Date(project.endDate).toLocaleDateString()
                               : 'Present'}
                           </span>
-                        </Col>
-                      </Row>
-                      <Row>
+                        </Grid>
+                      </Grid>
+                      <Grid>
                         <span>
                           <b>{project.title}</b>
                           <br />
@@ -87,13 +85,13 @@ export default function ProjectsSestion(): ReactElement {
                           <br />
                           <i>{project.competencies.join(' • ')}</i>
                         </span>
-                      </Row>
-                    </Row>
+                      </Grid>
+                    </Grid>
                   ))}
-                </Card.Body>
+                </CardContent>
               </Card>
-            </Col>
-          </Row>
+            </Grid>
+          </Grid>
         ))
       ) : (
         <i>No experience to display</i>

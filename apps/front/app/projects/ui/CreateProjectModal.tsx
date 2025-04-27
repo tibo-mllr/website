@@ -1,12 +1,12 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Card, CardHeader, Modal } from '@mui/material';
 import { useState, type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { PartialBy, ProjectType } from '@website/shared-types';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -42,14 +42,14 @@ export default function CreateProjectModal(): ReactElement {
   const organizations = useSelector(selectOrganizations);
   const showNew = useSelector(selectShowNewProject);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleCreate = async (
     newProject: PartialBy<Project, 'organization'>,
   ): Promise<void> => {
     const organizationId = await handleOrganization(
       organizations,
-      enqueueSnackbar,
+      notify,
       newProject.organization,
     );
 
@@ -59,31 +59,27 @@ export default function CreateProjectModal(): ReactElement {
       endDate: selectEndDate ? newProject.endDate : undefined,
     })
       .then(() => {
-        enqueueSnackbar('Project added', { variant: 'success' });
+        notify('Project added', { severity: 'success' });
         dispatch(switchShowNewProject(false));
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
-    <Modal
-      show={showNew}
-      onHide={() => dispatch(switchShowNewProject(false))}
-      size="lg"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>New project</Modal.Title>
-      </Modal.Header>
-      <ProjectForm
-        selectEndDate={selectEndDate}
-        setSelectEndDate={setSelectEndDate}
-        create
-        initialValues={emptyProject}
-        onSubmit={handleCreate}
-      />
+    <Modal open={showNew} onClose={() => dispatch(switchShowNewProject(false))}>
+      <Card>
+        <CardHeader title="New project" closeButton />
+        <ProjectForm
+          selectEndDate={selectEndDate}
+          setSelectEndDate={setSelectEndDate}
+          create
+          initialValues={emptyProject}
+          onSubmit={handleCreate}
+        />
+      </Card>
     </Modal>
   );
 }

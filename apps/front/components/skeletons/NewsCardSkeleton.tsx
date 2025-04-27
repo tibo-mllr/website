@@ -1,18 +1,16 @@
 'use client';
 
+import { Card, CardActions, CardContent, CardHeader } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Card } from 'react-bootstrap';
 
 export function NewsCardSkeleton(): ReactElement {
   return (
     <div className="my-3">
       <Card>
-        <Card.Header>
-          <Card.Title>
-            <div className="skeleton-text" style={{ width: '10%' }} />
-          </Card.Title>
-        </Card.Header>
-        <Card.Body>
+        <CardHeader
+          title={<div className="skeleton-text" style={{ width: '100%' }} />}
+        />
+        <CardContent>
           <div
             className="skeleton-text"
             style={{
@@ -34,10 +32,10 @@ export function NewsCardSkeleton(): ReactElement {
               marginBottom: '10px',
             }}
           />
-        </Card.Body>
-        <Card.Footer>
+        </CardContent>
+        <CardActions>
           <div className="skeleton-text" style={{ width: '20%' }} />
-        </Card.Footer>
+        </CardActions>
       </Card>
     </div>
   );

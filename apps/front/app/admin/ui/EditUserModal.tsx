@@ -1,13 +1,13 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Card, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { frontUserSchema } from '@website/shared-types';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { selectToken, selectUserRole } from '@/lib/redux/slices';
 import { type FrontUserDocument } from '@/lib/utils';
@@ -28,37 +28,37 @@ export default function EditUserModal({
   const userRole = useSelector(selectUserRole);
   const token = useSelector(selectToken);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleEdit = (values: FrontUserDocument): void => {
     API.editUser(userToEdit._id, values)
       .then(() => {
-        enqueueSnackbar('User edited', { variant: 'success' });
+        notify('User edited', { severity: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Card.Title>Edit user</Card.Title>
-      </Modal.Header>
-      <UserForm
-        initialValues={userToEdit}
-        validationSchema={toFormikValidationSchema(
-          frontUserSchema.omit({ password: true }).extend({
-            password: frontUserSchema.shape.password.optional(),
-          }),
-        )}
-        onSubmit={handleEdit}
-        token={token}
-        userRole={userRole}
-        edit
-      />
+    <Modal open={show} onClose={() => setShow(false)}>
+      <Card>
+        <CardHeader title="Edit user" closeButton />
+        <UserForm
+          initialValues={userToEdit}
+          validationSchema={toFormikValidationSchema(
+            frontUserSchema.omit({ password: true }).extend({
+              password: frontUserSchema.shape.password.optional(),
+            }),
+          )}
+          onSubmit={handleEdit}
+          token={token}
+          userRole={userRole}
+          edit
+        />
+      </Card>
     </Modal>
   );
 }

@@ -1,24 +1,15 @@
+import { Card, CardContent, CardHeader, Grid } from '@mui/material';
 import { type ReactElement } from 'react';
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Col,
-  Row,
-} from 'react-bootstrap';
 
 import { CompetenciesSection, ProjectsSection } from './ui';
 
 export default function ResumeView(): ReactElement {
   return (
-    <Row>
-      <Col md={3} xs={12} className="my-3">
+    <Grid>
+      <Grid className="my-3">
         <Card>
-          <CardHeader>
-            <CardTitle>MULLER Thibault</CardTitle>
-          </CardHeader>
-          <CardBody>
+          <CardHeader title="MULLER Thibault" />
+          <CardContent>
             <b className="fs-4">About me</b>
             <br />
             <span>
@@ -46,12 +37,12 @@ export default function ResumeView(): ReactElement {
             <b className="fs-4">Interests</b>
             <br />
             <span>Photography • Sports • DIY</span>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col className="overflow-auto" style={{ maxHeight: '92vh' }}>
+      </Grid>
+      <Grid className="overflow-auto" style={{ maxHeight: '92vh' }}>
         <ProjectsSection />
-      </Col>
-    </Row>
+      </Grid>
+    </Grid>
   );
 }

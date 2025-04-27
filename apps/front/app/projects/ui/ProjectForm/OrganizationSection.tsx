@@ -1,13 +1,10 @@
 'use client';
 
+import { Autocomplete, Card, CardHeader, Grid, TextField } from '@mui/material';
 import { useFormikContext } from 'formik';
 import { type ReactElement } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { type Organization } from '@website/shared-types';
-
-import { TextFieldWithLabel, TypeaheadField } from '@/components';
 import { selectOrganizations } from '@/lib/redux/slices';
 import {
   type OrganizationDocument,
@@ -20,64 +17,74 @@ export default function OrganizationSection<
     | (ProjectDocument & { organization: OrganizationDocument })
     | Project,
 >(): ReactElement {
-  const { setFieldValue } = useFormikContext<T>();
+  const { values, setFieldValue } = useFormikContext<T>();
 
   const organizations = useSelector(selectOrganizations);
 
   return (
     <Card className="mb-3 p-2">
-      <Card.Title>Organization</Card.Title>
-      <Row>
-        <Col md={4}>
-          <TypeaheadField
-            name="organization.name"
-            label="Name"
-            allowNew
-            onSelected={(selected) => {
-              if ((selected as OrganizationDocument)._id)
-                setFieldValue('organization', selected);
-              else
+      <CardHeader title="Organization" />
+      <Grid>
+        <Grid>
+          <Autocomplete
+            freeSolo
+            options={organizations}
+            getOptionLabel={(option) =>
+              typeof option === 'string' ? option : option.name
+            }
+            value={values.organization?.name || ''}
+            onChange={(event, newValue) => {
+              if (typeof newValue === 'string') {
+                // User typed a new name
                 setFieldValue('organization', {
-                  name: (selected as Organization).name,
+                  name: newValue,
                   description: '',
                   location: '',
                   website: '',
                 });
+              } else if (newValue) {
+                // User picked an existing org
+                setFieldValue('organization', newValue);
+              }
             }}
-            groupClassName="mb-3"
-            options={organizations}
-            placeholder="Organization"
-            labelKey="name"
+            onInputChange={(event, newInputValue) => {
+              setFieldValue('organization.name', newInputValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Name"
+                name="organization.name"
+                fullWidth
+              />
+            )}
           />
-        </Col>
-        <Col md={4}>
-          <TextFieldWithLabel
+        </Grid>
+        <Grid>
+          <TextField
             name="organization.location"
             label="Location"
             placeholder="Location"
-            groupClassName="mb-3"
-            floating={false}
           />
-        </Col>
-        <Col md={4}>
-          <TextFieldWithLabel
+        </Grid>
+        <Grid>
+          <TextField
             name="organization.website"
             label="Website"
             placeholder="Website"
-            groupClassName="mb-3"
-            floating={false}
           />
-        </Col>
-        <Col>
-          <TextFieldWithLabel
-            as="textarea"
+        </Grid>
+        <Grid>
+          <TextField
+            type="text"
+            multiline
             name="organization.description"
             label="Description"
             placeholder="Description"
             style={{ height: '10vh' }}
           />
-        </Col>
-      </Row>
+        </Grid>
+      </Grid>
     </Card>
   );
 }

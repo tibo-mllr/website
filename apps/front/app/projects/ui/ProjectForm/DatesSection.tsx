@@ -1,12 +1,12 @@
 'use client';
 
+import { Button, FormGroup, FormLabel, Grid } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useFormikContext } from 'formik';
 import Image from 'next/image';
 import { ReactElement } from 'react';
-import { Button, Col, Form, InputGroup, Row } from 'react-bootstrap';
 
 import { binIcon, plusIcon } from '@/app/ui/assets';
-import { DatePicker, DatePickerWithLabel } from '@/components';
 import {
   type OrganizationDocument,
   type Project,
@@ -26,22 +26,18 @@ export default function DatesSection<
   const { setFieldValue } = useFormikContext<T>();
 
   return (
-    <Form.Group className="mb-3">
-      <Row>
-        <Col>
-          <DatePickerWithLabel
-            name="startDate"
-            label="Start date"
-            groupClassName="mb-3"
-          />
-        </Col>
-        <Col>
-          <Row>
-            <Form.Group className="mb-3">
-              <Form.Label>End date</Form.Label>
+    <FormGroup className="mb-3">
+      <Grid>
+        <Grid>
+          <DatePicker name="startDate" label="Start date" />
+        </Grid>
+        <Grid>
+          <Grid>
+            <FormGroup className="mb-3">
+              <FormLabel>End date</FormLabel>
               {selectEndDate ? (
-                <InputGroup>
-                  <DatePicker name="endDate" tooltipError />
+                <FormGroup>
+                  <DatePicker name="endDate" />
                   <Button
                     onClick={() => {
                       setSelectEndDate(!selectEndDate);
@@ -50,9 +46,9 @@ export default function DatesSection<
                   >
                     <Image alt="Bin icon" src={binIcon} height="16" />
                   </Button>
-                </InputGroup>
+                </FormGroup>
               ) : (
-                <Col>
+                <Grid>
                   <Button
                     onClick={() => {
                       setSelectEndDate(!selectEndDate);
@@ -63,12 +59,12 @@ export default function DatesSection<
                     <Image alt="Plus icon" src={plusIcon} height="16" />
                     Add end date
                   </Button>
-                </Col>
+                </Grid>
               )}
-            </Form.Group>
-          </Row>
-        </Col>
-      </Row>
-    </Form.Group>
+            </FormGroup>
+          </Grid>
+        </Grid>
+      </Grid>
+    </FormGroup>
   );
 }

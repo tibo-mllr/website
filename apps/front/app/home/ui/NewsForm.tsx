@@ -1,10 +1,9 @@
+import { Button, CardActions, CardContent, TextField } from '@mui/material';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 
 import { type News } from '@website/shared-types';
 
-import { TextFieldWithLabel } from '@/components';
 import { type NewsDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
@@ -18,30 +17,25 @@ export default function NewsForm<
   return (
     <Formik {...props}>
       {({ handleSubmit }) => (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
-              name="title"
-              label="Title"
-              placeholder="Enter title"
-              groupClassName="mb-3"
-            />
-            <TextFieldWithLabel
-              as="textarea"
+        <form onSubmit={handleSubmit}>
+          <CardContent>
+            <TextField name="title" label="Title" placeholder="Enter title" />
+            <TextField
+              type="text"
+              multiline
               name="content"
               label="Content"
               placeholder="Enter content"
-              groupClassName="mb-3"
               style={{ height: '20vh' }}
             />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
+          </CardContent>
+          <CardActions>
+            <Button variant="contained" type="submit">
               {edit && 'Edit'}
               {create && 'Add'}
             </Button>
-          </Modal.Footer>
-        </Form>
+          </CardActions>
+        </form>
       )}
     </Formik>
   );

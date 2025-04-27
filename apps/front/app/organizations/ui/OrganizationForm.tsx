@@ -1,11 +1,10 @@
+import { Button, CardActions, CardContent, TextField } from '@mui/material';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { Organization, organizationSchema } from '@website/shared-types';
 
-import { TextFieldWithLabel } from '@/components';
 import { type OrganizationDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
@@ -22,42 +21,35 @@ export default function OrganizationForm<
       {...props}
     >
       {({ handleSubmit }) => (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
-              name="name"
-              label="Name"
-              placeholder="Enter name"
-              groupClassName="mb-3"
-            />
-            <TextFieldWithLabel
-              as="textarea"
+        <form onSubmit={handleSubmit}>
+          <CardContent>
+            <TextField name="name" label="Name" placeholder="Enter name" />
+            <TextField
+              type="text"
+              multiline
               name="description"
               label="Description"
               placeholder="Enter description"
-              groupClassName="mb-3"
               style={{ height: '20vh' }}
             />
-            <TextFieldWithLabel
+            <TextField
               name="location"
               label="Location"
               placeholder="Enter location"
-              groupClassName="mb-3"
             />
-            <TextFieldWithLabel
+            <TextField
               name="website"
               label="Website"
               placeholder="Enter website"
-              groupClassName="mb-3"
             />
-          </Modal.Body>
-          <Modal.Footer>
+          </CardContent>
+          <CardActions>
             <Button type="submit">
               {edit && 'Edit'}
               {create && 'Add'}
             </Button>
-          </Modal.Footer>
-        </Form>
+          </CardActions>
+        </form>
       )}
     </Formik>
   );

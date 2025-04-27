@@ -1,9 +1,16 @@
 'use client';
 
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Modal,
+} from '@mui/material';
 import Image from 'next/image';
-import { useSnackbar } from 'notistack';
 import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Card, Col, Modal, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { ProjectType } from '@website/shared-types';
@@ -14,6 +21,7 @@ import {
   CustomSuspense,
   ProjectCardSkeleton,
 } from '@/components';
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import {
   fetchCompetencies,
@@ -72,13 +80,13 @@ export default function ProjectView(): ReactElement {
   const projects = useSelector(selectProjects);
   const isLoading = useSelector(selectProjectsLoading);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleDelete = (id: string): void => {
     API.deleteProject(id)
-      .then(() => enqueueSnackbar('Project deleted', { variant: 'success' }))
+      .then(() => notify('Project deleted', { severity: 'success' }))
       .catch((error) => {
-        enqueueSnackbar('Error deleting project', { variant: 'error' });
+        notify('Error deleting project', { severity: 'error' });
         console.error(error);
       });
   };
@@ -139,9 +147,9 @@ export default function ProjectView(): ReactElement {
         onClose={() => setShowConfirm(false)}
         onConfirm={() => handleDelete(projectToEdit._id)}
       />
-      <Row>
+      <Grid>
         <h1 className="text-center">These are the projects I worked on</h1>
-      </Row>
+      </Grid>
       <CustomSuspense
         fallback={<ProjectCardSkeleton />}
         count={2}
@@ -149,51 +157,51 @@ export default function ProjectView(): ReactElement {
       >
         {projects.length ? (
           projects.map((project) => (
-            <Row className="my-3" key={project._id}>
-              <Col>
+            <Grid className="my-3" key={project._id}>
+              <Grid>
                 <Card>
-                  <Card.Header>
-                    <Card.Title>
-                      <span className="fs-2">
-                        {project.role}
-                        {' | '}
-                      </span>
-                      {project.organization && (
-                        <span
-                          className="fs-4 "
-                          role="button"
-                          onClick={() => {
-                            setShowOrganization(true);
-                            setOrganization(project.organization!);
-                          }}
-                        >
-                          <u>{project.organization.name}</u>
+                  <CardHeader
+                    title={
+                      <>
+                        <span className="fs-2">
+                          {project.role}
                           {' | '}
                         </span>
-                      )}
-                      <i className="fs-6">
-                        {new Date(project.startDate).toLocaleDateString()} -{' '}
-                        {project.endDate
-                          ? new Date(project.endDate).toLocaleDateString()
-                          : 'Present'}
-                      </i>
-                    </Card.Title>
-                  </Card.Header>
-                  <Card.Body>
-                    <Card.Text>
-                      <b>{project.title}</b>
-                      <br />
-                      {project.description}
-                      <br />
-                      <i>{project.competencies.join(' • ')}</i>
-                    </Card.Text>
-                  </Card.Body>
+                        {project.organization && (
+                          <span
+                            className="fs-4 "
+                            role="button"
+                            onClick={() => {
+                              setShowOrganization(true);
+                              setOrganization(project.organization!);
+                            }}
+                          >
+                            <u>{project.organization.name}</u>
+                            {' | '}
+                          </span>
+                        )}
+                        <i className="fs-6">
+                          {new Date(project.startDate).toLocaleDateString()} -{' '}
+                          {project.endDate
+                            ? new Date(project.endDate).toLocaleDateString()
+                            : 'Present'}
+                        </i>
+                      </>
+                    }
+                  />
+                  <CardContent>
+                    <b>{project.title}</b>
+                    <br />
+                    {project.description}
+                    <br />
+                    <i>{project.competencies.join(' • ')}</i>
+                  </CardContent>
                   {!!project.link ||
                     (!!token && userRole === 'superAdmin' && (
-                      <Card.Footer>
-                        <Row>
+                      <CardActions>
+                        <Grid>
                           {project.link && (
-                            <Col>
+                            <Grid>
                               <a
                                 href={project.link}
                                 target="_blank"
@@ -201,10 +209,10 @@ export default function ProjectView(): ReactElement {
                               >
                                 See more
                               </a>
-                            </Col>
+                            </Grid>
                           )}
                           {!!token && userRole === 'superAdmin' && (
-                            <Col className="d-flex justify-content-end gap-2">
+                            <Grid className="d-flex justify-content-end gap-2">
                               <Button
                                 onClick={() => {
                                   setShowEdit(true);
@@ -231,35 +239,35 @@ export default function ProjectView(): ReactElement {
                                   className="d-inline-block align-center"
                                 />
                               </Button>
-                            </Col>
+                            </Grid>
                           )}
-                        </Row>
-                      </Card.Footer>
+                        </Grid>
+                      </CardActions>
                     ))}
                 </Card>
-              </Col>
-            </Row>
+              </Grid>
+            </Grid>
           ))
         ) : (
           <i>No project to display</i>
         )}
       </CustomSuspense>
-      <Modal show={showOrganization} onHide={() => setShowOrganization(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>{organization.name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            <b>Location: </b>
-            {organization.location}
-          </p>
-          <p>
-            <b>Website: </b>
-            <a href={organization.website} target="_blank" rel="noreferrer">
-              {organization.website}
-            </a>
-          </p>
-        </Modal.Body>
+      <Modal open={showOrganization} onClose={() => setShowOrganization(false)}>
+        <Card>
+          <CardHeader title={organization.name} closeButton />
+          <CardContent>
+            <p>
+              <b>Location: </b>
+              {organization.location}
+            </p>
+            <p>
+              <b>Website: </b>
+              <a href={organization.website} target="_blank" rel="noreferrer">
+                {organization.website}
+              </a>
+            </p>
+          </CardContent>
+        </Card>
       </Modal>
       {!!token && <CreateProjectModal />}
       {!!token && userRole === 'superAdmin' && (

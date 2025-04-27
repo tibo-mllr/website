@@ -1,18 +1,16 @@
 'use client';
 
+import { Card, CardContent, CardHeader } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Card } from 'react-bootstrap';
 
 export function OrganizationCardSkeleton(): ReactElement {
   return (
     <div className="my-3">
       <Card>
-        <Card.Header>
-          <Card.Title>
-            <div className="skeleton-text" style={{ width: '10%' }} />
-          </Card.Title>
-        </Card.Header>
-        <Card.Body>
+        <CardHeader
+          title={<div className="skeleton-text" style={{ width: '100%' }} />}
+        />
+        <CardContent>
           <div
             className="skeleton-text"
             style={{
@@ -57,7 +55,7 @@ export function OrganizationCardSkeleton(): ReactElement {
               marginBottom: '10px',
             }}
           />
-        </Card.Body>
+        </CardContent>
       </Card>
     </div>
   );
