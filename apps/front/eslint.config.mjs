@@ -1,9 +1,10 @@
-import globals from 'globals';
 import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import pluginNext from '@next/eslint-plugin-next';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
-import pluginNext from '@next/eslint-plugin-next';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
 import rootConfig from '../../eslint.config.mjs';
 
 /** @type {import('eslint').Linter.Config[]} */
@@ -22,6 +23,13 @@ export default [
     },
   },
   { languageOptions: { globals: globals.browser } },
+  {
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
