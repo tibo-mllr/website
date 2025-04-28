@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
@@ -63,19 +63,21 @@ export default function CreateUserModal({
 
   return (
     <Modal open={showNew} onClose={() => dispatch(switchShowNewUser(false))}>
-      <Card>
-        <CardHeader title="New user" closeButton />
-        <UserForm
-          initialValues={emptyUser}
-          onSubmit={async (values) => {
-            handleCreate(values);
-          }}
-          validationSchema={toFormikValidationSchema(frontUserSchema)}
-          token={token}
-          userRole={userRole}
-          create
-        />
-      </Card>
+      <Box padding={2} display="flex" justifyContent="center">
+        <Card className="flex flex-col w-fit m-auto px-15 py-5">
+          <CardHeader title="New user" />
+          <UserForm
+            initialValues={emptyUser}
+            onSubmit={async (values) => {
+              handleCreate(values);
+            }}
+            validationSchema={toFormikValidationSchema(frontUserSchema)}
+            token={token}
+            userRole={userRole}
+            create
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

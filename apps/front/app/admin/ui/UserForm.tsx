@@ -2,15 +2,16 @@ import {
   Button,
   CardActions,
   CardContent,
+  FormGroup,
   MenuItem,
   Select,
-  TextField,
 } from '@mui/material';
-import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import { Form, Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 
 import { UserRole, type FrontUser } from '@website/shared-types';
 
+import { TextField } from '@/components';
 import { type FrontUserDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
@@ -30,38 +31,43 @@ export default function UserForm<T extends FrontUserDocument | FrontUser>({
 }: UserFormProps<T>): ReactElement {
   return (
     <Formik {...props}>
-      {({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
+      {() => (
+        <Form>
           <CardContent>
-            <TextField
-              name="username"
-              label="Username"
-              placeholder="Enter username"
-              autoComplete="username"
-            />
-            <TextField
-              name="password"
-              type="password"
-              placeholder="Enter password"
-              autoComplete="new-password"
-            />
-            {!!token && userRole == 'superAdmin' && (
-              <Select name="role" label="Role">
-                {Object.values(UserRole).map((role) => (
-                  <MenuItem key={role} value={role}>
-                    {role}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
+            <FormGroup sx={{ gap: 1 }}>
+              <TextField
+                id="username"
+                name="username"
+                label="Username"
+                placeholder="Enter username"
+                autoComplete="username"
+              />
+              <TextField
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                placeholder="Enter password"
+                autoComplete="new-password"
+              />
+              {!!token && userRole == 'superAdmin' && (
+                <Select name="role" label="Role">
+                  {Object.values(UserRole).map((role) => (
+                    <MenuItem key={role} value={role}>
+                      {role}
+                    </MenuItem>
+                  ))}
+                </Select>
+              )}
+            </FormGroup>
           </CardContent>
           <CardActions>
-            <Button variant="contained" type="submit">
+            <Button type="submit" variant="contained" className="w-full">
               {edit && 'Edit'}
-              {create && 'Add'}
+              {create && 'Create account'}
             </Button>
           </CardActions>
-        </form>
+        </Form>
       )}
     </Formik>
   );

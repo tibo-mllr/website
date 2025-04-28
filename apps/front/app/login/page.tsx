@@ -5,13 +5,14 @@ import {
   Card,
   CardActions,
   CardContent,
+  FormGroup,
   Grid,
-  TextField,
 } from '@mui/material';
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 
+import { TextField } from '@/components';
 import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -43,59 +44,72 @@ export default function LoginView(): ReactElement {
 
   return (
     <>
-      <Grid>
-        <Grid className="col d-flex flex-column justify-content-center align-items-center">
-          <Card className="w-50 mt-5">
-            <Formik
-              initialValues={{ username: '', password: '' }}
-              validate={(values) => {
-                const errors: Record<string, string> = {};
+      <Grid padding={2} display="flex" justifyContent="center">
+        <Card className="flex w-fit m-auto px-15 py-5">
+          <Formik
+            initialValues={{ username: '', password: '' }}
+            validate={(values) => {
+              const errors: Record<string, string> = {};
 
-                if (!values.username) {
-                  errors.username = 'Required';
-                }
-                if (!values.password) {
-                  errors.password = 'Required';
-                }
-                return errors;
-              }}
-              onSubmit={handleSignIn}
-            >
-              {({ handleSubmit }) => (
-                <form onSubmit={handleSubmit}>
-                  <CardContent>
+              if (!values.username) {
+                errors.username = 'Required';
+              }
+              if (!values.password) {
+                errors.password = 'Required';
+              }
+              return errors;
+            }}
+            onSubmit={handleSignIn}
+          >
+            {() => (
+              <Form>
+                <CardContent>
+                  <FormGroup sx={{ gap: 1 }}>
                     <TextField
+                      id="username"
                       name="username"
                       label="Username"
                       placeholder="Enter username"
                       autoComplete="username"
                     />
                     <TextField
+                      id="password"
                       name="password"
                       type="password"
+                      label="Password"
                       placeholder="Enter password"
                       autoComplete="current-password"
                     />
-                  </CardContent>
-                  <CardActions>
-                    <Grid>
-                      <Grid>
-                        <Button type="submit">Connect</Button>
-                      </Grid>
-                      <Grid className="d-flex justify-content-end">
-                        <Button
-                          onClick={() => dispatch(switchShowNewUser(true))}
-                        >
-                          Create account
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </CardActions>
-                </form>
-              )}
-            </Formik>
-          </Card>
-        </Grid>
+                  </FormGroup>
+                </CardContent>
+                <CardActions>
+                  <Grid
+                    display="flex"
+                    flexDirection="column"
+                    justifyContent="space-between"
+                    width="100%"
+                    gap={1}
+                  >
+                    <Button
+                      type="submit"
+                      className="w-full"
+                      variant="contained"
+                    >
+                      Connect
+                    </Button>
+                    <Button
+                      className="w-full"
+                      variant="outlined"
+                      onClick={() => dispatch(switchShowNewUser(true))}
+                    >
+                      Create account
+                    </Button>
+                  </Grid>
+                </CardActions>
+              </Form>
+            )}
+          </Formik>
+        </Card>
       </Grid>
       <CreateUserModal newSelf />
     </>
