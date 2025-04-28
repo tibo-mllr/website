@@ -1,19 +1,13 @@
 'use client';
 
-import { AppBar, Button, Grid, MenuItem, Select, Toolbar } from '@mui/material';
+import { AppBar, Button, Grid, Toolbar, Typography } from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState, type ReactElement } from 'react';
+import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { darkIcon, lightIcon, logo, plusIcon } from '@/app/ui/assets';
-import {
-  getPreferredTheme,
-  setStoredTheme,
-  setTheme,
-  showActiveTheme,
-} from '@/app/ui/theme';
+import { logo, plusIcon } from '@/app/ui/assets';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -33,62 +27,60 @@ export default function Header(): ReactElement {
   const token = useSelector(selectToken);
   const userRole = useSelector(selectUserRole);
 
-  const [selectedTheme, setSelectedTheme] = useState('dark');
-
-  useEffect(() => {
-    setSelectedTheme(getPreferredTheme());
-  }, []);
-
   return (
-    <AppBar position="sticky" enableColorOnDark>
-      <Toolbar>
-        <Link href="/home" className="navbar-brand">
+    <AppBar position="sticky" color="inherit" enableColorOnDark>
+      <Toolbar style={{ gap: 4 }}>
+        <Link
+          href="/home"
+          style={{ display: 'flex', alignItems: 'center', marginRight: '1em' }}
+        >
           <Image
-            alt="Anarchist logo"
+            alt="Website logo"
             src={logo}
-            height="30"
+            height="40"
             className="d-inline-block align-top me-2"
             priority
-          />{' '}
-          <b>Mini website project</b>
+          />
+          <Typography variant="h5">Mini website project</Typography>
         </Link>
-        <Grid className="me-auto">
-          <Link
-            href="/home"
-            className={`nav-link ${pathname === '/home' && 'bg-selected'}`}
+        <Button
+          LinkComponent={Link}
+          href="/home"
+          variant={pathname === '/home' ? 'contained' : 'outlined'}
+        >
+          Home
+        </Button>
+        <Button
+          LinkComponent={Link}
+          href="/resume"
+          variant={pathname === '/resume' ? 'contained' : 'outlined'}
+        >
+          Resume
+        </Button>
+        <Button
+          LinkComponent={Link}
+          href="/projects"
+          variant={pathname === '/projects' ? 'contained' : 'outlined'}
+        >
+          Projects
+        </Button>
+        <Button
+          LinkComponent={Link}
+          href="/organizations"
+          variant={pathname === '/organizations' ? 'contained' : 'outlined'}
+        >
+          Organizations
+        </Button>
+        {!!token && (
+          <Button
+            LinkComponent={Link}
+            href="/admin"
+            variant={pathname === '/admin' ? 'contained' : 'outlined'}
           >
-            Home
-          </Link>
-          <Link
-            href="/resume"
-            className={`nav-link ${pathname === '/resume' && 'bg-selected'}`}
-          >
-            Resume
-          </Link>
-          <Link
-            href="/projects"
-            className={`nav-link ${pathname === '/projects' && 'bg-selected'}`}
-          >
-            Projects
-          </Link>
-          <Link
-            href="/organizations"
-            className={`nav-link ${
-              pathname === '/organizations' && 'bg-selected'
-            }`}
-          >
-            Organizations
-          </Link>
-          {!!token && (
-            <Link
-              href="/admin"
-              className={`nav-link ${pathname === '/admin' && 'bg-selected'}`}
-            >
-              Admin
-            </Link>
-          )}
-        </Grid>
-        <Grid className="justify-content-end">
+            Admin
+          </Button>
+        )}
+        <Grid className="ms-auto justify-content-end" display="flex">
           {!!token &&
             (userRole === 'admin' || userRole === 'superAdmin') &&
             pathname === '/home' && (
@@ -131,48 +123,11 @@ export default function Header(): ReactElement {
               <b>Add user</b>
             </Button>
           )}
-          <Select className="me-2">
-            <MenuItem
-              className={`nav-link d-flex align-items-center ${selectedTheme === 'light' && 'bg-selected'}`}
-              onClick={() => {
-                const theme = 'light';
-                setStoredTheme(theme);
-                setTheme(theme);
-                showActiveTheme(theme);
-                setSelectedTheme(theme);
-              }}
-            >
-              <Image
-                alt="Light mode icon"
-                src={lightIcon}
-                height="24"
-                className="me-2"
-              />
-              Light
-            </MenuItem>
-            <MenuItem
-              className={`nav-link d-flex align-items-center ${selectedTheme === 'dark' && 'bg-selected'}`}
-              onClick={() => {
-                const theme = 'dark';
-                setStoredTheme(theme);
-                setTheme(theme);
-                showActiveTheme(theme);
-                setSelectedTheme(theme);
-              }}
-            >
-              <Image
-                alt="Dark mode icon"
-                src={darkIcon}
-                height="24"
-                className="me-2"
-              />
-              Dark
-            </MenuItem>
-          </Select>
+
           {!token ? (
-            <Link href="/login" className="nav-link">
+            <Button LinkComponent={Link} href="/login" variant="outlined">
               Account
-            </Link>
+            </Button>
           ) : (
             <Button
               className="btn-logout"

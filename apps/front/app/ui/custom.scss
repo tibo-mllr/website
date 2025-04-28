@@ -1,56 +1,22 @@
-// Template from https://getbootstrap.com/docs/5.3/customize/sass/
-
-// ** 1. Include functions first (so you can manipulate colors, SVGs, calc, etc) **
-@import '~bootstrap/scss/functions';
-
-// ** 2. Include any default variable overrides here **
 $primary: #854afc;
 $light: #bebebe;
-
-// ** 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets) **
-@import '~bootstrap/scss/variables';
-@import '~bootstrap/scss/variables-dark';
-
-// ** 4. Include any default map overrides here **
-
-// ** 5. Include remainder of required parts **
-@import '~bootstrap/scss/bootstrap.scss';
-@import '~bootstrap/scss/mixins';
-@import '~bootstrap/scss/root';
-
-// ** 6. Optionally include any other parts as needed **
-@import '~bootstrap/scss/utilities';
-@import '~bootstrap/scss/reboot';
-// @import '~bootstrap/scss/type';
-// @import '~bootstrap/scss/images';
-// @import '~bootstrap/scss/containers';
-// @import '~bootstrap/scss/grid';
-@import '~bootstrap/scss/helpers';
-
-// ** 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss` **
-// @import '~bootstrap/scss/utilities/api';
-
-// ** 8. Add additional custom code here **
+$dark: #1a1a1a;
+$yellow: #f6c700;
+$blue: #007bff;
 
 $color-mode-type: data;
 
-// Override of/additions to Bootstrap classes
-
-@include color-mode(dark) {
+@media (prefers-color-scheme: dark) {
   .btn-primary {
     color: black;
   }
 }
-@include color-mode(light) {
+@media (prefers-color-scheme: light) {
   .btn-primary {
     color: $dark;
     background-color: lighten($primary, 10%);
     border-color: lighten($primary, 10%);
   }
-}
-
-.nav-link {
-  border-radius: 0.25rem;
 }
 
 .card {
@@ -69,33 +35,27 @@ $color-mode-type: data;
   min-width: 7rem !important;
 }
 
-@include color-mode(dark) {
+@media (prefers-color-scheme: dark) {
   .bg-selected {
     background-color: darken($primary, 20%);
   }
 }
-@include color-mode(light) {
+@media (prefers-color-scheme: light) {
   .bg-selected {
     background-color: lighten($primary, 20%);
   }
 }
 
-@include color-mode(light) {
-  .navbar-brand {
-    color: lighten($dark, 10%) !important;
-  }
-}
-
-// Custom classes
-
-@include color-mode(dark) {
+@media (prefers-color-scheme: dark) {
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: radial-gradient(
+    background:
+      radial-gradient(
         circle at 15% 30%,
         lighten($primary, 10%),
         transparent 20%
@@ -105,14 +65,16 @@ $color-mode-type: data;
     background-attachment: fixed;
   }
 }
-@include color-mode(light) {
+@media (prefers-color-scheme: light) {
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
-      'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans',
-      'Helvetica Neue', sans-serif;
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background: radial-gradient(
+    background:
+      radial-gradient(
         circle at 15% 30%,
         lighten($primary, 10%),
         transparent 20%
@@ -123,31 +85,31 @@ $color-mode-type: data;
   }
 }
 
-@include color-mode(dark) {
+@media (prefers-color-scheme: dark) {
   header {
-    background: linear-gradient(to right, $primary 5%, lighten($dark, 2%) 30%);
-    @extend .sticky-top;
-    z-index: 1000;
+    background: linear-gradient(
+      to right,
+      $primary 5%,
+      lighten($dark, 2%) 30%
+    ) !important;
   }
 }
-@include color-mode(light) {
+@media (prefers-color-scheme: light) {
   header {
-    background: linear-gradient(to right, $primary 5%, darken($light, 2%) 30%);
-    @extend .sticky-top;
-    z-index: 1000;
+    background: linear-gradient(
+      to right,
+      $primary 5%,
+      darken($light, 2%) 30%
+    ) !important;
   }
-}
-
-main {
-  @extend .py-1;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-@include color-mode(dark) {
+@media (prefers-color-scheme: dark) {
   .btn-logout {
     background: linear-gradient(-30deg, $primary, $dark 50%);
     color: $light !important;
@@ -157,7 +119,7 @@ code {
     }
   }
 }
-@include color-mode(light) {
+@media (prefers-color-scheme: light) {
   .btn-logout {
     background: linear-gradient(-30deg, $primary, $light 50%);
 
@@ -168,9 +130,6 @@ code {
 }
 
 .btn-add {
-  @extend .d-flex;
-  @extend .align-items-center;
-  @extend .me-2;
   color: black;
   gap: 0.5rem;
 

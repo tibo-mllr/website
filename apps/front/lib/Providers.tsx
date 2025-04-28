@@ -5,12 +5,6 @@ import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { useEffect, useRef, type ReactElement, type ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import {
-  getPreferredTheme,
-  getStoredTheme,
-  setTheme,
-  showActiveTheme,
-} from '@/app/ui/theme';
 import { NotificationProvider } from '@/components/NotificationProvider';
 import { initAdmin } from '@/lib/redux/slices';
 
@@ -18,8 +12,8 @@ import { AppStore, makeStore } from './redux/types';
 
 const theme = extendTheme({
   colorSchemes: {
-    light: true,
-    dark: true,
+    light: { palette: { primary: { main: '#854afc' } } },
+    dark: { palette: { primary: { main: '#854afc' } } },
   },
 });
 
@@ -36,19 +30,6 @@ export default function Providers({
 
   useEffect(() => {
     if (storeRef.current) storeRef.current.dispatch(initAdmin());
-
-    setTheme(getPreferredTheme());
-
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', () => {
-        const storedTheme = getStoredTheme();
-        if (storedTheme !== 'light' && storedTheme !== 'dark') {
-          setTheme(getPreferredTheme());
-        }
-      });
-
-    showActiveTheme(getPreferredTheme());
   }, [storeRef]);
 
   return (
