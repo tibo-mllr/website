@@ -15,6 +15,47 @@ const theme = extendTheme({
     light: { palette: { primary: { main: '#854afc' } } },
     dark: { palette: { primary: { main: '#854afc' } } },
   },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          opacity: 0.75,
+          '.MuiModal-root &': { opacity: 1 },
+        },
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderBottomWidth: 1,
+          borderBottomColor: theme.palette.divider,
+          backgroundColor:
+            'color-mix(in srgb, var(--mui-palette-background-paper), var(--mui-palette-primary-main))',
+          '.MuiModal-root &': {
+            backgroundColor: 'unset',
+            borderBottom: 'unset',
+          },
+        }),
+      },
+    },
+    MuiCardActions: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderTopWidth: 1,
+          borderTopColor: theme.palette.divider,
+          backgroundColor:
+            'color-mix(in srgb, var(--mui-palette-background-paper) 90%, var(--mui-palette-text-primary))',
+          '.MuiModal-root &': {
+            backgroundColor: 'unset',
+            borderTop: 'unset',
+          },
+        }),
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: { root: { paddingTop: 0, paddingBottom: 0 } },
+    },
+  },
 });
 
 export default function Providers({

@@ -63,8 +63,15 @@ export default function CreateUserModal({
 
   return (
     <Modal open={showNew} onClose={() => dispatch(switchShowNewUser(false))}>
-      <Box padding={2} display="flex" justifyContent="center">
-        <Card className="flex flex-col w-fit m-auto px-15 py-5">
+      <Box
+        padding={2}
+        width="fit"
+        position="absolute"
+        left="50%"
+        top="50%"
+        sx={{ transform: 'translate(-50%, -100%)' }}
+      >
+        <Card className="px-15 py-5">
           <CardHeader title="New user" />
           <UserForm
             initialValues={emptyUser}

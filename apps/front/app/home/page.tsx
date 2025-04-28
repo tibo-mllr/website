@@ -1,19 +1,19 @@
 'use client';
 
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Grid,
+  IconButton,
   Typography,
 } from '@mui/material';
-import Image from 'next/image';
 import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { binIcon, editIcon } from '@/app/ui/assets';
 import { ConfirmModal, CustomSuspense, NewsCardSkeleton } from '@/components';
 import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
@@ -97,63 +97,52 @@ export default function HomeView(): ReactElement {
       />
       {allNews.length ? (
         allNews.map((news) => (
-          <Grid container className="my-3" key={news._id}>
-            <Grid>
-              <Card>
-                <CardHeader title={news.title} />
-                <CardContent>
-                  <Typography>{news.content}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Grid container>
-                    <Grid>
-                      {new Date(news.date).toLocaleDateString()} by{' '}
-                      {news.author.username}
-                      {!!news.edited && (
-                        <>
-                          {' - '}
-                          <i>
-                            Edited{' '}
-                            {news.editor ? 'by ' + news.editor.username : ''}
-                          </i>
-                        </>
-                      )}
-                    </Grid>
-                    {!!token && userRole === 'superAdmin' && (
-                      <Grid className="d-flex justify-content-end gap-2">
-                        <Button
-                          onClick={() => {
-                            setShowEdit(true);
-                            setNewsToEdit(news);
-                          }}
-                        >
-                          <Image
-                            alt="Edit"
-                            src={editIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setShowConfirm(true);
-                            setNewsToEdit(news);
-                          }}
-                        >
-                          <Image
-                            alt="Delete"
-                            src={binIcon}
-                            height="24"
-                            className="d-inline-block align-center"
-                          />
-                        </Button>
-                      </Grid>
-                    )}
+          <Card key={news._id} className="my-3">
+            <CardHeader title={news.title} />
+            <CardContent>
+              <Typography>{news.content}</Typography>
+            </CardContent>
+            <CardActions>
+              <Grid container alignItems="center" width="100%">
+                <Grid>
+                  {new Date(news.date).toLocaleDateString()} by{' '}
+                  {news.author.username}
+                  {!!news.edited && (
+                    <>
+                      {' - '}
+                      <i>
+                        Edited {news.editor ? 'by ' + news.editor.username : ''}
+                      </i>
+                    </>
+                  )}
+                </Grid>
+                {!!token && userRole === 'superAdmin' && (
+                  <Grid className="ms-auto justify-content-end" display="flex">
+                    <IconButton
+                      aria-label="Edit"
+                      onClick={() => {
+                        setShowEdit(true);
+                        setNewsToEdit(news);
+                      }}
+                      color="warning"
+                    >
+                      <EditTwoToneIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={() => {
+                        setShowConfirm(true);
+                        setNewsToEdit(news);
+                      }}
+                      color="error"
+                    >
+                      <DeleteForeverTwoToneIcon />
+                    </IconButton>
                   </Grid>
-                </CardActions>
-              </Card>
-            </Grid>
-          </Grid>
+                )}
+              </Grid>
+            </CardActions>
+          </Card>
         ))
       ) : (
         <i>Nothing to display</i>

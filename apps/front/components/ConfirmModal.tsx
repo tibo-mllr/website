@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -25,24 +26,34 @@ export function ConfirmModal({
 }: ConfirmModalProps): ReactElement {
   return (
     <Modal open={show} onClose={onClose} className="center-modal">
-      <Card>
-        <CardHeader closeButton className="no-border" title={title} />
-        <CardContent>{message}</CardContent>
-        <CardActions className="no-border">
-          <Button color="secondary" onClick={onClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            onClick={() => {
-              onConfirm();
-              onClose();
-            }}
-          >
-            Confirm
-          </Button>
-        </CardActions>
-      </Card>
+      <Box
+        padding={2}
+        width="30vw"
+        position="absolute"
+        left="50%"
+        top="50%"
+        sx={{ transform: 'translate(-50%, -100%)' }}
+      >
+        <Card>
+          <CardHeader title={title} />
+          <CardContent>{message}</CardContent>
+          <CardActions sx={{ justifyContent: 'space-between' }}>
+            <Button color="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                onConfirm();
+                onClose();
+              }}
+            >
+              Confirm
+            </Button>
+          </CardActions>
+        </Card>
+      </Box>
     </Modal>
   );
 }

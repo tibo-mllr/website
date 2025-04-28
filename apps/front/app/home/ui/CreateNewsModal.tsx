@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
@@ -40,17 +40,25 @@ export default function CreateNewsModal(): ReactElement {
 
   return (
     <Modal open={showNew} onClose={() => dispatch(switchShowNewNews(false))}>
-      <Card>
-        <CardHeader title="Create a news" />
-        <NewsForm
-          create
-          initialValues={emptyNews}
-          validationSchema={toFormikValidationSchema(
-            newsSchema.omit({ author: true }),
-          )}
-          onSubmit={handleCreate}
-        />
-      </Card>
+      <Box
+        padding={2}
+        width="30vw"
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="Create a news" />
+          <NewsForm
+            create
+            initialValues={emptyNews}
+            validationSchema={toFormikValidationSchema(
+              newsSchema.omit({ author: true }),
+            )}
+            onSubmit={handleCreate}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
@@ -38,17 +38,25 @@ export default function EditNewsModal({
 
   return (
     <Modal open={show} onClose={() => setShow(false)}>
-      <Card>
-        <CardHeader title="Edit news" />
-        <NewsForm
-          edit
-          initialValues={newsToEdit}
-          validationSchema={toFormikValidationSchema(
-            newsSchema.omit({ author: true, date: true, editor: true }),
-          )}
-          onSubmit={handleEdit}
-        />
-      </Card>
+      <Box
+        padding={2}
+        width="30vw"
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="Edit news" />
+          <NewsForm
+            edit
+            initialValues={newsToEdit}
+            validationSchema={toFormikValidationSchema(
+              newsSchema.omit({ author: true, date: true, editor: true }),
+            )}
+            onSubmit={handleEdit}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }
