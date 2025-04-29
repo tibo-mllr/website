@@ -85,6 +85,20 @@ export class UsersController {
     });
   }
 
+  @Put('/self/:id')
+  @ApiBearerAuth()
+  @Roles(UserRole.Admin)
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @ApiOperation({ description: 'Update a user' })
+  async updateSelf(
+    @Param('id') id: string,
+    @Body() user: UpdateUserDto,
+  ): Promise<UserDocument> {
+    return await this.userService.update(id, user).catch((error) => {
+      throw error;
+    });
+  }
+
   @Delete('/:id')
   @ApiBearerAuth()
   @Roles(UserRole.SuperAdmin)

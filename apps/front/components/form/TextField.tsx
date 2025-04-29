@@ -14,6 +14,8 @@ export function TextField({ name, ...props }: TextFieldProps): ReactElement {
 
   return (
     <MUITextField
+      // @ts-expect-error Default value to not change between controlled and uncontrolled
+      value={''}
       {...field}
       {...props}
       error={meta.touched && Boolean(meta.error)}

@@ -2,7 +2,9 @@ import {
   Button,
   CardActions,
   CardContent,
+  FormControl,
   FormGroup,
+  InputLabel,
   MenuItem,
   Select,
 } from '@mui/material';
@@ -31,7 +33,7 @@ export default function UserForm<T extends FrontUserDocument | FrontUser>({
 }: UserFormProps<T>): ReactElement {
   return (
     <Formik {...props}>
-      {() => (
+      {({ values, setFieldValue }) => (
         <Form>
           <CardContent>
             <FormGroup sx={{ gap: 1 }}>
@@ -51,13 +53,24 @@ export default function UserForm<T extends FrontUserDocument | FrontUser>({
                 autoComplete="new-password"
               />
               {!!token && userRole == 'superAdmin' && (
-                <Select name="role" label="Role">
-                  {Object.values(UserRole).map((role) => (
-                    <MenuItem key={role} value={role}>
-                      {role}
-                    </MenuItem>
-                  ))}
-                </Select>
+                <FormControl fullWidth>
+                  <InputLabel id="role-label">Role</InputLabel>
+                  <Select
+                    name="role"
+                    labelId="role-label"
+                    label="Role"
+                    value={values.role}
+                    onChange={(event) =>
+                      setFieldValue('role', event.target.value as UserRole)
+                    }
+                  >
+                    {Object.values(UserRole).map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               )}
             </FormGroup>
           </CardContent>

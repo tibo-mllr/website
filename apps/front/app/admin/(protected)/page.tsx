@@ -1,21 +1,21 @@
 'use client';
 
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Grid,
+  IconButton,
   Typography,
 } from '@mui/material';
-import Image from 'next/image';
 import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
 import { UserRole } from '@website/shared-types';
 
-import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
   CustomSuspense,
@@ -40,10 +40,11 @@ import { CreateUserModal, EditUserModal } from '../ui';
 export default function AdminView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
-  const [userToEdit, setUserToEdit] = useState<FrontUserDocument>({
+  const [userToEdit, setUserToEdit] = useState<
+    Omit<FrontUserDocument, 'password'>
+  >({
     _id: '',
     username: '',
-    password: '',
     role: UserRole.Admin,
   });
 
@@ -91,52 +92,46 @@ export default function AdminView(): ReactElement {
         onClose={() => setShowConfirm(false)}
         onConfirm={() => handleDelete(userToEdit._id)}
       />
-      {users.map((user) => (
-        <Grid className="my-3" key={user._id} container>
-          <Grid container>
-            <Card>
+      <Grid container columns={{ xs: 4, sm: 9, md: 12 }} spacing={3}>
+        {users.map((user) => (
+          <Grid key={user._id} size={{ xs: 2, sm: 3, md: 3 }}>
+            <Card className="my-3">
               <CardHeader title={`User: ${user.username}`} />
               <CardContent>
                 <Typography>Role: {user.role}</Typography>
               </CardContent>
               <CardActions>
-                <Grid>
-                  <Grid>
-                    <Button
-                      onClick={() => {
-                        setShowEdit(true);
-                        setUserToEdit(user);
-                      }}
-                    >
-                      <Image
-                        alt="Edit"
-                        src={editIcon}
-                        height="24"
-                        className="d-inline-block align-center"
-                      />
-                    </Button>
-                  </Grid>
-                  <Grid className="d-flex justify-content-end">
-                    <Button
-                      onClick={() => {
-                        setShowConfirm(true);
-                        setUserToEdit(user);
-                      }}
-                    >
-                      <Image
-                        alt="Delete"
-                        src={binIcon}
-                        height="24"
-                        className="d-inline-block align-center"
-                      />
-                    </Button>
-                  </Grid>
+                <Grid
+                  display="flex"
+                  width="100%"
+                  justifyContent="space-between"
+                >
+                  <IconButton
+                    aria-label="Edit"
+                    onClick={() => {
+                      setShowEdit(true);
+                      setUserToEdit(user);
+                    }}
+                    color="warning"
+                  >
+                    <EditTwoToneIcon />
+                  </IconButton>
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() => {
+                      setShowConfirm(true);
+                      setUserToEdit(user);
+                    }}
+                    color="error"
+                  >
+                    <DeleteForeverTwoToneIcon />
+                  </IconButton>
                 </Grid>
               </CardActions>
             </Card>
           </Grid>
-        </Grid>
-      ))}
+        ))}
+      </Grid>
       {userRole === 'superAdmin' && <CreateUserModal />}
       <EditUserModal
         userToEdit={userToEdit}
