@@ -21,6 +21,9 @@ import {
 
 import { AddButton } from './AddButton';
 
+const ADD_BUTTON_PATHNAMES = ['/home', '/projects', '/organizations'];
+type AddButtonPathnames = (typeof ADD_BUTTON_PATHNAMES)[number];
+
 export default function Header(): ReactElement {
   const pathname = usePathname();
   const router = useRouter();
@@ -29,13 +32,13 @@ export default function Header(): ReactElement {
   const token = useSelector(selectToken);
   const userRole = useSelector(selectUserRole);
 
-  const pathnameToText: Record<string, string> = {
+  const pathnameToText: Record<AddButtonPathnames, string> = {
     '/home': 'Add a news',
     '/projects': 'Add project',
     '/organizations': 'Add organization',
   };
 
-  const pathnameToAction: Record<string, () => void> = {
+  const pathnameToAction: Record<AddButtonPathnames, () => void> = {
     '/home': () => dispatch(switchShowNewNews(true)),
     '/projects': () => dispatch(switchShowNewProject(true)),
     '/organizations': () => dispatch(switchShowNewOrganization(true)),
@@ -97,7 +100,7 @@ export default function Header(): ReactElement {
         <Grid className="ms-auto" display="flex" flexDirection="row">
           {!!token &&
             (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname !== '/admin' && (
+            ADD_BUTTON_PATHNAMES.includes(pathname) && (
               <AddButton
                 openModal={pathnameToAction[pathname]}
                 text={pathnameToText[pathname]}
