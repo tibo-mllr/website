@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -46,14 +46,23 @@ export default function CreateOrganizationModal(): ReactElement {
       open={showNew}
       onClose={() => dispatch(switchShowNewOrganization(false))}
     >
-      <Card>
-        <CardHeader title="New organization" closeButton />
-        <OrganizationForm
-          create
-          initialValues={emptyOrganization}
-          onSubmit={handleCreate}
-        />
-      </Card>
+      <Box
+        padding={2}
+        width="30vw"
+        minWidth={300}
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="New organization" />
+          <OrganizationForm
+            create
+            initialValues={emptyOrganization}
+            onSubmit={handleCreate}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

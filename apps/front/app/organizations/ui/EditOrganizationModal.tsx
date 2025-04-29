@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
 
 import { useNotification } from '@/components/NotificationProvider';
@@ -36,14 +36,23 @@ export default function EditOrganizationModal({
 
   return (
     <Modal open={show} onClose={() => setShow(false)}>
-      <Card>
-        <CardHeader title="Edit organizaton" closeButton />
-        <OrganizationForm
-          edit
-          initialValues={organizationToEdit}
-          onSubmit={handleEdit}
-        />
-      </Card>
+      <Box
+        padding={2}
+        width="30vw"
+        minWidth={300}
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="Edit organizaton" />
+          <OrganizationForm
+            edit
+            initialValues={organizationToEdit}
+            onSubmit={handleEdit}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

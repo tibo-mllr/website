@@ -1,18 +1,18 @@
 'use client';
 
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import {
-  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Grid,
+  IconButton,
 } from '@mui/material';
-import Image from 'next/image';
 import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
   CustomSuspense,
@@ -108,66 +108,50 @@ export default function OrganizationView(): ReactElement {
       >
         {organizations.length ? (
           organizations.map((organization) => (
-            <Grid className="my-3" key={organization._id}>
-              <Grid>
-                <Card>
-                  <CardHeader
-                    title={
-                      <>
-                        <b>{organization.name}</b>, {organization.location}
-                      </>
-                    }
-                  />
-                  <CardContent>
-                    {organization.description ?? <i>No description provided</i>}
-                    <br />
-                    <br />
-                    <b>Website: </b>
-                    <a
-                      href={organization.website}
-                      target="_blank"
-                      rel="noreferrer"
+            <Card className="my-3" key={organization._id}>
+              <CardHeader
+                title={
+                  <>
+                    <b>{organization.name}</b>, {organization.location}
+                  </>
+                }
+              />
+              <CardContent>
+                {organization.description ?? <i>No description provided</i>}
+                <br />
+                <br />
+                <b>Website: </b>
+                <a href={organization.website} target="_blank" rel="noreferrer">
+                  {organization.website}
+                </a>
+              </CardContent>
+              {!!token && userRole === 'superAdmin' && (
+                <CardActions>
+                  <Grid container justifyContent="end" width="100%">
+                    <IconButton
+                      aria-label="Edit"
+                      onClick={() => {
+                        setShowEdit(true);
+                        setOrganizationToEdit(organization);
+                      }}
+                      color="warning"
                     >
-                      {organization.website}
-                    </a>
-                  </CardContent>
-                  {!!token && userRole === 'superAdmin' && (
-                    <CardActions>
-                      <Grid>
-                        <Grid className="d-flex justify-content-end gap-2">
-                          <Button
-                            onClick={() => {
-                              setShowEdit(true);
-                              setOrganizationToEdit(organization);
-                            }}
-                          >
-                            <Image
-                              alt="Edit"
-                              src={editIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setShowConfirm(true);
-                              setOrganizationToEdit(organization);
-                            }}
-                          >
-                            <Image
-                              alt="Delete"
-                              src={binIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    </CardActions>
-                  )}
-                </Card>
-              </Grid>
-            </Grid>
+                      <EditTwoToneIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={() => {
+                        setShowConfirm(true);
+                        setOrganizationToEdit(organization);
+                      }}
+                      color="error"
+                    >
+                      <DeleteForeverTwoToneIcon />
+                    </IconButton>
+                  </Grid>
+                </CardActions>
+              )}
+            </Card>
           ))
         ) : (
           <i>No organization to display</i>
