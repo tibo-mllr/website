@@ -16,7 +16,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { logo, plusIcon } from '@/app/ui/assets';
+import { logo } from '@/app/ui/assets';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -27,6 +27,8 @@ import {
   switchShowNewProject,
   switchShowNewUser,
 } from '@/lib/redux/slices';
+
+import { AddButton } from './AddButton';
 
 export default function MobileHeader(): ReactElement {
   const pathname = usePathname();
@@ -39,6 +41,18 @@ export default function MobileHeader(): ReactElement {
   const handleChange = (event: SelectChangeEvent): void => {
     const selectedPath = event.target.value;
     router.push(selectedPath);
+  };
+
+  const pathnameToText: Record<string, string> = {
+    '/home': 'Add a news',
+    '/projects': 'Add project',
+    '/organizations': 'Add organization',
+  };
+
+  const pathnameToAction: Record<string, () => void> = {
+    '/home': () => dispatch(switchShowNewNews(true)),
+    '/projects': () => dispatch(switchShowNewProject(true)),
+    '/organizations': () => dispatch(switchShowNewOrganization(true)),
   };
 
   return (
@@ -56,41 +70,17 @@ export default function MobileHeader(): ReactElement {
         <Grid className="ms-auto me-2 justify-content-end" display="flex">
           {!!token &&
             (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname === '/home' && (
-              <Button
-                onClick={() => dispatch(switchShowNewNews(true))}
-                className="btn-add"
-              >
-                <Image alt="Plus icon" src={plusIcon} height="16" />
-              </Button>
-            )}
-          {!!token &&
-            (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname === '/projects' && (
-              <Button
-                onClick={() => dispatch(switchShowNewProject(true))}
-                className="btn-add"
-              >
-                <Image alt="Plus icon" src={plusIcon} height="16" />
-              </Button>
-            )}
-          {!!token &&
-            (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname === '/organizations' && (
-              <Button
-                onClick={() => dispatch(switchShowNewOrganization(true))}
-                className="btn-add"
-              >
-                <Image alt="Plus icon" src={plusIcon} height="16" />
-              </Button>
+            pathname !== '/admin' && (
+              <AddButton
+                openModal={pathnameToAction[pathname]}
+                text={pathnameToText[pathname]}
+              />
             )}
           {!!token && userRole === 'superAdmin' && pathname === '/admin' && (
-            <Button
-              onClick={() => dispatch(switchShowNewUser(true))}
-              className="btn-add"
-            >
-              <Image alt="Plus icon" src={plusIcon} height="16" />
-            </Button>
+            <AddButton
+              openModal={() => dispatch(switchShowNewUser(true))}
+              text="Add user"
+            />
           )}
           {!token ? (
             <Button LinkComponent={Link} href="/login" variant="outlined">

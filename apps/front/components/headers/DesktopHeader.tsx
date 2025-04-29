@@ -7,7 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { logo, plusIcon } from '@/app/ui/assets';
+import { logo } from '@/app/ui/assets';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -19,6 +19,8 @@ import {
   switchShowNewUser,
 } from '@/lib/redux/slices';
 
+import { AddButton } from './AddButton';
+
 export default function Header(): ReactElement {
   const pathname = usePathname();
   const router = useRouter();
@@ -26,6 +28,18 @@ export default function Header(): ReactElement {
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
   const userRole = useSelector(selectUserRole);
+
+  const pathnameToText: Record<string, string> = {
+    '/home': 'Add a news',
+    '/projects': 'Add project',
+    '/organizations': 'Add organization',
+  };
+
+  const pathnameToAction: Record<string, () => void> = {
+    '/home': () => dispatch(switchShowNewNews(true)),
+    '/projects': () => dispatch(switchShowNewProject(true)),
+    '/organizations': () => dispatch(switchShowNewOrganization(true)),
+  };
 
   return (
     <AppBar position="sticky" color="inherit" enableColorOnDark>
@@ -80,48 +94,21 @@ export default function Header(): ReactElement {
             Admin
           </Button>
         )}
-        <Grid className="ms-auto justify-content-end" display="flex">
+        <Grid className="ms-auto" display="flex" flexDirection="row">
           {!!token &&
             (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname === '/home' && (
-              <Button
-                onClick={() => dispatch(switchShowNewNews(true))}
-                className="btn-add"
-              >
-                <Image alt="Plus icon" src={plusIcon} height="16" />
-                <b>Add a news</b>
-              </Button>
+            pathname !== '/admin' && (
+              <AddButton
+                openModal={pathnameToAction[pathname]}
+                text={pathnameToText[pathname]}
+              />
             )}
-          {!!token &&
-            (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname === '/projects' && (
-              <Button
-                onClick={() => dispatch(switchShowNewProject(true))}
-                className="btn-add"
-              >
-                <Image alt="Plus icon" src={plusIcon} height="16" />
-                <b>Add project</b>
-              </Button>
-            )}
-          {!!token &&
-            (userRole === 'admin' || userRole === 'superAdmin') &&
-            pathname === '/organizations' && (
-              <Button
-                onClick={() => dispatch(switchShowNewOrganization(true))}
-                className="btn-add"
-              >
-                <Image alt="Plus icon" src={plusIcon} height="16" />
-                <b>Add organization</b>
-              </Button>
-            )}
+
           {!!token && userRole === 'superAdmin' && pathname === '/admin' && (
-            <Button
-              onClick={() => dispatch(switchShowNewUser(true))}
-              className="btn-add"
-            >
-              <Image alt="Plus icon" src={plusIcon} height="16" />
-              <b>Add user</b>
-            </Button>
+            <AddButton
+              openModal={() => dispatch(switchShowNewUser(true))}
+              text="Add user"
+            />
           )}
 
           {!token ? (
