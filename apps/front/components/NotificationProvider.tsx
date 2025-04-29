@@ -34,11 +34,14 @@ export function NotificationProvider({
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState<AlertColor>('info');
 
-  const notify = useCallback((msg: string, options?: NotificationOptions) => {
-    setMessage(msg);
-    setSeverity(options?.severity || 'info');
-    setOpen(true);
-  }, []);
+  const notify = useCallback(
+    (msg: string | Error, options?: NotificationOptions) => {
+      setMessage(msg.toString());
+      setSeverity(options?.severity || 'info');
+      setOpen(true);
+    },
+    [],
+  );
 
   const handleClose = (): void => {
     setOpen(false);
@@ -49,7 +52,7 @@ export function NotificationProvider({
       {children}
       <CustomSnackbar
         open={open}
-        autoHideDuration={3000}
+        autoHideDuration={severity === 'error' ? undefined : 3000}
         onClose={handleClose}
         message={message}
         severity={severity}
