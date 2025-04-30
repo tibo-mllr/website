@@ -5,8 +5,8 @@ import { CompetenciesSection, ProjectsSection } from './ui';
 
 export default function ResumeView(): ReactElement {
   return (
-    <Grid>
-      <Grid className="my-3">
+    <Grid container spacing={2} marginY={2}>
+      <Grid size={12}>
         <Card>
           <CardHeader title="MULLER Thibault" />
           <CardContent>
@@ -40,7 +40,7 @@ export default function ResumeView(): ReactElement {
           </CardContent>
         </Card>
       </Grid>
-      <Grid className="overflow-auto" style={{ maxHeight: '92vh' }}>
+      <Grid className="overflow-auto" style={{ maxHeight: '92vh' }} size={12}>
         <ProjectsSection />
       </Grid>
     </Grid>

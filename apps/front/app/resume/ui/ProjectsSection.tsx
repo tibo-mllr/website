@@ -46,38 +46,41 @@ export default function ProjectsSestion(): ReactElement {
       count={2}
       isLoading={isLoading}
     >
-      {resume.projects.length ? (
-        resume.projects.map((type) => (
-          <Grid className="my-3" key={type._id}>
-            <Grid>
-              <Card>
-                <CardHeader title={type._id} />
-                <CardContent>
+      <Grid container spacing={2}>
+        {resume.projects.length ? (
+          resume.projects.map((type) => (
+            <Card key={type._id} sx={{ width: '100%' }}>
+              <CardHeader title={type._id} />
+              <CardContent>
+                <Grid container spacing={2}>
                   {type.projects.map((project) => (
-                    <Grid key={project._id.toString()}>
-                      <Grid>
-                        <Grid>
-                          <b>
-                            <span className="fs-4">
-                              {project.role}
-                              {' | '}
-                            </span>
-                          </b>
-                          {project.organization && (
-                            <span className="fs-5">
-                              <u>{project.organization?.name}</u>
-                              {' | '}
-                            </span>
-                          )}
-                          <span className="fs-7">
-                            {new Date(project.startDate).toLocaleDateString()} -{' '}
-                            {project.endDate
-                              ? new Date(project.endDate).toLocaleDateString()
-                              : 'Present'}
+                    <Grid
+                      container
+                      key={project._id.toString()}
+                      size={12}
+                      spacing={0}
+                    >
+                      <Grid size={12}>
+                        <b>
+                          <span className="fs-4">
+                            {project.role}
+                            {' | '}
                           </span>
-                        </Grid>
+                        </b>
+                        {project.organization && (
+                          <span className="fs-5">
+                            <u>{project.organization?.name}</u>
+                            {' | '}
+                          </span>
+                        )}
+                        <span className="fs-7">
+                          {new Date(project.startDate).toLocaleDateString()} -{' '}
+                          {project.endDate
+                            ? new Date(project.endDate).toLocaleDateString()
+                            : 'Present'}
+                        </span>
                       </Grid>
-                      <Grid>
+                      <Grid size={12}>
                         <span>
                           <b>{project.title}</b>
                           <br />
@@ -88,14 +91,14 @@ export default function ProjectsSestion(): ReactElement {
                       </Grid>
                     </Grid>
                   ))}
-                </CardContent>
-              </Card>
-            </Grid>
-          </Grid>
-        ))
-      ) : (
-        <i>No experience to display</i>
-      )}
+                </Grid>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <i>No experience to display</i>
+        )}
+      </Grid>
     </CustomSuspense>
   );
 }
