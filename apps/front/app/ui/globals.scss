@@ -1,0 +1,65 @@
+@use "sass:color";
+@use 'vars.scss';
+
+@media (prefers-color-scheme: dark) {
+  body {
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background:
+      radial-gradient(
+        circle at 15% 30%,
+        color.adjust(vars.$primary, $lightness: 10%),
+        transparent 20%
+      ),
+      radial-gradient(circle at 60% 80%, vars.$primary, transparent 10%),
+      radial-gradient(circle at 85% 50%, color.adjust(vars.$primary, $lightness: -10%), transparent 12%);
+    background-attachment: fixed;
+  }
+}
+@media (prefers-color-scheme: light) {
+  body {
+    font-family:
+      -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background:
+      radial-gradient(
+        circle at 15% 30%,
+        color.adjust(vars.$primary, $lightness: 10%),
+        transparent 20%
+      ),
+      radial-gradient(circle at 60% 80%, vars.$yellow, transparent 10%),
+      radial-gradient(circle at 85% 50%, color.adjust(vars.$blue, $lightness: -10%), transparent 12%);
+    background-attachment: fixed;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  header {
+    background: linear-gradient(
+      to right,
+      vars.$primary 5%,
+      color.adjust(vars.$dark, $lightness: 2%) 30%
+    ) !important;
+  }
+}
+@media (prefers-color-scheme: light) {
+  header {
+    background: linear-gradient(
+      to right,
+      vars.$primary 5%,
+      color.adjust(vars.$light, $lightness: -2%) 30%
+    ) !important;
+  }
+}
+
+code {
+  font-family:
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}

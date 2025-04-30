@@ -7,7 +7,9 @@ import { Header } from '@/components';
 import Providers from '@/lib/Providers';
 
 import './ui/globals.css';
-import './ui/custom.scss';
+import './ui/globals.scss';
+import './ui/classes.scss';
+import './ui/skeletons.scss';
 
 const inter = Inter({ subsets: ['latin'] });
 

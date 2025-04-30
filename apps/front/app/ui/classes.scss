@@ -1,0 +1,22 @@
+@use "sass:color";
+@use 'vars.scss';
+
+@media (prefers-color-scheme: dark) {
+  .btn-logout {
+    background: linear-gradient(-30deg, vars.$primary, vars.$dark 50%);
+    color: vars.$light !important;
+
+    &:hover {
+      color: color.adjust(vars.$light, $lightness: 10%) !important;
+    }
+  }
+}
+@media (prefers-color-scheme: light) {
+  .btn-logout {
+    background: linear-gradient(-30deg, vars.$primary, vars.$light 50%);
+
+    &:hover {
+      color: color.adjust(vars.$light, $lightness: -30%) !important;
+    }
+  }
+}
