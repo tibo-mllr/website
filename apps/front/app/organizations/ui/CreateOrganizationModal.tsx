@@ -1,12 +1,12 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { type Organization } from '@website/shared-types';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -27,33 +27,44 @@ export default function CreateOrganizationModal(): ReactElement {
   const dispatch = useAppDispatch();
   const showNew = useSelector(selectShowNewOrganization);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleCreate = (newOrganization: Organization): void => {
     API.createOrganization(newOrganization)
       .then(() => {
-        enqueueSnackbar('Organization added', { variant: 'success' });
+        notify('Organization added', { severity: 'success' });
         dispatch(switchShowNewOrganization(false));
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
     <Modal
-      show={showNew}
-      onHide={() => dispatch(switchShowNewOrganization(false))}
+      open={showNew}
+      onClose={() => dispatch(switchShowNewOrganization(false))}
     >
-      <Modal.Header closeButton>
-        <Modal.Title>New Organization</Modal.Title>
-      </Modal.Header>
-      <OrganizationForm
-        create
-        initialValues={emptyOrganization}
-        onSubmit={handleCreate}
-      />
+      <Box
+        padding={2}
+        width="30vw"
+        minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="New organization" />
+          <OrganizationForm
+            create
+            initialValues={emptyOrganization}
+            onSubmit={handleCreate}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

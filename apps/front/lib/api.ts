@@ -86,8 +86,14 @@ export class API {
     await this.client.post(`/user${newSelf ? '/new' : ''}`, newUser);
   }
 
-  static async editUser(id: string, user: FrontUserDocument): Promise<void> {
-    await this.client.put(`/user/${id}`, user);
+  static async editUser(
+    id: string,
+    user: FrontUserDocument,
+    userRole: UserRole | undefined,
+  ): Promise<void> {
+    if (userRole === UserRole.SuperAdmin)
+      await this.client.put(`/user/${id}`, user);
+    else await this.client.put(`/user/self/${id}`, user);
   }
 
   static async deleteUser(id: string): Promise<void> {

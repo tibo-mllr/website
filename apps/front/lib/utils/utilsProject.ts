@@ -1,9 +1,9 @@
-import { EnqueueSnackbar } from 'notistack';
-
 import {
   PartialBy,
   type Project as NormalProject,
 } from '@website/shared-types';
+
+import { Notify } from '@/components';
 
 import { API } from '../api';
 
@@ -20,7 +20,7 @@ export type ProjectDocument = Omit<Project, 'organization'> & {
 
 export const handleOrganization = async (
   organizations: OrganizationDocument[],
-  enqueueSnackbar: EnqueueSnackbar,
+  notify: Notify,
   organization?: OrganizationDocument,
 ): Promise<string | undefined> => {
   if (!organization) return undefined;
@@ -33,7 +33,7 @@ export const handleOrganization = async (
     return API.createOrganization(organizationToPost)
       .then(({ _id }) => _id)
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
         throw error;
       });
@@ -51,7 +51,7 @@ export const handleOrganization = async (
     return API.editOrganization(organization._id, organization)
       .then(({ _id }) => _id)
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
         throw error;
       });

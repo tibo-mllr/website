@@ -1,13 +1,21 @@
 'use client';
 
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import {
+  Autocomplete,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from '@mui/material';
 import { useFormikContext } from 'formik';
-import Image from 'next/image';
 import { type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { plusIcon } from '@/app/ui/assets';
-import { DataList } from '@/components';
+import { AddButton, TextField } from '@/components';
 import { selectCompetencies } from '@/lib/redux/slices';
 import {
   Project,
@@ -24,56 +32,95 @@ export default function CompetenciesSection<
 
   const competencies = useSelector(selectCompetencies);
 
+  const handleCompetencyChange = (
+    index: number,
+    newValue: string | null,
+  ): void => {
+    const newCompetencies = [...values.competencies];
+    newCompetencies[index] = newValue ?? '';
+    setFieldValue('competencies', newCompetencies);
+  };
+
   return (
-    <Card>
-      <datalist id="competenciesList">
-        {competencies.map((competency) => (
-          <option key={competency} value={competency} />
-        ))}
-      </datalist>
-      <Card.Body>
-        <Row>
-          {values.competencies.length ? (
-            values.competencies.map((_, index) => (
-              <Col key={index} md={4}>
-                <DataList
-                  name={`competencies[${index}]`}
-                  label={`Competency ${index + 1}`}
-                  groupClassName="mb-3"
-                  placeholder="Competency"
-                  listId="competenciesList"
-                  autoComplete="off"
-                  onDeleteOption={() =>
-                    setFieldValue(
-                      'competencies',
-                      values.competencies.filter((_, i) => i !== index),
-                    )
+    <Grid size={12}>
+      <Card>
+        <CardContent>
+          <Grid container spacing={2}>
+            {values.competencies.length ? (
+              values.competencies.map((competency, index) => (
+                <Grid key={index} size={3}>
+                  <Autocomplete
+                    freeSolo
+                    options={competencies}
+                    value={competency}
+                    onChange={(_, newValue) =>
+                      handleCompetencyChange(
+                        index,
+                        typeof newValue === 'string' ? newValue : '',
+                      )
+                    }
+                    onInputChange={(_, newInputValue) => {
+                      handleCompetencyChange(index, newInputValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={`Competency ${index + 1}`}
+                        name={`competencies[${index}]`}
+                        fullWidth
+                        slotProps={{
+                          input: {
+                            ...params.InputProps,
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  aria-label="Delete"
+                                  onClick={() =>
+                                    setFieldValue(
+                                      'competencies',
+                                      values.competencies.filter(
+                                        (_, i) => i !== index,
+                                      ),
+                                    )
+                                  }
+                                  color="error"
+                                  edge="end"
+                                >
+                                  <DeleteForeverTwoToneIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          },
+                        }}
+                      />
+                    )}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Grid textAlign="center" size={12}>
+                <Typography
+                  color={
+                    !!touched.competencies && !!errors.competencies
+                      ? 'error'
+                      : ''
                   }
-                />
-              </Col>
-            ))
-          ) : (
-            <Row>
-              <Col
-                className={`text-center ${touched.competencies && !!errors.competencies ? 'text-invalid' : ''}`}
-              >
-                No competencies linked to this project
-              </Col>
-            </Row>
-          )}
-        </Row>
-      </Card.Body>
-      <Card.Footer>
-        <Button
-          onClick={() =>
-            setFieldValue('competencies', [...values.competencies, ''])
-          }
-          className="btn-add"
-        >
-          <Image alt="Plus icon" src={plusIcon} height="16" />
-          Add competency
-        </Button>
-      </Card.Footer>
-    </Card>
+                >
+                  No competencies linked to this project
+                </Typography>
+              </Grid>
+            )}
+          </Grid>
+        </CardContent>
+        <CardActions sx={{ justifyContent: 'center' }}>
+          <AddButton
+            onClick={() =>
+              setFieldValue('competencies', [...values.competencies, ''])
+            }
+            text="Add competency"
+          />
+        </CardActions>
+      </Card>
+    </Grid>
   );
 }

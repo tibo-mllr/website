@@ -1,10 +1,10 @@
-import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import { Button, CardActions, CardContent, FormGroup } from '@mui/material';
+import { Form, Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 
 import { type News } from '@website/shared-types';
 
-import { TextFieldWithLabel } from '@/components';
+import { TextField } from '@/components';
 import { type NewsDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
@@ -19,28 +19,30 @@ export default function NewsForm<
     <Formik {...props}>
       {({ handleSubmit }) => (
         <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
-              name="title"
-              label="Title"
-              placeholder="Enter title"
-              groupClassName="mb-3"
-            />
-            <TextFieldWithLabel
-              as="textarea"
-              name="content"
-              label="Content"
-              placeholder="Enter content"
-              groupClassName="mb-3"
-              style={{ height: '20vh' }}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
+          <CardContent>
+            <FormGroup sx={{ gap: 1 }}>
+              <TextField
+                id="title"
+                name="title"
+                label="Title"
+                placeholder="Enter title"
+              />
+              <TextField
+                multiline
+                minRows={4}
+                id="content"
+                name="content"
+                label="Content"
+                placeholder="Enter content"
+              />
+            </FormGroup>
+          </CardContent>
+          <CardActions>
+            <Button variant="contained" type="submit" className="w-full">
               {edit && 'Edit'}
               {create && 'Add'}
             </Button>
-          </Modal.Footer>
+          </CardActions>
         </Form>
       )}
     </Formik>

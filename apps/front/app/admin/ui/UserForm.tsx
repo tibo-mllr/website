@@ -1,14 +1,19 @@
-import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import {
+  Button,
+  CardActions,
+  CardContent,
+  FormControl,
+  FormGroup,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
+import { Form, Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 
 import { UserRole, type FrontUser } from '@website/shared-types';
 
-import {
-  PasswordField,
-  SelectFieldWithLabel,
-  TextFieldWithLabel,
-} from '@/components';
+import { TextField } from '@/components';
 import { type FrontUserDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
@@ -28,37 +33,53 @@ export default function UserForm<T extends FrontUserDocument | FrontUser>({
 }: UserFormProps<T>): ReactElement {
   return (
     <Formik {...props}>
-      {({ handleSubmit }) => (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
-              name="username"
-              label="Username"
-              placeholder="Enter username"
-              autoComplete="username"
-              groupClassName="mb-3"
-            />
-            <PasswordField
-              name="password"
-              placeholder="Enter password"
-              autoComplete="new-password"
-              groupClassName="mb-3"
-            />
-            {!!token && userRole == 'superAdmin' && (
-              <SelectFieldWithLabel
-                name="role"
-                label="Role"
-                options={Object.values(UserRole)}
-                groupClassName="mb-3"
+      {({ values, setFieldValue }) => (
+        <Form>
+          <CardContent>
+            <FormGroup sx={{ gap: 1 }}>
+              <TextField
+                id="username"
+                name="username"
+                label="Username"
+                placeholder="Enter username"
+                autoComplete="username"
               />
-            )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="primary" type="submit">
+              <TextField
+                id="password"
+                name="password"
+                label="Password"
+                type="password"
+                placeholder="Enter password"
+                autoComplete="new-password"
+              />
+              {!!token && userRole == 'superAdmin' && (
+                <FormControl fullWidth>
+                  <InputLabel id="role-label">Role</InputLabel>
+                  <Select
+                    name="role"
+                    labelId="role-label"
+                    label="Role"
+                    value={values.role}
+                    onChange={(event) =>
+                      setFieldValue('role', event.target.value as UserRole)
+                    }
+                  >
+                    {Object.values(UserRole).map((role) => (
+                      <MenuItem key={role} value={role}>
+                        {role}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+            </FormGroup>
+          </CardContent>
+          <CardActions>
+            <Button type="submit" variant="contained" className="w-full">
               {edit && 'Edit'}
-              {create && 'Add'}
+              {create && 'Create account'}
             </Button>
-          </Modal.Footer>
+          </CardActions>
         </Form>
       )}
     </Formik>

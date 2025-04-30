@@ -1,19 +1,62 @@
 'use client';
 
-import { SnackbarProvider } from 'notistack';
+import { extendTheme, ThemeProvider } from '@mui/material';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import { useEffect, useRef, type ReactElement, type ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
-import {
-  getPreferredTheme,
-  getStoredTheme,
-  setTheme,
-  showActiveTheme,
-} from '@/app/ui/theme';
-import { CustomSnackbar } from '@/components';
+import { NotificationProvider } from '@/components/NotificationProvider';
 import { initAdmin } from '@/lib/redux/slices';
 
 import { AppStore, makeStore } from './redux/types';
+
+const theme = extendTheme({
+  colorSchemes: {
+    light: { palette: { primary: { main: '#854afc' } } },
+    dark: { palette: { primary: { main: '#854afc' } } },
+  },
+  components: {
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          opacity: 0.75,
+          '.MuiModal-root &': { opacity: 1 },
+        },
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderBottomWidth: 1,
+          borderBottomColor: theme.palette.divider,
+          backgroundColor:
+            'color-mix(in srgb, var(--mui-palette-background-paper), var(--mui-palette-primary-main))',
+          '.MuiModal-root &': {
+            backgroundColor: 'unset',
+            borderBottom: 'unset',
+          },
+        }),
+      },
+    },
+    MuiCardActions: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderTopWidth: 1,
+          borderTopColor: theme.palette.divider,
+          backgroundColor:
+            'color-mix(in srgb, var(--mui-palette-background-paper) 90%, var(--mui-palette-text-primary))',
+          '.MuiModal-root &': {
+            backgroundColor: 'unset',
+            borderTop: 'unset',
+          },
+        }),
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: { root: { paddingTop: 0, paddingBottom: 0 } },
+    },
+  },
+});
 
 export default function Providers({
   children,
@@ -28,34 +71,15 @@ export default function Providers({
 
   useEffect(() => {
     if (storeRef.current) storeRef.current.dispatch(initAdmin());
-
-    setTheme(getPreferredTheme());
-
-    window
-      .matchMedia('(prefers-color-scheme: dark)')
-      .addEventListener('change', () => {
-        const storedTheme = getStoredTheme();
-        if (storedTheme !== 'light' && storedTheme !== 'dark') {
-          setTheme(getPreferredTheme());
-        }
-      });
-
-    showActiveTheme(getPreferredTheme());
   }, [storeRef]);
 
   return (
     <Provider store={storeRef.current}>
-      <SnackbarProvider
-        preventDuplicate
-        Components={{
-          success: CustomSnackbar,
-          error: CustomSnackbar,
-          warning: CustomSnackbar,
-          info: CustomSnackbar,
-        }}
-      >
-        {children}
-      </SnackbarProvider>
+      <NotificationProvider>
+        <AppRouterCacheProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
+        </AppRouterCacheProvider>
+      </NotificationProvider>
     </Provider>
   );
 }

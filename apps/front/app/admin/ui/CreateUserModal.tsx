@@ -1,8 +1,7 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Card, Modal } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
@@ -12,6 +11,7 @@ import {
   type FrontUser,
 } from '@website/shared-types';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
@@ -36,7 +36,7 @@ export default function CreateUserModal({
     role: UserRole.Admin,
   };
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const dispatch = useAppDispatch();
   const userRole = useSelector(selectUserRole);
@@ -46,36 +46,47 @@ export default function CreateUserModal({
   const handleCreate = (newUser: FrontUser): void => {
     API.createUser(newUser, newSelf)
       .then(() => {
-        enqueueSnackbar(newSelf ? 'Account created' : 'User added', {
-          variant: 'success',
+        notify(newSelf ? 'Account created' : 'User added', {
+          severity: 'success',
         });
         dispatch(switchShowNewUser(false));
       })
       .catch((error) => {
         if (error.response?.status === 409)
-          enqueueSnackbar('Username already exists', { variant: 'error' });
+          notify('Username already exists', { severity: 'error' });
         else {
-          enqueueSnackbar(error, { variant: 'error' });
+          notify(error, { severity: 'error' });
           console.error(error);
         }
       });
   };
 
   return (
-    <Modal show={showNew} onHide={() => dispatch(switchShowNewUser(false))}>
-      <Modal.Header closeButton>
-        <Card.Title>New user</Card.Title>
-      </Modal.Header>
-      <UserForm
-        initialValues={emptyUser}
-        onSubmit={async (values) => {
-          handleCreate(values);
-        }}
-        validationSchema={toFormikValidationSchema(frontUserSchema)}
-        token={token}
-        userRole={userRole}
-        create
-      />
+    <Modal open={showNew} onClose={() => dispatch(switchShowNewUser(false))}>
+      <Box
+        padding={2}
+        width="fit"
+        maxHeight="100vh"
+        overflow="auto"
+        position="absolute"
+        left="50%"
+        top="50%"
+        sx={{ transform: 'translate(-50%, -100%)' }}
+      >
+        <Card className="px-15 py-5">
+          <CardHeader title="New user" />
+          <UserForm
+            initialValues={emptyUser}
+            onSubmit={async (values) => {
+              handleCreate(values);
+            }}
+            validationSchema={toFormikValidationSchema(frontUserSchema)}
+            token={token}
+            userRole={userRole}
+            create
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

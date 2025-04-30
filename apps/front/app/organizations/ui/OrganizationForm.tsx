@@ -1,11 +1,11 @@
-import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import { Button, CardActions, CardContent, Grid } from '@mui/material';
+import { Form, Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { Organization, organizationSchema } from '@website/shared-types';
 
-import { TextFieldWithLabel } from '@/components';
+import { TextField } from '@/components';
 import { type OrganizationDocument } from '@/lib/utils';
 
 type EditProps = { edit: true; create?: never };
@@ -21,44 +21,54 @@ export default function OrganizationForm<
       validationSchema={toFormikValidationSchema(organizationSchema)}
       {...props}
     >
-      {({ handleSubmit }) => (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
+      <Form>
+        <CardContent>
+          <Grid container spacing={1} width="100%">
+            <TextField
+              id="name"
               name="name"
               label="Name"
               placeholder="Enter name"
-              groupClassName="mb-3"
+              fullWidth
             />
-            <TextFieldWithLabel
-              as="textarea"
+            <TextField
+              multiline
+              minRows={4}
+              id="description"
               name="description"
               label="Description"
               placeholder="Enter description"
-              groupClassName="mb-3"
-              style={{ height: '20vh' }}
+              fullWidth
             />
-            <TextFieldWithLabel
-              name="location"
-              label="Location"
-              placeholder="Enter location"
-              groupClassName="mb-3"
-            />
-            <TextFieldWithLabel
-              name="website"
-              label="Website"
-              placeholder="Enter website"
-              groupClassName="mb-3"
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button type="submit">
-              {edit && 'Edit'}
-              {create && 'Add'}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      )}
+            <Grid container width="100%" spacing={1}>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  id="location"
+                  name="location"
+                  label="Location"
+                  placeholder="Enter location"
+                  fullWidth
+                />
+              </Grid>
+              <Grid size={{ xs: 12, md: 6 }}>
+                <TextField
+                  id="website"
+                  name="website"
+                  label="Website"
+                  placeholder="Enter website"
+                  fullWidth
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </CardContent>
+        <CardActions>
+          <Button type="submit" variant="contained" className="w-full">
+            {edit && 'Edit'}
+            {create && 'Add'}
+          </Button>
+        </CardActions>
+      </Form>
     </Formik>
   );
 }

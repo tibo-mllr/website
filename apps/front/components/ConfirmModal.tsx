@@ -1,5 +1,13 @@
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Modal,
+} from '@mui/material';
 import { ReactElement } from 'react';
-import { Button, Modal } from 'react-bootstrap';
 
 type ConfirmModalProps = {
   title: string;
@@ -17,25 +25,38 @@ export function ConfirmModal({
   onConfirm,
 }: ConfirmModalProps): ReactElement {
   return (
-    <Modal show={show} onHide={onClose} className="center-modal">
-      <Modal.Header closeButton className="no-border">
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>{message}</Modal.Body>
-      <Modal.Footer className="no-border">
-        <Button variant="secondary" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => {
-            onConfirm();
-            onClose();
-          }}
-        >
-          Confirm
-        </Button>
-      </Modal.Footer>
+    <Modal open={show} onClose={onClose}>
+      <Box
+        padding={2}
+        width="30vw"
+        minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
+        position="absolute"
+        left="50%"
+        top="50%"
+        sx={{ transform: 'translate(-50%, -100%)' }}
+      >
+        <Card>
+          <CardHeader title={title} />
+          <CardContent>{message}</CardContent>
+          <CardActions sx={{ justifyContent: 'space-between' }}>
+            <Button color="secondary" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={() => {
+                onConfirm();
+                onClose();
+              }}
+            >
+              Confirm
+            </Button>
+          </CardActions>
+        </Card>
+      </Box>
     </Modal>
   );
 }

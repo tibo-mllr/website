@@ -1,15 +1,27 @@
 'use client';
 
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { UserRole } from '@website/shared-types';
 
-import { binIcon, editIcon } from '@/app/ui/assets';
-import { ConfirmModal, CustomSuspense, UserCardSkeleton } from '@/components';
+import {
+  ConfirmModal,
+  CustomSuspense,
+  useNotification,
+  UserCardSkeleton,
+} from '@/components';
 import { API } from '@/lib/api';
 import { fetchUsers } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -28,10 +40,11 @@ import { CreateUserModal, EditUserModal } from '../ui';
 export default function AdminView(): ReactElement {
   const [showConfirm, setShowConfirm] = useState<boolean>(false);
   const [showEdit, setShowEdit] = useState<boolean>(false);
-  const [userToEdit, setUserToEdit] = useState<FrontUserDocument>({
+  const [userToEdit, setUserToEdit] = useState<
+    Omit<FrontUserDocument, 'password'>
+  >({
     _id: '',
     username: '',
-    password: '',
     role: UserRole.Admin,
   });
 
@@ -40,13 +53,13 @@ export default function AdminView(): ReactElement {
   const users = useSelector(selectUsers);
   const isLoading = useSelector(selectUsersLoading);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleDelete = (id: string): void => {
     API.deleteUser(id)
-      .then(() => enqueueSnackbar('User deleted', { variant: 'success' }))
+      .then(() => notify('User deleted', { severity: 'success' }))
       .catch((error) => {
-        enqueueSnackbar('Error deleting user', { variant: 'error' });
+        notify('Error deleting user', { severity: 'error' });
         console.error(error);
       });
   };
@@ -79,54 +92,46 @@ export default function AdminView(): ReactElement {
         onClose={() => setShowConfirm(false)}
         onConfirm={() => handleDelete(userToEdit._id)}
       />
-      {users.map((user) => (
-        <Row className="my-3" key={user._id}>
-          <Col>
-            <Card>
-              <Card.Header>
-                <Card.Title>User: {user.username}</Card.Title>
-              </Card.Header>
-              <Card.Body>
-                <Card.Text>Role: {user.role}</Card.Text>
-              </Card.Body>
-              <Card.Footer>
-                <Row>
-                  <Col>
-                    <Button
-                      onClick={() => {
-                        setShowEdit(true);
-                        setUserToEdit(user);
-                      }}
-                    >
-                      <Image
-                        alt="Edit"
-                        src={editIcon}
-                        height="24"
-                        className="d-inline-block align-center"
-                      />
-                    </Button>
-                  </Col>
-                  <Col className="d-flex justify-content-end">
-                    <Button
-                      onClick={() => {
-                        setShowConfirm(true);
-                        setUserToEdit(user);
-                      }}
-                    >
-                      <Image
-                        alt="Delete"
-                        src={binIcon}
-                        height="24"
-                        className="d-inline-block align-center"
-                      />
-                    </Button>
-                  </Col>
-                </Row>
-              </Card.Footer>
+      <Grid container columns={{ xs: 4, sm: 9, md: 12 }} spacing={3}>
+        {users.map((user) => (
+          <Grid key={user._id} size={{ xs: 2, sm: 3, md: 3 }}>
+            <Card className="my-3">
+              <CardHeader title={`User: ${user.username}`} />
+              <CardContent>
+                <Typography>Role: {user.role}</Typography>
+              </CardContent>
+              <CardActions>
+                <Grid
+                  display="flex"
+                  width="100%"
+                  justifyContent="space-between"
+                >
+                  <IconButton
+                    aria-label="Edit"
+                    onClick={() => {
+                      setShowEdit(true);
+                      setUserToEdit(user);
+                    }}
+                    color="warning"
+                  >
+                    <EditTwoToneIcon />
+                  </IconButton>
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() => {
+                      setShowConfirm(true);
+                      setUserToEdit(user);
+                    }}
+                    color="error"
+                  >
+                    <DeleteForeverTwoToneIcon />
+                  </IconButton>
+                </Grid>
+              </CardActions>
             </Card>
-          </Col>
-        </Row>
-      ))}
+          </Grid>
+        ))}
+      </Grid>
       {userRole === 'superAdmin' && <CreateUserModal />}
       <EditUserModal
         userToEdit={userToEdit}

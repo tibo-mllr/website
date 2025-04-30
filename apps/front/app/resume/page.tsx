@@ -1,25 +1,18 @@
+import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { type ReactElement } from 'react';
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Col,
-  Row,
-} from 'react-bootstrap';
 
 import { CompetenciesSection, ProjectsSection } from './ui';
 
 export default function ResumeView(): ReactElement {
   return (
-    <Row>
-      <Col md={3} xs={12} className="my-3">
+    <Grid container spacing={2} marginY={2}>
+      <Grid size={3}>
         <Card>
-          <CardHeader>
-            <CardTitle>MULLER Thibault</CardTitle>
-          </CardHeader>
-          <CardBody>
-            <b className="fs-4">About me</b>
+          <CardHeader title="MULLER Thibault" />
+          <CardContent>
+            <Typography variant="h5" component="span">
+              <b>About me</b>
+            </Typography>
             <br />
             <span>
               Interested in DIY & sciences since young, my passions took me to
@@ -29,12 +22,16 @@ export default function ResumeView(): ReactElement {
             </span>
             <br />
             <br />
-            <b className="fs-4">Skills</b>
+            <Typography variant="h5" component="span">
+              <b>Skills</b>
+            </Typography>
             <br />
             <CompetenciesSection />
             <br />
             <br />
-            <b className="fs-4">Languages</b>
+            <Typography variant="h5" component="span">
+              <b>Languages</b>
+            </Typography>
             <br />
             <span>
               French: Native
@@ -43,15 +40,17 @@ export default function ResumeView(): ReactElement {
             </span>
             <br />
             <br />
-            <b className="fs-4">Interests</b>
+            <Typography variant="h5" component="span">
+              <b>Interests</b>
+            </Typography>
             <br />
             <span>Photography • Sports • DIY</span>
-          </CardBody>
+          </CardContent>
         </Card>
-      </Col>
-      <Col className="overflow-auto" style={{ maxHeight: '92vh' }}>
+      </Grid>
+      <Grid className="overflow-auto" style={{ maxHeight: '92vh' }} size={9}>
         <ProjectsSection />
-      </Col>
-    </Row>
+      </Grid>
+    </Grid>
   );
 }

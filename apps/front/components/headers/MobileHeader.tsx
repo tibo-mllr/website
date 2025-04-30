@@ -1,33 +1,21 @@
 'use client';
 
+import {
+  AppBar,
+  Button,
+  FormControl,
+  Grid,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Toolbar,
+} from '@mui/material';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState, type ReactElement } from 'react';
-import {
-  Button,
-  Col,
-  Container,
-  Dropdown,
-  Nav,
-  Navbar,
-  Row,
-} from 'react-bootstrap';
+import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import {
-  darkIcon,
-  darkSelectedIcon,
-  lightIcon,
-  logo,
-  plusIcon,
-} from '@/app/ui/assets';
-import {
-  getPreferredTheme,
-  setStoredTheme,
-  setTheme,
-  showActiveTheme,
-} from '@/app/ui/theme';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -39,210 +27,98 @@ import {
   switchShowNewUser,
 } from '@/lib/redux/slices';
 
+import { AddButton } from '..';
+
+const ADD_BUTTON_PATHNAMES = ['/home', '/projects', '/organizations'];
+type AddButtonPathnames = (typeof ADD_BUTTON_PATHNAMES)[number];
+
 export default function MobileHeader(): ReactElement {
   const pathname = usePathname();
-  const capitalizedSelected =
-    pathname.charAt(1).toUpperCase() + pathname.slice(2);
   const router = useRouter();
 
   const dispatch = useAppDispatch();
   const token = useSelector(selectToken);
   const userRole = useSelector(selectUserRole);
 
-  const [selectedTheme, setSelectedTheme] = useState('dark');
+  const handleChange = (event: SelectChangeEvent): void => {
+    const selectedPath = event.target.value;
+    router.push(selectedPath);
+  };
 
-  useEffect(() => {
-    setSelectedTheme(getPreferredTheme());
-  }, []);
+  const pathnameToText: Record<AddButtonPathnames, string> = {
+    '/home': 'Add a news',
+    '/projects': 'Add project',
+    '/organizations': 'Add organization',
+  };
+
+  const pathnameToAction: Record<AddButtonPathnames, () => void> = {
+    '/home': () => dispatch(switchShowNewNews(true)),
+    '/projects': () => dispatch(switchShowNewProject(true)),
+    '/organizations': () => dispatch(switchShowNewOrganization(true)),
+  };
 
   return (
-    <header>
-      <div className="h-100 navbar navbar-expand navbar-light">
-        <Container fluid>
-          <Col>
-            <Row className="mb-2">
-              <Col>
-                <Navbar.Brand>
-                  <Link href="/home" className="navbar-brand">
-                    <Image
-                      alt="Anarchist logo"
-                      src={logo}
-                      height="30"
-                      className="d-inline-block align-top"
-                      priority
-                    />{' '}
-                    <b>Mini website</b>
-                  </Link>
-                </Navbar.Brand>
-              </Col>
-              <Col>
-                <Nav className="justify-content-end">
-                  {!!token &&
-                    (userRole === 'admin' || userRole === 'superAdmin') &&
-                    pathname === '/home' && (
-                      <Button
-                        onClick={() => dispatch(switchShowNewNews(true))}
-                        className="btn-add"
-                      >
-                        <Image alt="Plus icon" src={plusIcon} height="16" />
-                      </Button>
-                    )}
-                  {!!token &&
-                    (userRole === 'admin' || userRole === 'superAdmin') &&
-                    pathname === '/projects' && (
-                      <Button
-                        onClick={() => dispatch(switchShowNewProject(true))}
-                        className="btn-add"
-                      >
-                        <Image alt="Plus icon" src={plusIcon} height="16" />
-                      </Button>
-                    )}
-                  {!!token &&
-                    (userRole === 'admin' || userRole === 'superAdmin') &&
-                    pathname === '/organizations' && (
-                      <Button
-                        onClick={() =>
-                          dispatch(switchShowNewOrganization(true))
-                        }
-                        className="btn-add"
-                      >
-                        <Image alt="Plus icon" src={plusIcon} height="16" />
-                      </Button>
-                    )}
-                  {!!token &&
-                    userRole === 'superAdmin' &&
-                    pathname === '/admin' && (
-                      <Button
-                        onClick={() => dispatch(switchShowNewUser(true))}
-                        className="btn-add"
-                      >
-                        <Image alt="Plus icon" src={plusIcon} height="16" />
-                      </Button>
-                    )}
-                  {!token ? (
-                    <Link href="/login" className="nav-link">
-                      Account
-                    </Link>
-                  ) : (
-                    <Button
-                      className="btn-logout"
-                      onClick={() => {
-                        dispatch(logout());
-                        if (pathname === '/admin') router.push('/');
-                      }}
-                    >
-                      Logout
-                    </Button>
-                  )}
-                </Nav>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Dropdown>
-                  <Dropdown.Toggle>{capitalizedSelected}</Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item
-                      className={pathname === '/home' ? 'bg-selected' : ''}
-                    >
-                      <Link href="/home" className="nav-link">
-                        Home
-                      </Link>
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      className={pathname === '/resume' ? 'bg-selected' : ''}
-                    >
-                      <Link href="/resume" className="nav-link">
-                        Resume
-                      </Link>
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      className={pathname === '/projects' ? 'bg-selected' : ''}
-                    >
-                      <Link className="nav-link" href="/projects">
-                        Projects
-                      </Link>
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      className={
-                        pathname === '/organizations' ? 'bg-selected' : ''
-                      }
-                    >
-                      <Link href="/organizations" className="nav-link">
-                        Organizations
-                      </Link>
-                    </Dropdown.Item>
-                    {!!token && (
-                      <Dropdown.Item
-                        className={pathname === '/admin' ? 'bg-selected' : ''}
-                      >
-                        <Link href="/admin" className="nav-link">
-                          Admin
-                        </Link>
-                      </Dropdown.Item>
-                    )}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </Col>
-              <Col>
-                <Nav className="justify-content-end">
-                  <Dropdown>
-                    <Dropdown.Toggle
-                      id="bd-theme"
-                      className="d-flex align-items-center justify-content-center"
-                    >
-                      <Image
-                        alt="Current mode icon"
-                        src={darkSelectedIcon}
-                        height="24"
-                        className="theme-icon-active"
-                      />
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item
-                        className={`nav-link d-flex align-items-center me-4 ${selectedTheme === 'light' && 'bg-selected'}`}
-                        onClick={() => {
-                          const theme = 'light';
-                          setStoredTheme(theme);
-                          setTheme(theme);
-                          showActiveTheme(theme);
-                          setSelectedTheme(theme);
-                        }}
-                      >
-                        <Image
-                          alt="Light mode icon"
-                          src={lightIcon}
-                          height="24"
-                          className="me-2"
-                        />
-                        Light
-                      </Dropdown.Item>
-                      <Dropdown.Item
-                        className={`nav-link d-flex align-items-center ${selectedTheme === 'dark' && 'bg-selected'}`}
-                        onClick={() => {
-                          const theme = 'dark';
-                          setStoredTheme(theme);
-                          setTheme(theme);
-                          showActiveTheme(theme);
-                          setSelectedTheme(theme);
-                        }}
-                      >
-                        <Image
-                          alt="Dark mode icon"
-                          src={darkIcon}
-                          height="24"
-                          className="me-2"
-                        />
-                        Dark
-                      </Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                </Nav>
-              </Col>
-            </Row>
-          </Col>
-        </Container>
-      </div>
-    </header>
+    <AppBar position="sticky" enableColorOnDark>
+      <Toolbar>
+        <Link href="/home" style={{ marginRight: '1em' }}>
+          <Image
+            alt="Website logo"
+            src="/logo.png"
+            height={40}
+            width={(4422 / 2067) * 40}
+            className="d-inline-block align-top"
+            priority
+          />
+        </Link>
+        <Grid className="ms-auto me-2 justify-content-end" display="flex">
+          {!!token &&
+            (userRole === 'admin' || userRole === 'superAdmin') &&
+            ADD_BUTTON_PATHNAMES.includes(pathname) && (
+              <AddButton
+                onClick={pathnameToAction[pathname]}
+                text={pathnameToText[pathname]}
+              />
+            )}
+          {!!token && userRole === 'superAdmin' && pathname === '/admin' && (
+            <AddButton
+              onClick={() => dispatch(switchShowNewUser(true))}
+              text="Add user"
+            />
+          )}
+          {!token ? (
+            <Button LinkComponent={Link} href="/login" variant="outlined">
+              Account
+            </Button>
+          ) : (
+            <Button
+              className="btn-logout"
+              onClick={() => {
+                dispatch(logout());
+                if (pathname === '/admin') router.push('/');
+              }}
+            >
+              Logout
+            </Button>
+          )}
+        </Grid>
+        <Grid>
+          <FormControl>
+            <Select
+              value={pathname}
+              onChange={handleChange}
+              displayEmpty
+              inputProps={{ 'aria-label': 'Navigation Menu' }}
+              className="my-2"
+            >
+              <MenuItem value="/home">Home</MenuItem>
+              <MenuItem value="/resume">Resume</MenuItem>
+              <MenuItem value="/projects">Projects</MenuItem>
+              <MenuItem value="/organizations">Organizations</MenuItem>
+              {!!token && <MenuItem value="/admin">Admin</MenuItem>}
+            </Select>
+          </FormControl>
+        </Grid>
+      </Toolbar>
+    </AppBar>
   );
 }

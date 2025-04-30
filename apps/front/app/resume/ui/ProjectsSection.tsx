@@ -1,7 +1,7 @@
 'use client';
 
+import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useEffect, type ReactElement } from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
 import { CustomSuspense, ProjectCardSkeleton } from '@/components';
@@ -46,40 +46,41 @@ export default function ProjectsSestion(): ReactElement {
       count={2}
       isLoading={isLoading}
     >
-      {resume.projects.length ? (
-        resume.projects.map((type) => (
-          <Row className="my-3" key={type._id}>
-            <Col>
-              <Card>
-                <Card.Header>
-                  <Card.Title>{type._id}</Card.Title>
-                </Card.Header>
-                <Card.Body>
+      <Grid container spacing={2}>
+        {resume.projects.length ? (
+          resume.projects.map((type) => (
+            <Card key={type._id} sx={{ width: '100%' }}>
+              <CardHeader title={type._id} />
+              <CardContent>
+                <Grid container spacing={2}>
                   {type.projects.map((project) => (
-                    <Row key={project._id.toString()}>
-                      <Row>
-                        <Col>
+                    <Grid
+                      container
+                      key={project._id.toString()}
+                      size={12}
+                      spacing={0}
+                    >
+                      <Grid size={12}>
+                        <Typography variant="h5" component="span">
                           <b>
-                            <span className="fs-4">
-                              {project.role}
-                              {' | '}
-                            </span>
+                            {project.role}
+                            {' | '}
                           </b>
-                          {project.organization && (
-                            <span className="fs-5">
-                              <u>{project.organization?.name}</u>
-                              {' | '}
-                            </span>
-                          )}
-                          <span className="fs-7">
-                            {new Date(project.startDate).toLocaleDateString()} -{' '}
-                            {project.endDate
-                              ? new Date(project.endDate).toLocaleDateString()
-                              : 'Present'}
-                          </span>
-                        </Col>
-                      </Row>
-                      <Row>
+                        </Typography>
+                        {project.organization && (
+                          <Typography variant="h6" component="span">
+                            <u>{project.organization?.name}</u>
+                            {' | '}
+                          </Typography>
+                        )}
+                        <Typography component="span">
+                          {new Date(project.startDate).toLocaleDateString()} -{' '}
+                          {project.endDate
+                            ? new Date(project.endDate).toLocaleDateString()
+                            : 'Present'}
+                        </Typography>
+                      </Grid>
+                      <Grid size={12}>
                         <span>
                           <b>{project.title}</b>
                           <br />
@@ -87,17 +88,17 @@ export default function ProjectsSestion(): ReactElement {
                           <br />
                           <i>{project.competencies.join(' • ')}</i>
                         </span>
-                      </Row>
-                    </Row>
+                      </Grid>
+                    </Grid>
                   ))}
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        ))
-      ) : (
-        <i>No experience to display</i>
-      )}
+                </Grid>
+              </CardContent>
+            </Card>
+          ))
+        ) : (
+          <i>No experience to display</i>
+        )}
+      </Grid>
     </CustomSuspense>
   );
 }

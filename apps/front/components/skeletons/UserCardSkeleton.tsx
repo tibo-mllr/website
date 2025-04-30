@@ -1,19 +1,14 @@
-import Image from 'next/image';
+import { Card, CardContent, CardHeader } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
-
-import { binIcon, editIcon } from '@/app/ui/assets';
 
 export function UserCardSkeleton(): ReactElement {
   return (
     <div className="my-3">
       <Card>
-        <Card.Header>
-          <Card.Title>
-            <div className="skeleton-text" style={{ width: '10%' }} />
-          </Card.Title>
-        </Card.Header>
-        <Card.Body>
+        <CardHeader
+          title={<div className="skeleton-text" style={{ width: '100%' }} />}
+        />
+        <CardContent>
           <div
             className="skeleton-text"
             style={{
@@ -21,31 +16,7 @@ export function UserCardSkeleton(): ReactElement {
               marginBottom: '10px',
             }}
           />
-        </Card.Body>
-        <Card.Footer>
-          <Row>
-            <Col>
-              <Button>
-                <Image
-                  alt="Edit"
-                  src={editIcon}
-                  height="24"
-                  className="d-inline-block align-center"
-                />
-              </Button>
-            </Col>
-            <Col className="d-flex justify-content-end">
-              <Button>
-                <Image
-                  alt="Delete"
-                  src={binIcon}
-                  height="24"
-                  className="d-inline-block align-center"
-                />
-              </Button>
-            </Col>
-          </Row>
-        </Card.Footer>
+        </CardContent>
       </Card>
     </div>
   );

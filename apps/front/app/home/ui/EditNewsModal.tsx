@@ -1,12 +1,12 @@
 'use client';
 
-import { useSnackbar } from 'notistack';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { newsSchema } from '@website/shared-types';
 
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { type NewsDocument } from '@/lib/utils';
 
@@ -23,32 +23,43 @@ export default function EditNewsModal({
   show,
   setShow,
 }: EditNewsProps): ReactElement {
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
   const handleEdit = async (values: NewsDocument): Promise<void> => {
     API.editNews(newsToEdit._id, values)
       .then(() => {
-        enqueueSnackbar('News edited', { variant: 'success' });
+        notify('News edited', { severity: 'success' });
         setShow(false);
       })
       .catch((error) => {
-        enqueueSnackbar(error, { variant: 'error' });
+        notify(error, { severity: 'error' });
         console.error(error);
       });
   };
 
   return (
-    <Modal show={show} onHide={() => setShow(false)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Edit news</Modal.Title>
-      </Modal.Header>
-      <NewsForm
-        edit
-        initialValues={newsToEdit}
-        validationSchema={toFormikValidationSchema(
-          newsSchema.omit({ author: true, date: true, editor: true }),
-        )}
-        onSubmit={handleEdit}
-      />
+    <Modal open={show} onClose={() => setShow(false)}>
+      <Box
+        padding={2}
+        width="30vw"
+        minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="Edit news" />
+          <NewsForm
+            edit
+            initialValues={newsToEdit}
+            validationSchema={toFormikValidationSchema(
+              newsSchema.omit({ author: true, date: true, editor: true }),
+            )}
+            onSubmit={handleEdit}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

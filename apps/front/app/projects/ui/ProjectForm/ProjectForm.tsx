@@ -1,11 +1,20 @@
-import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import {
+  Button,
+  CardActions,
+  CardContent,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+} from '@mui/material';
+import { Form, Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { projectSchema, ProjectType } from '@website/shared-types';
 
-import { SelectFieldWithLabel, TextFieldWithLabel } from '@/components';
+import { TextField } from '@/components';
 import {
   type OrganizationDocument,
   type Project,
@@ -64,67 +73,88 @@ export default function ProjectForm<
       }}
       {...props}
     >
-      {({ values, handleChange, handleSubmit, setFieldValue }) => (
-        <Form onSubmit={handleSubmit}>
-          <Modal.Body>
-            <TextFieldWithLabel
-              name="role"
-              label="Role"
-              placeholder="Role (e.g. Developer)"
-              groupClassName="mb-3"
-            />
-            <TextFieldWithLabel
-              name="title"
-              label="Title"
-              placeholder="Title (e.g. Project name)"
-              groupClassName="mb-3"
-            />
-            {values.type === ProjectType.TechExperiences && (
-              <OrganizationSection />
-            )}
-            <SelectFieldWithLabel
-              name="type"
-              label="Type"
-              options={Object.values(ProjectType)}
-              helperOption="Select a type"
-              onChange={(event) => {
-                if (event.target.value === 'Tech Experiences')
-                  setFieldValue(
-                    'organization',
-                    organization ?? {
-                      _id: '',
-                      name: '',
-                      description: '',
-                      location: '',
-                      website: '',
-                    },
-                  );
-                else setFieldValue('organization', undefined);
-                handleChange(event);
-              }}
-              groupClassName="mb-3"
-            />
-            <DatesSection
-              selectEndDate={selectEndDate}
-              setSelectEndDate={setSelectEndDate}
-            />
-            <TextFieldWithLabel
-              as="textarea"
-              name="description"
-              label="Description"
-              placeholder="Description"
-              groupClassName="mb-3"
-              style={{ height: '20vh' }}
-            />
-            <TextFieldWithLabel
-              name="link"
-              label="Link"
-              placeholder="Link"
-              groupClassName="mb-3"
-            />
-            <CompetenciesSection />
-          </Modal.Body>
-          <Modal.Footer>
+      {({ values, handleChange, setFieldValue }) => (
+        <Form>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid container flexDirection="row" spacing={2} size={12}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    id="role"
+                    name="role"
+                    label="Role"
+                    placeholder="Role (e.g. Developer)"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    id="title"
+                    name="title"
+                    label="Title"
+                    placeholder="Title (e.g. Project name)"
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <FormControl fullWidth>
+                <InputLabel id="type-label">Type</InputLabel>
+                <Select
+                  name="type"
+                  labelId="type-label"
+                  label="Type"
+                  value={values.type}
+                  onChange={(event) => {
+                    if (event.target.value === 'Tech Experiences')
+                      setFieldValue(
+                        'organization',
+                        organization ?? {
+                          _id: '',
+                          name: '',
+                          description: '',
+                          location: '',
+                          website: '',
+                        },
+                      );
+                    else setFieldValue('organization', undefined);
+                    handleChange(event);
+                  }}
+                >
+                  {Object.values(ProjectType).map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {values.type === ProjectType.TechExperiences && (
+                <OrganizationSection />
+              )}
+              <DatesSection
+                selectEndDate={selectEndDate}
+                setSelectEndDate={setSelectEndDate}
+              />
+              <Grid container flexDirection="row" spacing={2} size={12}>
+                <TextField
+                  multiline
+                  minRows={4}
+                  id="description"
+                  name="description"
+                  label="Description"
+                  placeholder="Description"
+                  fullWidth
+                />
+                <TextField
+                  id="link"
+                  name="link"
+                  label="Link"
+                  placeholder="Link"
+                />
+              </Grid>
+              <CompetenciesSection />
+            </Grid>
+          </CardContent>
+          <CardActions>
             <Button
               type="submit"
               onClick={() => {
@@ -138,11 +168,13 @@ export default function ProjectForm<
                 )
                   setFieldValue('organization', undefined);
               }}
+              variant="contained"
+              className="w-full"
             >
               {edit && 'Edit'}
               {create && 'Add'}
             </Button>
-          </Modal.Footer>
+          </CardActions>
         </Form>
       )}
     </Formik>

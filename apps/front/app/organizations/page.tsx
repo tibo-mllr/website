@@ -1,17 +1,25 @@
 'use client';
 
-import Image from 'next/image';
-import { useSnackbar } from 'notistack';
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  IconButton,
+  Typography,
+} from '@mui/material';
 import { useEffect, useState, type ReactElement } from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 
-import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
   CustomSuspense,
   OrganizationCardSkeleton,
 } from '@/components';
+import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { fetchOrganizations } from '@/lib/redux/actions';
 import { useAppDispatch } from '@/lib/redux/hooks';
@@ -46,15 +54,13 @@ export default function OrganizationView(): ReactElement {
   const isLoading = useSelector(selectOrganizationsLoading);
   const organizations = useSelector(selectOrganizations);
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { notify } = useNotification();
 
   const handleDelete = (id: string): void => {
     API.deleteOrganization(id)
-      .then(() =>
-        enqueueSnackbar('Organization deleted', { variant: 'success' }),
-      )
+      .then(() => notify('Organization deleted', { severity: 'success' }))
       .catch((error) => {
-        enqueueSnackbar('Error deleting organization', { variant: 'error' });
+        notify('Error deleting organization', { severity: 'error' });
         console.error(error);
       });
   };
@@ -91,11 +97,11 @@ export default function OrganizationView(): ReactElement {
         onClose={() => setShowConfirm(false)}
         onConfirm={() => handleDelete(organizationToEdit._id)}
       />
-      <Row>
-        <h1 className="text-center">
+      <Grid>
+        <Typography textAlign="center" variant="h4" component="h1">
           These are the organizations I worked for
-        </h1>
-      </Row>
+        </Typography>
+      </Grid>
       <CustomSuspense
         fallback={<OrganizationCardSkeleton />}
         count={2}
@@ -103,64 +109,50 @@ export default function OrganizationView(): ReactElement {
       >
         {organizations.length ? (
           organizations.map((organization) => (
-            <Row className="my-3" key={organization._id}>
-              <Col>
-                <Card>
-                  <Card.Header>
-                    <Card.Title>
-                      <b>{organization.name}</b>, {organization.location}
-                    </Card.Title>
-                  </Card.Header>
-                  <Card.Body>
-                    {organization.description ?? <i>No description provided</i>}
-                    <br />
-                    <br />
-                    <b>Website: </b>
-                    <a
-                      href={organization.website}
-                      target="_blank"
-                      rel="noreferrer"
+            <Card className="my-3" key={organization._id}>
+              <CardHeader
+                title={
+                  <>
+                    <b>{organization.name}</b>, {organization.location}
+                  </>
+                }
+              />
+              <CardContent>
+                {organization.description ?? <i>No description provided</i>}
+                <br />
+                <br />
+                <b>Website: </b>
+                <a href={organization.website} target="_blank" rel="noreferrer">
+                  {organization.website}
+                </a>
+              </CardContent>
+              {!!token && userRole === 'superAdmin' && (
+                <CardActions>
+                  <Grid container justifyContent="end" width="100%">
+                    <IconButton
+                      aria-label="Edit"
+                      onClick={() => {
+                        setShowEdit(true);
+                        setOrganizationToEdit(organization);
+                      }}
+                      color="warning"
                     >
-                      {organization.website}
-                    </a>
-                  </Card.Body>
-                  {!!token && userRole === 'superAdmin' && (
-                    <Card.Footer>
-                      <Row>
-                        <Col className="d-flex justify-content-end gap-2">
-                          <Button
-                            onClick={() => {
-                              setShowEdit(true);
-                              setOrganizationToEdit(organization);
-                            }}
-                          >
-                            <Image
-                              alt="Edit"
-                              src={editIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                          <Button
-                            onClick={() => {
-                              setShowConfirm(true);
-                              setOrganizationToEdit(organization);
-                            }}
-                          >
-                            <Image
-                              alt="Delete"
-                              src={binIcon}
-                              height="24"
-                              className="d-inline-block align-center"
-                            />
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Card.Footer>
-                  )}
-                </Card>
-              </Col>
-            </Row>
+                      <EditTwoToneIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={() => {
+                        setShowConfirm(true);
+                        setOrganizationToEdit(organization);
+                      }}
+                      color="error"
+                    >
+                      <DeleteForeverTwoToneIcon />
+                    </IconButton>
+                  </Grid>
+                </CardActions>
+              )}
+            </Card>
           ))
         ) : (
           <i>No organization to display</i>
