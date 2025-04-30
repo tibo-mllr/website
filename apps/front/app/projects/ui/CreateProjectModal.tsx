@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -70,16 +70,27 @@ export default function CreateProjectModal(): ReactElement {
 
   return (
     <Modal open={showNew} onClose={() => dispatch(switchShowNewProject(false))}>
-      <Card>
-        <CardHeader title="New project" closeButton />
-        <ProjectForm
-          selectEndDate={selectEndDate}
-          setSelectEndDate={setSelectEndDate}
-          create
-          initialValues={emptyProject}
-          onSubmit={handleCreate}
-        />
-      </Card>
+      <Box
+        padding={2}
+        width="70vw"
+        minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="New project" />
+          <ProjectForm
+            selectEndDate={selectEndDate}
+            setSelectEndDate={setSelectEndDate}
+            create
+            initialValues={emptyProject}
+            onSubmit={handleCreate}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

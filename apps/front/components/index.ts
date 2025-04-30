@@ -1,3 +1,4 @@
+export * from './AddButton';
 export * from './ConfirmModal';
 export * from './CustomSnackbar';
 export * from './CustomSuspense';

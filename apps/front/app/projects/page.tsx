@@ -1,21 +1,23 @@
 'use client';
 
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import {
-  Button,
+  Box,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Grid,
+  IconButton,
+  Link,
   Modal,
 } from '@mui/material';
-import Image from 'next/image';
 import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
 import { ProjectType } from '@website/shared-types';
 
-import { binIcon, editIcon } from '@/app/ui/assets';
 import {
   ConfirmModal,
   CustomSuspense,
@@ -196,54 +198,54 @@ export default function ProjectView(): ReactElement {
                     <br />
                     <i>{project.competencies.join(' • ')}</i>
                   </CardContent>
-                  {!!project.link ||
-                    (!!token && userRole === 'superAdmin' && (
-                      <CardActions>
-                        <Grid>
-                          {project.link && (
-                            <Grid>
-                              <a
-                                href={project.link}
-                                target="_blank"
-                                rel="noreferrer"
-                              >
-                                See more
-                              </a>
-                            </Grid>
-                          )}
-                          {!!token && userRole === 'superAdmin' && (
-                            <Grid className="d-flex justify-content-end gap-2">
-                              <Button
-                                onClick={() => {
-                                  setShowEdit(true);
-                                  setProjectToEdit(project);
-                                }}
-                              >
-                                <Image
-                                  alt="Edit"
-                                  src={editIcon}
-                                  height="24"
-                                  className="d-inline-block align-center"
-                                />
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  setShowConfirm(true);
-                                  setProjectToEdit(project);
-                                }}
-                              >
-                                <Image
-                                  alt="Delete"
-                                  src={binIcon}
-                                  height="24"
-                                  className="d-inline-block align-center"
-                                />
-                              </Button>
-                            </Grid>
-                          )}
-                        </Grid>
-                      </CardActions>
-                    ))}
+                  {(!!project.link ||
+                    (!!token && userRole === 'superAdmin')) && (
+                    <CardActions>
+                      <Grid
+                        container
+                        justifyContent="space-between"
+                        alignItems="center"
+                        width="100%"
+                      >
+                        {project.link && (
+                          <Link
+                            href={project.link}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            See more
+                          </Link>
+                        )}
+                        {!!token && userRole === 'superAdmin' && (
+                          <Grid
+                            className="ms-auto justify-content-end"
+                            display="flex"
+                          >
+                            <IconButton
+                              aria-label="Edit"
+                              onClick={() => {
+                                setShowEdit(true);
+                                setProjectToEdit(project);
+                              }}
+                              color="warning"
+                            >
+                              <EditTwoToneIcon />
+                            </IconButton>
+                            <IconButton
+                              aria-label="Delete"
+                              onClick={() => {
+                                setShowConfirm(true);
+                                setProjectToEdit(project);
+                              }}
+                              color="error"
+                            >
+                              <DeleteForeverTwoToneIcon />
+                            </IconButton>
+                          </Grid>
+                        )}
+                      </Grid>
+                    </CardActions>
+                  )}
                 </Card>
               </Grid>
             </Grid>
@@ -253,21 +255,30 @@ export default function ProjectView(): ReactElement {
         )}
       </CustomSuspense>
       <Modal open={showOrganization} onClose={() => setShowOrganization(false)}>
-        <Card>
-          <CardHeader title={organization.name} closeButton />
-          <CardContent>
-            <p>
-              <b>Location: </b>
-              {organization.location}
-            </p>
-            <p>
-              <b>Website: </b>
-              <a href={organization.website} target="_blank" rel="noreferrer">
-                {organization.website}
-              </a>
-            </p>
-          </CardContent>
-        </Card>
+        <Box
+          padding={2}
+          width="fit"
+          position="absolute"
+          left="50%"
+          top="50%"
+          sx={{ transform: 'translate(-50%, -100%)' }}
+        >
+          <Card>
+            <CardHeader title={organization.name} closeButton />
+            <CardContent>
+              <p>
+                <b>Location: </b>
+                {organization.location}
+              </p>
+              <p>
+                <b>Website: </b>
+                <a href={organization.website} target="_blank" rel="noreferrer">
+                  {organization.website}
+                </a>
+              </p>
+            </CardContent>
+          </Card>
+        </Box>
       </Modal>
       {!!token && <CreateProjectModal />}
       {!!token && userRole === 'superAdmin' && (

@@ -2,16 +2,19 @@ import {
   Button,
   CardActions,
   CardContent,
+  FormControl,
+  Grid,
+  InputLabel,
   MenuItem,
   Select,
-  TextField,
 } from '@mui/material';
-import { Formik, type FormikConfig, type FormikValues } from 'formik';
+import { Form, Formik, type FormikConfig, type FormikValues } from 'formik';
 import { type ReactElement } from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { projectSchema, ProjectType } from '@website/shared-types';
 
+import { TextField } from '@/components';
 import {
   type OrganizationDocument,
   type Project,
@@ -70,59 +73,86 @@ export default function ProjectForm<
       }}
       {...props}
     >
-      {({ values, handleChange, handleSubmit, setFieldValue }) => (
-        <form onSubmit={handleSubmit}>
+      {({ values, handleChange, setFieldValue }) => (
+        <Form>
           <CardContent>
-            <TextField
-              name="role"
-              label="Role"
-              placeholder="Role (e.g. Developer)"
-            />
-            <TextField
-              name="title"
-              label="Title"
-              placeholder="Title (e.g. Project name)"
-            />
-            {values.type === ProjectType.TechExperiences && (
-              <OrganizationSection />
-            )}
-            <Select
-              name="type"
-              label="Type"
-              onChange={(event) => {
-                if (event.target.value === 'Tech Experiences')
-                  setFieldValue(
-                    'organization',
-                    organization ?? {
-                      _id: '',
-                      name: '',
-                      description: '',
-                      location: '',
-                      website: '',
-                    },
-                  );
-                else setFieldValue('organization', undefined);
-                handleChange(event);
-              }}
-            >
-              {Object.values(ProjectType).map((type) => (
-                <MenuItem key={type} value={type} />
-              ))}
-            </Select>
-            <DatesSection
-              selectEndDate={selectEndDate}
-              setSelectEndDate={setSelectEndDate}
-            />
-            <TextField
-              type="text"
-              multiline
-              name="description"
-              label="Description"
-              placeholder="Description"
-              style={{ height: '20vh' }}
-            />
-            <TextField name="link" label="Link" placeholder="Link" />
-            <CompetenciesSection />
+            <Grid container spacing={2}>
+              <Grid container flexDirection="row" spacing={2} size={12}>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    id="role"
+                    name="role"
+                    label="Role"
+                    placeholder="Role (e.g. Developer)"
+                    fullWidth
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, md: 6 }}>
+                  <TextField
+                    id="title"
+                    name="title"
+                    label="Title"
+                    placeholder="Title (e.g. Project name)"
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <FormControl fullWidth>
+                <InputLabel id="type-label">Type</InputLabel>
+                <Select
+                  name="type"
+                  labelId="type-label"
+                  label="Type"
+                  value={values.type}
+                  onChange={(event) => {
+                    if (event.target.value === 'Tech Experiences')
+                      setFieldValue(
+                        'organization',
+                        organization ?? {
+                          _id: '',
+                          name: '',
+                          description: '',
+                          location: '',
+                          website: '',
+                        },
+                      );
+                    else setFieldValue('organization', undefined);
+                    handleChange(event);
+                  }}
+                >
+                  {Object.values(ProjectType).map((type) => (
+                    <MenuItem key={type} value={type}>
+                      {type}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              {values.type === ProjectType.TechExperiences && (
+                <OrganizationSection />
+              )}
+              <DatesSection
+                selectEndDate={selectEndDate}
+                setSelectEndDate={setSelectEndDate}
+              />
+              <Grid container flexDirection="row" spacing={2} size={12}>
+                <TextField
+                  multiline
+                  minRows={4}
+                  id="description"
+                  name="description"
+                  label="Description"
+                  placeholder="Description"
+                  fullWidth
+                />
+                <TextField
+                  id="link"
+                  name="link"
+                  label="Link"
+                  placeholder="Link"
+                />
+              </Grid>
+              <CompetenciesSection />
+            </Grid>
           </CardContent>
           <CardActions>
             <Button
@@ -138,12 +168,14 @@ export default function ProjectForm<
                 )
                   setFieldValue('organization', undefined);
               }}
+              variant="contained"
+              className="w-full"
             >
               {edit && 'Edit'}
               {create && 'Add'}
             </Button>
           </CardActions>
-        </form>
+        </Form>
       )}
     </Formik>
   );

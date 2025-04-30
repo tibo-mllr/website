@@ -1,12 +1,15 @@
 'use client';
 
-import { Button, FormGroup, FormLabel, Grid } from '@mui/material';
+import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
+import { Grid, IconButton } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { enGB } from 'date-fns/locale';
 import { useFormikContext } from 'formik';
-import Image from 'next/image';
 import { ReactElement } from 'react';
 
-import { binIcon, plusIcon } from '@/app/ui/assets';
+import { AddButton } from '@/components';
 import {
   type OrganizationDocument,
   type Project,
@@ -26,45 +29,55 @@ export default function DatesSection<
   const { setFieldValue } = useFormikContext<T>();
 
   return (
-    <FormGroup className="mb-3">
-      <Grid>
-        <Grid>
-          <DatePicker name="startDate" label="Start date" />
+    <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={enGB}>
+      <Grid container flexDirection="row" spacing={2} size={12}>
+        <Grid size={{ xs: 12, md: 6 }}>
+          <DatePicker
+            name="startDate"
+            label="Start date"
+            sx={{ width: '100%' }}
+          />
         </Grid>
-        <Grid>
-          <Grid>
-            <FormGroup className="mb-3">
-              <FormLabel>End date</FormLabel>
-              {selectEndDate ? (
-                <FormGroup>
-                  <DatePicker name="endDate" />
-                  <Button
-                    onClick={() => {
-                      setSelectEndDate(!selectEndDate);
-                      setFieldValue('endDate', new Date());
-                    }}
-                  >
-                    <Image alt="Bin icon" src={binIcon} height="16" />
-                  </Button>
-                </FormGroup>
-              ) : (
-                <Grid>
-                  <Button
-                    onClick={() => {
-                      setSelectEndDate(!selectEndDate);
-                      setFieldValue('endDate', new Date());
-                    }}
-                    className="btn-add"
-                  >
-                    <Image alt="Plus icon" src={plusIcon} height="16" />
-                    Add end date
-                  </Button>
-                </Grid>
-              )}
-            </FormGroup>
-          </Grid>
+        <Grid container size={{ xs: 12, md: 6 }} alignItems="center">
+          {selectEndDate ? (
+            <Grid
+              container
+              flexDirection="row"
+              spacing={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Grid>
+                <DatePicker
+                  name="endDate"
+                  label="End date"
+                  sx={{ width: '100%' }}
+                />
+              </Grid>
+              <Grid marginRight="auto">
+                <IconButton
+                  aria-label="Delete"
+                  onClick={() => {
+                    setSelectEndDate(!selectEndDate);
+                    setFieldValue('endDate', new Date());
+                  }}
+                  color="error"
+                >
+                  <DeleteForeverTwoToneIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+          ) : (
+            <AddButton
+              onClick={() => {
+                setSelectEndDate(!selectEndDate);
+                setFieldValue('endDate', new Date());
+              }}
+              text="Add end date"
+            />
+          )}
         </Grid>
       </Grid>
-    </FormGroup>
+    </LocalizationProvider>
   );
 }

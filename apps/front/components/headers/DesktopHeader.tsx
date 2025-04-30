@@ -19,7 +19,7 @@ import {
   switchShowNewUser,
 } from '@/lib/redux/slices';
 
-import { AddButton } from './AddButton';
+import { AddButton } from '..';
 
 const ADD_BUTTON_PATHNAMES = ['/home', '/projects', '/organizations'];
 type AddButtonPathnames = (typeof ADD_BUTTON_PATHNAMES)[number];
@@ -102,14 +102,14 @@ export default function Header(): ReactElement {
             (userRole === 'admin' || userRole === 'superAdmin') &&
             ADD_BUTTON_PATHNAMES.includes(pathname) && (
               <AddButton
-                openModal={pathnameToAction[pathname]}
+                onClick={pathnameToAction[pathname]}
                 text={pathnameToText[pathname]}
               />
             )}
 
           {!!token && userRole === 'superAdmin' && pathname === '/admin' && (
             <AddButton
-              openModal={() => dispatch(switchShowNewUser(true))}
+              onClick={() => dispatch(switchShowNewUser(true))}
               text="Add user"
             />
           )}

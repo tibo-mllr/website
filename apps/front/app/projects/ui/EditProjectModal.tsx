@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardHeader, Modal } from '@mui/material';
+import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -54,31 +54,43 @@ export default function EditProjectModal({
 
   return (
     <Modal open={show} onClose={() => setShow(false)}>
-      <Card>
-        <CardHeader title="Edit project" closeButton />
+      <Box
+        padding={2}
+        width="70vw"
+        minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
+        position="absolute"
+        left="50%"
+        sx={{ transform: 'translate(-50%, 0)' }}
+      >
+        <Card>
+          <CardHeader title="Edit project" />
 
-        <ProjectForm
-          selectEndDate={selectEndDate}
-          setSelectEndDate={setSelectEndDate}
-          organization={projectToEdit.organization}
-          edit
-          initialValues={{
-            ...projectToEdit,
-            startDate: new Date(projectToEdit.startDate),
-            endDate: projectToEdit.endDate
-              ? new Date(projectToEdit.endDate)
-              : undefined,
-            organization: projectToEdit.organization ?? {
-              _id: '',
-              name: '',
-              description: '',
-              location: '',
-              website: '',
-            },
-          }}
-          onSubmit={handleEdit}
-        />
-      </Card>
+          <ProjectForm
+            selectEndDate={selectEndDate}
+            setSelectEndDate={setSelectEndDate}
+            organization={projectToEdit.organization}
+            edit
+            initialValues={{
+              ...projectToEdit,
+              startDate: new Date(projectToEdit.startDate),
+              endDate: projectToEdit.endDate
+                ? new Date(projectToEdit.endDate)
+                : undefined,
+              organization: projectToEdit.organization ?? {
+                _id: '',
+                name: '',
+                description: '',
+                location: '',
+                website: '',
+              },
+              link: projectToEdit.link ?? '',
+            }}
+            onSubmit={handleEdit}
+          />
+        </Card>
+      </Box>
     </Modal>
   );
 }

@@ -3,13 +3,13 @@ import { Button } from '@mui/material';
 import { ReactElement } from 'react';
 
 type AddButtonProps = {
-  openModal: () => void;
+  onClick: () => void;
   text: string;
 };
 
-export function AddButton({ openModal, text }: AddButtonProps): ReactElement {
+export function AddButton({ onClick, text }: AddButtonProps): ReactElement {
   return (
-    <Button onClick={openModal} startIcon={<AddIcon />} variant="text">
+    <Button onClick={onClick} startIcon={<AddIcon />} variant="text">
       <b>{text}</b>
     </Button>
   );
