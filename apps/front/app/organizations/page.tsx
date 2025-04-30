@@ -9,6 +9,7 @@ import {
   CardHeader,
   Grid,
   IconButton,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
@@ -97,9 +98,9 @@ export default function OrganizationView(): ReactElement {
         onConfirm={() => handleDelete(organizationToEdit._id)}
       />
       <Grid>
-        <h1 className="text-center">
+        <Typography textAlign="center" variant="h4" component="h1">
           These are the organizations I worked for
-        </h1>
+        </Typography>
       </Grid>
       <CustomSuspense
         fallback={<OrganizationCardSkeleton />}

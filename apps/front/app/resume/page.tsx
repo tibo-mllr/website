@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Grid } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { type ReactElement } from 'react';
 
 import { CompetenciesSection, ProjectsSection } from './ui';
@@ -6,11 +6,13 @@ import { CompetenciesSection, ProjectsSection } from './ui';
 export default function ResumeView(): ReactElement {
   return (
     <Grid container spacing={2} marginY={2}>
-      <Grid size={12}>
+      <Grid size={3}>
         <Card>
           <CardHeader title="MULLER Thibault" />
           <CardContent>
-            <b className="fs-4">About me</b>
+            <Typography variant="h5" component="span">
+              <b>About me</b>
+            </Typography>
             <br />
             <span>
               Interested in DIY & sciences since young, my passions took me to
@@ -20,12 +22,16 @@ export default function ResumeView(): ReactElement {
             </span>
             <br />
             <br />
-            <b className="fs-4">Skills</b>
+            <Typography variant="h5" component="span">
+              <b>Skills</b>
+            </Typography>
             <br />
             <CompetenciesSection />
             <br />
             <br />
-            <b className="fs-4">Languages</b>
+            <Typography variant="h5" component="span">
+              <b>Languages</b>
+            </Typography>
             <br />
             <span>
               French: Native
@@ -34,13 +40,15 @@ export default function ResumeView(): ReactElement {
             </span>
             <br />
             <br />
-            <b className="fs-4">Interests</b>
+            <Typography variant="h5" component="span">
+              <b>Interests</b>
+            </Typography>
             <br />
             <span>Photography • Sports • DIY</span>
           </CardContent>
         </Card>
       </Grid>
-      <Grid className="overflow-auto" style={{ maxHeight: '92vh' }} size={12}>
+      <Grid className="overflow-auto" style={{ maxHeight: '92vh' }} size={9}>
         <ProjectsSection />
       </Grid>
     </Grid>

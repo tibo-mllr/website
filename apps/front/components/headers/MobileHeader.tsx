@@ -16,7 +16,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { logo } from '@/app/ui/assets';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -63,9 +62,10 @@ export default function MobileHeader(): ReactElement {
       <Toolbar>
         <Link href="/home" style={{ marginRight: '1em' }}>
           <Image
-            alt="Anarchist logo"
-            src={logo}
-            height="40"
+            alt="Website logo"
+            src="/logo.png"
+            height={40}
+            width={(4422 / 2067) * 40}
             className="d-inline-block align-top"
             priority
           />

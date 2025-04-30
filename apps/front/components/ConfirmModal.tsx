@@ -25,10 +25,13 @@ export function ConfirmModal({
   onConfirm,
 }: ConfirmModalProps): ReactElement {
   return (
-    <Modal open={show} onClose={onClose} className="center-modal">
+    <Modal open={show} onClose={onClose}>
       <Box
         padding={2}
         width="30vw"
+        minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
         position="absolute"
         left="50%"
         top="50%"

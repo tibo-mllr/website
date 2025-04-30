@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, Grid } from '@mui/material';
+import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { useEffect, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -61,24 +61,24 @@ export default function ProjectsSestion(): ReactElement {
                       spacing={0}
                     >
                       <Grid size={12}>
-                        <b>
-                          <span className="fs-4">
+                        <Typography variant="h5" component="span">
+                          <b>
                             {project.role}
                             {' | '}
-                          </span>
-                        </b>
+                          </b>
+                        </Typography>
                         {project.organization && (
-                          <span className="fs-5">
+                          <Typography variant="h6" component="span">
                             <u>{project.organization?.name}</u>
                             {' | '}
-                          </span>
+                          </Typography>
                         )}
-                        <span className="fs-7">
+                        <Typography component="span">
                           {new Date(project.startDate).toLocaleDateString()} -{' '}
                           {project.endDate
                             ? new Date(project.endDate).toLocaleDateString()
                             : 'Present'}
-                        </span>
+                        </Typography>
                       </Grid>
                       <Grid size={12}>
                         <span>

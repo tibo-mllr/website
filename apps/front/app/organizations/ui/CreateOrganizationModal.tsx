@@ -50,6 +50,8 @@ export default function CreateOrganizationModal(): ReactElement {
         padding={2}
         width="30vw"
         minWidth={300}
+        maxHeight="100vh"
+        overflow="auto"
         position="absolute"
         left="50%"
         sx={{ transform: 'translate(-50%, 0)' }}

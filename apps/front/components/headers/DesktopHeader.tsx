@@ -7,7 +7,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
-import { logo } from '@/app/ui/assets';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
   logout,
@@ -49,12 +48,17 @@ export default function Header(): ReactElement {
       <Toolbar style={{ gap: 4 }}>
         <Link
           href="/home"
-          style={{ display: 'flex', alignItems: 'center', marginRight: '1em' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            marginRight: '1em',
+          }}
         >
           <Image
             alt="Website logo"
-            src={logo}
-            height="40"
+            src="/logo.png"
+            height={40}
+            width={(4422 / 2067) * 40}
             className="d-inline-block align-top me-2"
             priority
           />

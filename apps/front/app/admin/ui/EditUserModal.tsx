@@ -50,6 +50,8 @@ export default function EditUserModal({
       <Box
         padding={2}
         width="fit"
+        maxHeight="100vh"
+        overflow="auto"
         position="absolute"
         left="50%"
         top="50%"

@@ -12,6 +12,7 @@ import {
   IconButton,
   Link,
   Modal,
+  Typography,
 } from '@mui/material';
 import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
@@ -150,7 +151,9 @@ export default function ProjectView(): ReactElement {
         onConfirm={() => handleDelete(projectToEdit._id)}
       />
       <Grid>
-        <h1 className="text-center">These are the projects I worked on</h1>
+        <Typography textAlign="center" variant="h4" component="h1">
+          These are the projects I worked on
+        </Typography>
       </Grid>
       <CustomSuspense
         fallback={<ProjectCardSkeleton />}
@@ -165,14 +168,16 @@ export default function ProjectView(): ReactElement {
                   <CardHeader
                     title={
                       <>
-                        <span className="fs-2">
-                          {project.role}
-                          {' | '}
-                        </span>
+                        <Typography variant="h4" component="span">
+                          <b>
+                            {project.role}
+                            {' | '}
+                          </b>
+                        </Typography>
                         {project.organization && (
-                          <span
-                            className="fs-4 "
-                            role="button"
+                          <Typography
+                            variant="h5"
+                            component="button"
                             onClick={() => {
                               setShowOrganization(true);
                               setOrganization(project.organization!);
@@ -180,14 +185,16 @@ export default function ProjectView(): ReactElement {
                           >
                             <u>{project.organization.name}</u>
                             {' | '}
-                          </span>
+                          </Typography>
                         )}
-                        <i className="fs-6">
-                          {new Date(project.startDate).toLocaleDateString()} -{' '}
-                          {project.endDate
-                            ? new Date(project.endDate).toLocaleDateString()
-                            : 'Present'}
-                        </i>
+                        <Typography variant="h6" component="span">
+                          <i>
+                            {new Date(project.startDate).toLocaleDateString()} -{' '}
+                            {project.endDate
+                              ? new Date(project.endDate).toLocaleDateString()
+                              : 'Present'}
+                          </i>
+                        </Typography>
                       </>
                     }
                   />
@@ -258,13 +265,15 @@ export default function ProjectView(): ReactElement {
         <Box
           padding={2}
           width="fit"
+          maxHeight="100vh"
+          overflow="auto"
           position="absolute"
           left="50%"
           top="50%"
           sx={{ transform: 'translate(-50%, -100%)' }}
         >
           <Card>
-            <CardHeader title={organization.name} closeButton />
+            <CardHeader title={organization.name} />
             <CardContent>
               <p>
                 <b>Location: </b>
