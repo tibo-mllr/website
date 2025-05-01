@@ -1,7 +1,7 @@
 'use client';
 
 import { Box, Card, CardHeader, Modal } from '@mui/material';
-import { useState, type ReactElement } from 'react';
+import { useEffect, useState, type ReactElement } from 'react';
 import { useSelector } from 'react-redux';
 
 import { PartialBy, ProjectType } from '@website/shared-types';
@@ -9,12 +9,12 @@ import { PartialBy, ProjectType } from '@website/shared-types';
 import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
+import { selectShowNewProject, switchShowNewProject } from '@/lib/redux/slices';
 import {
-  selectOrganizations,
-  selectShowNewProject,
-  switchShowNewProject,
-} from '@/lib/redux/slices';
-import { handleOrganization, type Project } from '@/lib/utils';
+  handleOrganization,
+  OrganizationDocument,
+  type Project,
+} from '@/lib/utils';
 
 import { ProjectForm } from './ProjectForm';
 
@@ -37,9 +37,11 @@ export default function CreateProjectModal(): ReactElement {
     endDate: undefined,
   };
   const [selectEndDate, setSelectEndDate] = useState<boolean>(false);
+  const [organizations, setOrganizations] = useState<OrganizationDocument[]>(
+    [],
+  );
 
   const dispatch = useAppDispatch();
-  const organizations = useSelector(selectOrganizations);
   const showNew = useSelector(selectShowNewProject);
 
   const { notify } = useNotification();
@@ -68,6 +70,10 @@ export default function CreateProjectModal(): ReactElement {
       });
   };
 
+  useEffect(() => {
+    API.getOrganizations().then(setOrganizations);
+  }, []);
+
   return (
     <Modal open={showNew} onClose={() => dispatch(switchShowNewProject(false))}>
       <Box
@@ -88,6 +94,7 @@ export default function CreateProjectModal(): ReactElement {
             create
             initialValues={emptyProject}
             onSubmit={handleCreate}
+            organizations={organizations}
           />
         </Card>
       </Box>

@@ -61,6 +61,8 @@ export default function CreateUserModal({
       });
   };
 
+  if (userRole !== 'superAdmin') return <></>;
+
   return (
     <Modal open={showNew} onClose={() => dispatch(switchShowNewUser(false))}>
       <Box
@@ -70,8 +72,7 @@ export default function CreateUserModal({
         overflow="auto"
         position="absolute"
         left="50%"
-        top="50%"
-        sx={{ transform: 'translate(-50%, -100%)' }}
+        sx={{ transform: 'translate(-50%, 0)' }}
       >
         <Card className="px-15 py-5">
           <CardHeader title="New user" />

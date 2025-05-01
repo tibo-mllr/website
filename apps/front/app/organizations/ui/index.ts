@@ -1,2 +1,3 @@
 export { default as CreateOrganizationModal } from './CreateOrganizationModal';
-export { default as EditOrganizationModal } from './EditOrganizationModal';
+export * from './OrganizationActions';
+export * from './OrganizationWebSockets';

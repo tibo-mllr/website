@@ -35,7 +35,7 @@ export function ConfirmModal({
         position="absolute"
         left="50%"
         top="50%"
-        sx={{ transform: 'translate(-50%, -100%)' }}
+        sx={{ transform: 'translate(-50%, -50%)' }}
       >
         <Card>
           <CardHeader title={title} />

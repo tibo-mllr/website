@@ -1,13 +1,16 @@
 'use client';
 
 import { Box, Card, CardHeader, Modal } from '@mui/material';
-import { useState, type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState, type ReactElement } from 'react';
 
 import { useNotification } from '@/components';
 import { API } from '@/lib/api';
-import { selectOrganizations } from '@/lib/redux/slices';
-import { handleOrganization, Project, type ProjectDocument } from '@/lib/utils';
+import {
+  handleOrganization,
+  OrganizationDocument,
+  Project,
+  type ProjectDocument,
+} from '@/lib/utils';
 
 import { ProjectForm } from './ProjectForm';
 
@@ -25,22 +28,26 @@ export default function EditProjectModal({
   const [selectEndDate, setSelectEndDate] = useState<boolean>(
     !!projectToEdit.endDate,
   );
+  const [organizations, setOrganizations] = useState<OrganizationDocument[]>(
+    [],
+  );
 
   const { notify } = useNotification();
 
-  const organizations = useSelector(selectOrganizations);
-
   const handleEdit = async (values: Project): Promise<void> => {
+    const changes = values;
+    if (!changes.link) delete changes.link;
+
     const organizationId = await handleOrganization(
       organizations,
       notify,
-      values.organization,
+      changes.organization,
     );
 
     API.editProject(projectToEdit._id, {
-      ...values,
+      ...changes,
       organization: organizationId,
-      endDate: selectEndDate ? values.endDate : undefined,
+      endDate: selectEndDate ? changes.endDate : undefined,
     })
       .then(() => {
         notify('Project edited', { severity: 'success' });
@@ -51,6 +58,10 @@ export default function EditProjectModal({
         console.error(error);
       });
   };
+
+  useEffect(() => {
+    API.getOrganizations().then(setOrganizations);
+  }, []);
 
   return (
     <Modal open={show} onClose={() => setShow(false)}>
@@ -88,6 +99,7 @@ export default function EditProjectModal({
               link: projectToEdit.link ?? '',
             }}
             onSubmit={handleEdit}
+            organizations={organizations}
           />
         </Card>
       </Box>

@@ -39,6 +39,7 @@ type ProjectFormProps<T extends FormikValues> = FormikConfig<T> &
   (EditProps | CreateProps) & {
     selectEndDate: boolean;
     setSelectEndDate: (selectEndDate: boolean) => void;
+    organizations: OrganizationDocument[];
   };
 
 export default function ProjectForm<
@@ -51,6 +52,7 @@ export default function ProjectForm<
   create,
   selectEndDate,
   setSelectEndDate,
+  organizations,
   ...props
 }: ProjectFormProps<T>): ReactElement {
   const checkTimeStamp = (begin: Date, end: Date): boolean => {
@@ -128,7 +130,7 @@ export default function ProjectForm<
                 </Select>
               </FormControl>
               {values.type === ProjectType.TechExperiences && (
-                <OrganizationSection />
+                <OrganizationSection organizations={organizations} />
               )}
               <DatesSection
                 selectEndDate={selectEndDate}
