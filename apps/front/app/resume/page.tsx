@@ -1,9 +1,13 @@
 import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
 import { type ReactElement } from 'react';
 
+import { API } from '@/lib/api';
+
 import { CompetenciesSection, ProjectsSection } from './ui';
 
-export default function ResumeView(): ReactElement {
+export default async function ResumeView(): Promise<ReactElement> {
+  const resume = await API.getResume();
+
   return (
     <Grid container spacing={2} marginY={2}>
       <Grid size={3}>
@@ -26,7 +30,7 @@ export default function ResumeView(): ReactElement {
               <b>Skills</b>
             </Typography>
             <br />
-            <CompetenciesSection />
+            <CompetenciesSection competencies={resume.competencies} />
             <br />
             <br />
             <Typography variant="h5" component="span">
@@ -49,7 +53,7 @@ export default function ResumeView(): ReactElement {
         </Card>
       </Grid>
       <Grid className="overflow-auto" style={{ maxHeight: '92vh' }} size={9}>
-        <ProjectsSection />
+        <ProjectsSection projects={resume.projects} />
       </Grid>
     </Grid>
   );

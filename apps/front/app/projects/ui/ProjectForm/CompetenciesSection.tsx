@@ -12,11 +12,10 @@ import {
   Typography,
 } from '@mui/material';
 import { useFormikContext } from 'formik';
-import { type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState, type ReactElement } from 'react';
 
 import { AddButton, TextField } from '@/components';
-import { selectCompetencies } from '@/lib/redux/slices';
+import { API } from '@/lib/api';
 import {
   Project,
   type OrganizationDocument,
@@ -30,7 +29,7 @@ export default function CompetenciesSection<
 >(): ReactElement {
   const { values, touched, errors, setFieldValue } = useFormikContext<T>();
 
-  const competencies = useSelector(selectCompetencies);
+  const [competencies, setCompetencies] = useState<string[]>([]);
 
   const handleCompetencyChange = (
     index: number,
@@ -40,6 +39,10 @@ export default function CompetenciesSection<
     newCompetencies[index] = newValue ?? '';
     setFieldValue('competencies', newCompetencies);
   };
+
+  useEffect(() => {
+    API.getCompetencies().then(setCompetencies);
+  }, []);
 
   return (
     <Grid size={12}>

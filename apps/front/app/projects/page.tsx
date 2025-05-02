@@ -1,302 +1,72 @@
-'use client';
+import { Card, CardContent, CardHeader, Grid, Typography } from '@mui/material';
+import { type ReactElement } from 'react';
 
-import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
-import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
-import {
-  Box,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  Grid,
-  IconButton,
-  Link,
-  Modal,
-  Typography,
-} from '@mui/material';
-import { useEffect, useState, type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
-
-import { ProjectType } from '@website/shared-types';
-
-import {
-  ConfirmModal,
-  CustomSuspense,
-  ProjectCardSkeleton,
-} from '@/components';
-import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
+
 import {
-  fetchCompetencies,
-  fetchOrganizations,
-  fetchProjects,
-} from '@/lib/redux/actions';
-import { useAppDispatch } from '@/lib/redux/hooks';
-import {
-  addCompetencies,
-  addOrganization,
-  addProject,
-  deleteOrganization,
-  deleteProject,
-  editOrganization,
-  editProject,
-  selectProjects,
-  selectProjectsLoading,
-  selectToken,
-  selectUserRole,
-} from '@/lib/redux/slices';
-import { type OrganizationDocument, type ProjectDocument } from '@/lib/utils';
+  CreateProjectModal,
+  ProjectActionsWrapper,
+  ProjectOrganizationSection,
+  ProjectWebSockets,
+} from './ui';
 
-import { CreateProjectModal, EditProjectModal } from './ui';
-
-export default function ProjectView(): ReactElement {
-  const [showConfirm, setShowConfirm] = useState<boolean>(false);
-  const [showOrganization, setShowOrganization] = useState<boolean>(false);
-  const [organization, setOrganization] = useState<OrganizationDocument>({
-    _id: '',
-    name: '',
-    description: '',
-    location: '',
-    website: '',
-  });
-  const [projectToEdit, setProjectToEdit] = useState<ProjectDocument>({
-    _id: '',
-    role: '',
-    title: '',
-    description: '',
-    competencies: [],
-    type: ProjectType.Education,
-    organization: {
-      _id: '',
-      name: '',
-      description: '',
-      location: '',
-      website: '',
-    },
-    startDate: new Date(),
-  });
-  const [showEdit, setShowEdit] = useState<boolean>(false);
-
-  const dispatch = useAppDispatch();
-  const token = useSelector(selectToken);
-  const userRole = useSelector(selectUserRole);
-  const projects = useSelector(selectProjects);
-  const isLoading = useSelector(selectProjectsLoading);
-
-  const { notify } = useNotification();
-
-  const handleDelete = (id: string): void => {
-    API.deleteProject(id)
-      .then(() => notify('Project deleted', { severity: 'success' }))
-      .catch((error) => {
-        notify('Error deleting project', { severity: 'error' });
-        console.error(error);
-      });
-  };
-
-  useEffect(() => {
-    dispatch(fetchProjects());
-    dispatch(fetchCompetencies());
-    dispatch(fetchOrganizations());
-  }, [dispatch]);
-
-  useEffect(() => {
-    API.listenTo('projectAdded', (newProject: ProjectDocument) => {
-      dispatch(addProject(newProject));
-      dispatch(addCompetencies(newProject.competencies));
-    });
-    API.listenTo('projectEdited', (editedProject: ProjectDocument) => {
-      dispatch(editProject(editedProject));
-      dispatch(fetchCompetencies());
-    });
-    API.listenTo('projectDeleted', (id: string) => {
-      dispatch(deleteProject(id));
-      dispatch(fetchCompetencies());
-    });
-    // Several projects deleted by cascade with an organization
-    API.listenTo('projectsDeleted', () => {
-      dispatch(fetchProjects());
-      dispatch(fetchCompetencies());
-    });
-    // Calls that can be made for the creation/edition of a project
-    API.listenTo('organizationAdded', (newOrganization: OrganizationDocument) =>
-      dispatch(addOrganization(newOrganization)),
-    );
-    API.listenTo(
-      'organizationEdited',
-      (editedOrganization: OrganizationDocument) =>
-        dispatch(editOrganization(editedOrganization)),
-    );
-    API.listenTo('organizationDeleted', (id: string) =>
-      dispatch(deleteOrganization(id)),
-    );
-    return () => {
-      API.stopListening('projectAdded');
-      API.stopListening('projectEdited');
-      API.stopListening('projectDeleted');
-      API.stopListening('projectsDeleted');
-      API.stopListening('organizationAdded');
-      API.stopListening('organizationEdited');
-      API.stopListening('organizationDeleted');
-    };
-  }, [dispatch]);
+export default async function ProjectView(): Promise<ReactElement> {
+  const projects = await API.getProjects();
 
   return (
     <>
-      <ConfirmModal
-        title="Delete project"
-        message="Are you sure you want to delete this project?"
-        show={showConfirm}
-        onClose={() => setShowConfirm(false)}
-        onConfirm={() => handleDelete(projectToEdit._id)}
-      />
       <Grid>
         <Typography textAlign="center" variant="h4" component="h1">
           These are the projects I worked on
         </Typography>
       </Grid>
-      <CustomSuspense
-        fallback={<ProjectCardSkeleton />}
-        count={2}
-        isLoading={isLoading}
-      >
-        {projects.length ? (
-          projects.map((project) => (
-            <Grid className="my-3" key={project._id}>
-              <Grid>
-                <Card>
-                  <CardHeader
-                    title={
-                      <>
-                        <Typography variant="h4" component="span">
-                          <b>
-                            {project.role}
-                            {' | '}
-                          </b>
-                        </Typography>
-                        {project.organization && (
-                          <Typography
-                            variant="h5"
-                            component="button"
-                            onClick={() => {
-                              setShowOrganization(true);
-                              setOrganization(project.organization!);
-                            }}
-                          >
-                            <u>{project.organization.name}</u>
-                            {' | '}
-                          </Typography>
-                        )}
-                        <Typography variant="h6" component="span">
-                          <i>
-                            {new Date(project.startDate).toLocaleDateString()} -{' '}
-                            {project.endDate
-                              ? new Date(project.endDate).toLocaleDateString()
-                              : 'Present'}
-                          </i>
-                        </Typography>
-                      </>
-                    }
-                  />
-                  <CardContent>
-                    <b>{project.title}</b>
-                    <br />
-                    {project.description}
-                    <br />
-                    <i>{project.competencies.join(' • ')}</i>
-                  </CardContent>
-                  {(!!project.link ||
-                    (!!token && userRole === 'superAdmin')) && (
-                    <CardActions>
-                      <Grid
-                        container
-                        justifyContent="space-between"
-                        alignItems="center"
-                        width="100%"
-                      >
-                        {project.link && (
-                          <Link
-                            href={project.link}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            See more
-                          </Link>
-                        )}
-                        {!!token && userRole === 'superAdmin' && (
-                          <Grid
-                            className="ms-auto justify-content-end"
-                            display="flex"
-                          >
-                            <IconButton
-                              aria-label="Edit"
-                              onClick={() => {
-                                setShowEdit(true);
-                                setProjectToEdit(project);
-                              }}
-                              color="warning"
-                            >
-                              <EditTwoToneIcon />
-                            </IconButton>
-                            <IconButton
-                              aria-label="Delete"
-                              onClick={() => {
-                                setShowConfirm(true);
-                                setProjectToEdit(project);
-                              }}
-                              color="error"
-                            >
-                              <DeleteForeverTwoToneIcon />
-                            </IconButton>
-                          </Grid>
-                        )}
-                      </Grid>
-                    </CardActions>
-                  )}
-                </Card>
-              </Grid>
+
+      {projects.length ? (
+        projects.map((project) => (
+          <Grid className="my-3" key={project._id}>
+            <Grid>
+              <Card>
+                <CardHeader
+                  title={
+                    <>
+                      <Typography variant="h4" component="span">
+                        <b>
+                          {project.role}
+                          {' | '}
+                        </b>
+                      </Typography>
+                      <ProjectOrganizationSection
+                        organization={project.organization}
+                      />
+                      <Typography variant="h6" component="span">
+                        <i>
+                          {new Date(project.startDate).toLocaleDateString()} -{' '}
+                          {project.endDate
+                            ? new Date(project.endDate).toLocaleDateString()
+                            : 'Present'}
+                        </i>
+                      </Typography>
+                    </>
+                  }
+                />
+                <CardContent>
+                  <b>{project.title}</b>
+                  <br />
+                  {project.description}
+                  <br />
+                  <i>{project.competencies.join(' • ')}</i>
+                </CardContent>
+                <ProjectActionsWrapper project={project} />
+              </Card>
             </Grid>
-          ))
-        ) : (
-          <i>No project to display</i>
-        )}
-      </CustomSuspense>
-      <Modal open={showOrganization} onClose={() => setShowOrganization(false)}>
-        <Box
-          padding={2}
-          width="fit"
-          maxHeight="100vh"
-          overflow="auto"
-          position="absolute"
-          left="50%"
-          top="50%"
-          sx={{ transform: 'translate(-50%, -100%)' }}
-        >
-          <Card>
-            <CardHeader title={organization.name} />
-            <CardContent>
-              <p>
-                <b>Location: </b>
-                {organization.location}
-              </p>
-              <p>
-                <b>Website: </b>
-                <a href={organization.website} target="_blank" rel="noreferrer">
-                  {organization.website}
-                </a>
-              </p>
-            </CardContent>
-          </Card>
-        </Box>
-      </Modal>
-      {!!token && <CreateProjectModal />}
-      {!!token && userRole === 'superAdmin' && (
-        <EditProjectModal
-          projectToEdit={projectToEdit}
-          show={showEdit}
-          setShow={setShowEdit}
-        />
+          </Grid>
+        ))
+      ) : (
+        <i>No project to display</i>
       )}
+
+      <CreateProjectModal />
+      <ProjectWebSockets />
     </>
   );
 }

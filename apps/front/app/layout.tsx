@@ -3,8 +3,7 @@ import { type Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import { type ReactElement, type ReactNode } from 'react';
 
-import { Header } from '@/components';
-import Providers from '@/lib/Providers';
+import { Header, Providers } from '@/components';
 
 import './ui/globals.css';
 import './ui/globals.scss';

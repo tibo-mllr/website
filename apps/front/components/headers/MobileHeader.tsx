@@ -64,10 +64,11 @@ export default function MobileHeader(): ReactElement {
           <Image
             alt="Website logo"
             src="/logo.png"
-            height={40}
-            width={(4422 / 2067) * 40}
+            height={2067}
+            width={4422}
             className="d-inline-block align-top"
             priority
+            style={{ height: 40, width: 'auto' }}
           />
         </Link>
         <Grid className="ms-auto me-2 justify-content-end" display="flex">

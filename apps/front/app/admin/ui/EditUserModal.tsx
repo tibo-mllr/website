@@ -54,8 +54,7 @@ export default function EditUserModal({
         overflow="auto"
         position="absolute"
         left="50%"
-        top="50%"
-        sx={{ transform: 'translate(-50%, -100%)' }}
+        sx={{ transform: 'translate(-50%, 0)' }}
       >
         <Card className="px-15 py-5">
           <CardHeader title="Edit user" />

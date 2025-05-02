@@ -1,5 +1,3 @@
-'use client';
-
 import { Alert, AlertColor, Snackbar, SnackbarProps } from '@mui/material';
 import { type ReactElement } from 'react';
 

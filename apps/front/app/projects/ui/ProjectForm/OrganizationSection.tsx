@@ -9,24 +9,24 @@ import {
 } from '@mui/material';
 import { useFormikContext } from 'formik';
 import { type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 
 import { TextField } from '@/components';
-import { selectOrganizations } from '@/lib/redux/slices';
 import {
   type OrganizationDocument,
   type Project,
   type ProjectDocument,
 } from '@/lib/utils';
 
+type OrganizationSectionProps = {
+  organizations: OrganizationDocument[];
+};
+
 export default function OrganizationSection<
   T extends
     | (ProjectDocument & { organization: OrganizationDocument })
     | Project,
->(): ReactElement {
+>({ organizations }: OrganizationSectionProps): ReactElement {
   const { values, setFieldValue } = useFormikContext<T>();
-
-  const organizations = useSelector(selectOrganizations);
 
   return (
     <Grid size={12}>

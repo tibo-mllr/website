@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { NotificationProvider } from '@/components/NotificationProvider';
 import { initAdmin } from '@/lib/redux/slices';
 
-import { AppStore, makeStore } from './redux/types';
+import { AppStore, makeStore } from '../lib/redux/types';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -58,11 +58,7 @@ const theme = extendTheme({
   },
 });
 
-export default function Providers({
-  children,
-}: {
-  children: ReactNode;
-}): ReactElement {
+export function Providers({ children }: { children: ReactNode }): ReactElement {
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
     // Create the store instance the first time this renders
@@ -75,11 +71,11 @@ export default function Providers({
 
   return (
     <Provider store={storeRef.current}>
-      <NotificationProvider>
-        <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>{children}</ThemeProvider>
-        </AppRouterCacheProvider>
-      </NotificationProvider>
+      <AppRouterCacheProvider>
+        <ThemeProvider theme={theme}>
+          <NotificationProvider>{children}</NotificationProvider>
+        </ThemeProvider>
+      </AppRouterCacheProvider>
     </Provider>
   );
 }

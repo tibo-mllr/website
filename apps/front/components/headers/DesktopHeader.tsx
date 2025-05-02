@@ -57,10 +57,11 @@ export default function Header(): ReactElement {
           <Image
             alt="Website logo"
             src="/logo.png"
-            height={40}
-            width={(4422 / 2067) * 40}
+            height={2067}
+            width={4422}
             className="d-inline-block align-top me-2"
             priority
+            style={{ height: 40, width: 'auto' }}
           />
           <Typography variant="h5">Mini website project</Typography>
         </Link>

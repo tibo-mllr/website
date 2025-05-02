@@ -1,22 +1,16 @@
-'use client';
-
 import { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 
-import { selectResume, selectResumeLoading } from '@/lib/redux/slices';
+type CompetenciesSectionProps = {
+  competencies: string[];
+};
 
-export default function CompetenciesSection(): ReactElement {
-  const resume = useSelector(selectResume);
-  const isLoading = useSelector(selectResumeLoading);
-
-  if (isLoading) {
-    return <i>Loading...</i>;
-  }
-
+export default function CompetenciesSection({
+  competencies,
+}: CompetenciesSectionProps): ReactElement {
   return (
     <span>
-      {resume.competencies.length ? (
-        resume.competencies.join(' • ')
+      {competencies.length ? (
+        competencies.join(' • ')
       ) : (
         <i>No skills to display</i>
       )}
