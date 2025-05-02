@@ -17,7 +17,7 @@ type OrganizationActionsProps = {
   organization: OrganizationDocument;
 };
 
-export function OrganizationActions({
+export default function OrganizationActions({
   organization,
 }: OrganizationActionsProps): ReactElement {
   const [showConfirm, setShowConfirm] = useState(false);

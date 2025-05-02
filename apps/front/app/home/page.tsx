@@ -10,7 +10,7 @@ import { type ReactElement } from 'react';
 
 import { API } from '@/lib/api';
 
-import { CreateNewsModal, NewsActions, NewsWebSockets } from './ui';
+import { CreateNewsModal, NewsActionsWrapper, NewsWebSockets } from './ui';
 
 export default async function HomeView(): Promise<ReactElement> {
   const allNews = await API.getNews();
@@ -39,7 +39,7 @@ export default async function HomeView(): Promise<ReactElement> {
                   </>
                 )}
               </Grid>
-              <NewsActions news={news} />
+              <NewsActionsWrapper news={news} />
             </Grid>
           </CardActions>
         </Card>

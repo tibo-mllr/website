@@ -17,7 +17,7 @@ type NewsActionsProps = {
   news: NewsDocument;
 };
 
-export function NewsActions({ news }: NewsActionsProps): ReactElement {
+export default function NewsActions({ news }: NewsActionsProps): ReactElement {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [newsToEdit, setNewsToEdit] = useState<NewsDocument>({

@@ -1,3 +1,4 @@
 export { default as CreateNewsModal } from './CreateNewsModal';
-export * from './NewsActions';
+export { NewsActionsWrapper } from './NewsActionsWrapper';
+export * from './NewsCardSkeleton';
 export * from './NewsWebSockets';

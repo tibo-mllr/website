@@ -5,7 +5,7 @@ import { API } from '@/lib/api';
 
 import {
   CreateProjectModal,
-  ProjectActions,
+  ProjectActionsWrapper,
   ProjectOrganizationSection,
   ProjectWebSockets,
 } from './ui';
@@ -56,7 +56,7 @@ export default async function ProjectView(): Promise<ReactElement> {
                   <br />
                   <i>{project.competencies.join(' • ')}</i>
                 </CardContent>
-                <ProjectActions project={project} />
+                <ProjectActionsWrapper project={project} />
               </Card>
             </Grid>
           </Grid>

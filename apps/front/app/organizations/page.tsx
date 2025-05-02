@@ -5,7 +5,7 @@ import { API } from '@/lib/api';
 
 import {
   CreateOrganizationModal,
-  OrganizationActions,
+  OrganizationActionsWrapper,
   OrganizationWebSockets,
 } from './ui';
 
@@ -38,7 +38,7 @@ export default async function OrganizationView(): Promise<ReactElement> {
                 {organization.website}
               </a>
             </CardContent>
-            <OrganizationActions organization={organization} />
+            <OrganizationActionsWrapper organization={organization} />
           </Card>
         ))
       ) : (

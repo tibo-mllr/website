@@ -20,7 +20,9 @@ type ProjectActionsProps = {
   project: ProjectDocument;
 };
 
-export function ProjectActions({ project }: ProjectActionsProps): ReactElement {
+export default function ProjectActions({
+  project,
+}: ProjectActionsProps): ReactElement {
   const [showConfirm, setShowConfirm] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [projectToEdit, setProjectToEdit] = useState<ProjectDocument>({
