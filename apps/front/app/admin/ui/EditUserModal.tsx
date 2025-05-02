@@ -2,14 +2,13 @@
 
 import { Box, Card, CardHeader, Modal } from '@mui/material';
 import { type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 
 import { frontUserSchema } from '@website/shared-types';
 
+import { useAuth } from '@/components/AuthProvider';
 import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
-import { selectToken, selectUserRole } from '@/lib/redux/slices';
 import { type FrontUserDocument } from '@/lib/utils';
 
 import UserForm from './UserForm';
@@ -25,8 +24,7 @@ export default function EditUserModal({
   show,
   setShow,
 }: EditUserProps): ReactElement {
-  const userRole = useSelector(selectUserRole);
-  const token = useSelector(selectToken);
+  const { token, userRole } = useAuth();
 
   const { notify } = useNotification();
 

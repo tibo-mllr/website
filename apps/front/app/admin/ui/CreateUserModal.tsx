@@ -11,15 +11,11 @@ import {
   type FrontUser,
 } from '@website/shared-types';
 
+import { useAuth } from '@/components/AuthProvider';
 import { useNotification } from '@/components/NotificationProvider';
 import { API } from '@/lib/api';
 import { useAppDispatch } from '@/lib/redux/hooks';
-import {
-  selectShowNewUser,
-  selectToken,
-  selectUserRole,
-  switchShowNewUser,
-} from '@/lib/redux/slices';
+import { selectShowNewUser, switchShowNewUser } from '@/lib/redux/slices';
 
 import UserForm from './UserForm';
 
@@ -39,9 +35,9 @@ export default function CreateUserModal({
   const { notify } = useNotification();
 
   const dispatch = useAppDispatch();
-  const userRole = useSelector(selectUserRole);
-  const token = useSelector(selectToken);
   const showNew = useSelector(selectShowNewUser);
+
+  const { token, userRole } = useAuth();
 
   const handleCreate = (newUser: FrontUser): void => {
     API.createUser(newUser, newSelf)

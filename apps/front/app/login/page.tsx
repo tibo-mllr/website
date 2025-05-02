@@ -2,38 +2,19 @@
 
 import { Button, FormGroup, Grid } from '@mui/material';
 import { Form, Formik } from 'formik';
-import { useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
 
 import { TextField } from '@/components';
-import { useNotification } from '@/components/NotificationProvider';
-import { API } from '@/lib/api';
+import { useAuth } from '@/components/AuthProvider';
 import { useAppDispatch } from '@/lib/redux/hooks';
-import { login, switchShowNewUser } from '@/lib/redux/slices';
+import { switchShowNewUser } from '@/lib/redux/slices';
 
 import { CreateUserModal } from '../admin';
 
 export default function LoginView(): ReactElement {
-  const router = useRouter();
-
   const dispatch = useAppDispatch();
 
-  const { notify } = useNotification();
-
-  const handleSignIn = (values: {
-    username: string;
-    password: string;
-  }): void => {
-    API.login(values.username, values.password)
-      .then(({ access_token, role }) => {
-        dispatch(login({ token: access_token, userRole: role }));
-        router.push('/admin');
-      })
-      .catch((error) => {
-        notify('Erreur de connexion', { severity: 'error' });
-        console.error(error);
-      });
-  };
+  const { login } = useAuth();
 
   return (
     <>
@@ -51,7 +32,7 @@ export default function LoginView(): ReactElement {
             }
             return errors;
           }}
-          onSubmit={handleSignIn}
+          onSubmit={({ username, password }) => login(username, password)}
         >
           {() => (
             <Form>

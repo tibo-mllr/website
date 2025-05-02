@@ -54,15 +54,11 @@ export class API {
     return data;
   }
 
-  static setAuth(token: string, userRole: UserRole): void {
-    sessionStorage.setItem('token', token);
-    sessionStorage.setItem('userRole', userRole);
+  static setAuth(token: string): void {
     this.client.defaults.headers.common.Authorization = `Bearer ${token}`;
   }
 
   static removeAuth(): void {
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('userRole');
     delete this.client.defaults.headers.common.Authorization;
   }
 

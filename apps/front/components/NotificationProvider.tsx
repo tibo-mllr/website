@@ -9,7 +9,7 @@ import {
   useState,
 } from 'react';
 
-import { CustomSnackbar } from './CustomSnackbar'; // adjust path
+import { CustomSnackbar } from './CustomSnackbar';
 
 type NotificationOptions = {
   severity?: AlertColor;

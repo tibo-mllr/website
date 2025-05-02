@@ -2,13 +2,14 @@
 
 import { extendTheme, ThemeProvider } from '@mui/material';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { useEffect, useRef, type ReactElement, type ReactNode } from 'react';
+import { useRef, type ReactElement, type ReactNode } from 'react';
 import { Provider } from 'react-redux';
 
 import { NotificationProvider } from '@/components/NotificationProvider';
-import { initAdmin } from '@/lib/redux/slices';
 
 import { AppStore, makeStore } from '../lib/redux/types';
+
+import { AuthProvider } from './AuthProvider';
 
 const theme = extendTheme({
   colorSchemes: {
@@ -65,15 +66,13 @@ export function Providers({ children }: { children: ReactNode }): ReactElement {
     storeRef.current = makeStore();
   }
 
-  useEffect(() => {
-    if (storeRef.current) storeRef.current.dispatch(initAdmin());
-  }, [storeRef]);
-
   return (
     <Provider store={storeRef.current}>
       <AppRouterCacheProvider>
         <ThemeProvider theme={theme}>
-          <NotificationProvider>{children}</NotificationProvider>
+          <NotificationProvider>
+            <AuthProvider>{children}</AuthProvider>
+          </NotificationProvider>
         </ThemeProvider>
       </AppRouterCacheProvider>
     </Provider>
