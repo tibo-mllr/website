@@ -4,11 +4,10 @@ import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { CardActions, Grid, IconButton } from '@mui/material';
 import { ReactElement, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { ConfirmModal, useNotification } from '@/components';
+import { useAuth } from '@/components/AuthProvider';
 import { API } from '@/lib/api';
-import { selectToken, selectUserRole } from '@/lib/redux/slices';
 import { OrganizationDocument } from '@/lib/utils';
 
 import EditOrganizationModal from './EditOrganizationModal';
@@ -31,8 +30,7 @@ export default function OrganizationActions({
       website: '',
     });
 
-  const token = useSelector(selectToken);
-  const userRole = useSelector(selectUserRole);
+  const { token, userRole } = useAuth();
 
   const { notify } = useNotification();
 

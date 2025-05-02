@@ -5,13 +5,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 
 import { useAppDispatch } from '@/lib/redux/hooks';
 import {
-  logout,
-  selectToken,
-  selectUserRole,
   switchShowNewNews,
   switchShowNewOrganization,
   switchShowNewProject,
@@ -19,6 +15,7 @@ import {
 } from '@/lib/redux/slices';
 
 import { AddButton } from '..';
+import { useAuth } from '../AuthProvider';
 
 const ADD_BUTTON_PATHNAMES = ['/home', '/projects', '/organizations'];
 type AddButtonPathnames = (typeof ADD_BUTTON_PATHNAMES)[number];
@@ -28,8 +25,8 @@ export default function Header(): ReactElement {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
-  const token = useSelector(selectToken);
-  const userRole = useSelector(selectUserRole);
+
+  const { token, userRole, logout } = useAuth();
 
   const pathnameToText: Record<AddButtonPathnames, string> = {
     '/home': 'Add a news',
@@ -127,8 +124,9 @@ export default function Header(): ReactElement {
             <Button
               className="btn-logout"
               onClick={() => {
-                dispatch(logout());
-                if (pathname === '/admin') router.push('/');
+                logout().then(() => {
+                  if (pathname === '/admin') router.push('/');
+                });
               }}
             >
               Logout

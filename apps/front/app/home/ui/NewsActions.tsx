@@ -4,11 +4,10 @@ import DeleteForeverTwoToneIcon from '@mui/icons-material/DeleteForeverTwoTone';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { Grid, IconButton } from '@mui/material';
 import { ReactElement, useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { ConfirmModal, useNotification } from '@/components';
+import { useAuth } from '@/components/AuthProvider';
 import { API } from '@/lib/api';
-import { selectToken, selectUserRole } from '@/lib/redux/slices';
 import { NewsDocument } from '@/lib/utils';
 
 import EditNewsModal from './EditNewsModal';
@@ -28,8 +27,7 @@ export default function NewsActions({ news }: NewsActionsProps): ReactElement {
     author: { username: '' },
   });
 
-  const token = useSelector(selectToken);
-  const userRole = useSelector(selectUserRole);
+  const { token, userRole } = useAuth();
 
   const { notify } = useNotification();
 

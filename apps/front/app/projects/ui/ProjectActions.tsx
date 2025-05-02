@@ -5,13 +5,12 @@ import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import { CardActions, Grid, IconButton } from '@mui/material';
 import Link from 'next/link';
 import { ReactElement, useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import { ProjectType } from '@website/shared-types';
 
 import { ConfirmModal, useNotification } from '@/components';
+import { useAuth } from '@/components/AuthProvider';
 import { API } from '@/lib/api';
-import { selectToken, selectUserRole } from '@/lib/redux/slices';
 import { ProjectDocument } from '@/lib/utils';
 
 import EditProjectModal from './EditProjectModal';
@@ -42,8 +41,7 @@ export default function ProjectActions({
     startDate: new Date(),
   });
 
-  const token = useSelector(selectToken);
-  const userRole = useSelector(selectUserRole);
+  const { token, userRole } = useAuth();
 
   const { notify } = useNotification();
 

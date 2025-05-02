@@ -8,12 +8,12 @@ import {
   Grid,
   Typography,
 } from '@mui/material';
+import { redirect } from 'next/navigation';
 import { useEffect, useState, type ReactElement } from 'react';
-import { useSelector } from 'react-redux';
 
 import { CustomSuspense } from '@/components';
+import { useAuth } from '@/components/AuthProvider';
 import { API } from '@/lib/api';
-import { selectUserRole } from '@/lib/redux/slices';
 import { type FrontUserDocument } from '@/lib/utils';
 
 import {
@@ -21,19 +21,24 @@ import {
   UserActions,
   UserCardSkeleton,
   UserWebSockets,
-} from '../ui';
+} from './ui';
 
 export default function AdminView(): ReactElement {
   const [users, setUsers] = useState<FrontUserDocument[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const userRole = useSelector(selectUserRole);
+  const { isSet, token, userRole } = useAuth();
 
   useEffect(() => {
-    API.getUsers(userRole)
-      .then(setUsers)
-      .finally(() => setIsLoading(false));
-  }, [userRole]);
+    if (isSet)
+      API.getUsers(userRole)
+        .then(setUsers)
+        .finally(() => setIsLoading(false));
+  }, [userRole, isSet]);
+
+  if (!isSet) return <></>;
+
+  if (!token) redirect('/');
 
   return (
     <CustomSuspense
